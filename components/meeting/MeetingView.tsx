@@ -4,9 +4,11 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { PlaybackStore } from '@/lib/playback'
 import type { MeetingBundle } from '@/lib/types'
+import { ActionItemsTab } from './ActionItemsTab'
 import { ChaptersTab } from './ChaptersTab'
 import { Player } from './Player'
 import { SpeakerStrip } from './SpeakerStrip'
+import { SummaryTab } from './SummaryTab'
 import { Tabs, type TabDef } from './Tabs'
 import { Transcript } from './Transcript'
 
@@ -19,7 +21,7 @@ export type MeetingViewProps = {
   initialMs: number
 }
 
-export function MeetingView({ bundle, initialMs }: MeetingViewProps) {
+export function MeetingView({ bundle, userId, initialMs }: MeetingViewProps) {
   const { meeting, participants, segments, chapters, highlights } = bundle
   const [store] = useState(() => new PlaybackStore(meeting.duration_sec * 1000, initialMs))
   useEffect(() => {
@@ -27,6 +29,18 @@ export function MeetingView({ bundle, initialMs }: MeetingViewProps) {
   }, [store, initialMs])
 
   const tabs: TabDef[] = [
+    { id: 'summary', label: 'Summary', content: <SummaryTab title={meeting.title} summaries={bundle.summaries} /> },
+    {
+      id: 'actions',
+      label: 'Action items',
+      content: (
+        <ActionItemsTab
+          store={store}
+          items={bundle.actionItems}
+          ownHighlights={highlights.filter((highlight) => highlight.type === 'action_item' && highlight.user_id === userId)}
+        />
+      ),
+    },
     { id: 'chapters', label: 'Chapters', content: <ChaptersTab store={store} chapters={chapters} /> },
   ]
 
