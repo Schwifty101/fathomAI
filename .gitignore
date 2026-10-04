@@ -4,3 +4,11 @@
 .claude/worktrees/
 .superpowers/
 graphify-out/
+node_modules
+.next
+*.tsbuildinfo
+next-env.d.ts
+supabase/.temp
+docs/design/refs/
+playwright-report
+test-results
