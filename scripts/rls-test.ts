@@ -17,11 +17,12 @@ function check(name: string, ok: boolean, detail?: unknown) {
   }
 }
 
-async function makeUser(tag: string) {
+async function makeUser(tag: string, userIds: string[]) {
   const email = `rls-${tag}-${Date.now()}@example.test`
   const password = randomUUID()
   const { data, error } = await admin.auth.admin.createUser({ email, password, email_confirm: true })
   if (error) throw error
+  userIds.push(data.user.id) // track before sign-in so a sign-in failure still cleans up
   const client = anonClient()
   const signIn = await client.auth.signInWithPassword({ email, password })
   if (signIn.error) throw signIn.error
@@ -39,8 +40,8 @@ async function main() {
   const anon = anonClient()
 
   try {
-    const A = await makeUser('a'); userIds.push(A.id)
-    const B = await makeUser('b'); userIds.push(B.id)
+    const A = await makeUser('a', userIds)
+    const B = await makeUser('b', userIds)
 
     // fixtures via service role
     const must = async (p: PromiseLike<{ error: unknown }>) => {
@@ -114,7 +115,7 @@ async function main() {
     const hLong = await A.client.from('highlights').insert({
       meeting_id: meetingId, user_id: A.id, type: 'insight', title: 'long', start_ms: 0, end_ms: 400000,
     })
-    check('highlight longer than 5 minutes is rejected', !!hLong.error, hLong)
+    check('highlight longer than 5 minutes is rejected (23514)', hLong.error?.code === '23514', hLong)
 
     // 4. ai_usage is service-role only
     const uA = await A.client.from('ai_usage').select('id')
@@ -133,14 +134,18 @@ async function main() {
       slug: `sp${suffix}`, meeting_id: meetingId, start_ms: 0, end_ms: 1000, created_by: B.id,
     })
     check('A cannot create a share as B', !!shSpoof.error, shSpoof)
-    const shLong = await A.client.from('shares').insert({
-      slug: `lg${suffix}`, meeting_id: meetingId, start_ms: 0, end_ms: 400000, created_by: A.id,
-    })
-    check('share longer than 5 minutes is rejected', !!shLong.error, shLong)
-    const shBad = await A.client.from('shares').insert({
-      slug: `bd${suffix}`, meeting_id: meetingId, start_ms: 5000, end_ms: 5000, created_by: A.id,
-    })
-    check('share with end <= start is rejected', !!shBad.error, shBad)
+    const shIns = (slug: string, start_ms: number, end_ms: number) =>
+      A.client.from('shares').insert({ slug, meeting_id: meetingId, start_ms, end_ms, created_by: A.id })
+    const shOk = await shIns(`ok${suffix}`, 0, 300000)
+    check('A can create a share with a valid 5 minute window', !shOk.error, shOk.error)
+    const shLong = await shIns(`lg${suffix}`, 0, 300001)
+    check('share of 300001 ms is rejected (23514)', shLong.error?.code === '23514', shLong)
+    const shEq = await shIns(`bd${suffix}`, 5000, 5000)
+    check('share with end = start is rejected (23514)', shEq.error?.code === '23514', shEq)
+    const shRev = await shIns(`rv${suffix}`, 5000, 1000)
+    check('share with end < start is rejected (23514)', shRev.error?.code === '23514', shRev)
+    const shStored = await admin.from('shares').select('slug').in('slug', [`lg${suffix}`, `bd${suffix}`, `rv${suffix}`])
+    check('rejected shares were not stored', !shStored.error && shStored.data?.length === 0, shStored)
 
     // 6. get_clip returns only the window and no sharer identity
     const clip = await anon.rpc('get_clip', { p_slug: shareSlug })
@@ -151,11 +156,11 @@ async function main() {
     check('get_clip returns null for unknown slug', none.data === null && !none.error, none)
 
     // 7. search_segments
-    const hit = await anon.rpc('search_segments', { q: 'budget review' })
+    const hit = await anon.rpc('search_segments', { q: 'budget review', scope_meeting: meetingId })
     check('search finds a matching segment', (hit.data ?? []).some((r: { meeting_slug: string }) => r.meeting_slug === slug), hit.error)
     for (const q of ['!!!', '"', '   ', 'a'.repeat(500)]) {
       const r = await anon.rpc('search_segments', { q })
-      check(`search tolerates odd query ${JSON.stringify(q.slice(0, 12))}`, !r.error, r.error)
+      check(`search returns empty for odd query ${JSON.stringify(q.slice(0, 12))}`, !r.error && Array.isArray(r.data) && r.data.length === 0, r.error ?? r.data)
     }
 
     // 8. team_stats readable
