@@ -41,6 +41,7 @@ html, body { background: var(--color-bg); color: var(--color-fg); font-family: v
   background-size: 200% 100%;
   animation: shimmer 1.4s linear infinite;
 }
+.tr-row { content-visibility: auto; contain-intrinsic-size: auto 64px; }
 
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
