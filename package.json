@@ -11,6 +11,7 @@
     "seed:gen": "tsx seed/gen/index.ts",
     "seed:check": "tsx seed/check.ts",
     "seed:load": "tsx --env-file=.env.local seed/load.ts",
+    "seed:clips": "tsx --env-file=.env.local scripts/seed-clips.ts",
     "rls:test": "tsx --env-file=.env.local scripts/rls-test.ts",
     "e2e": "playwright test"
   },

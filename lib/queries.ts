@@ -1,7 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { TEMPLATES, type Template } from './schema'
 import type {
-  AskAnswerRow, MeetingBundle, MeetingListItem, SearchHit, SummaryRow, TeamStatRow, UpcomingEvent,
+  AskAnswerRow, MeetingBundle, MeetingListItem, SearchHit, ShareRow, SummaryRow, TeamStatRow, UpcomingEvent,
 } from './types'
 
 type Page<T> = PromiseLike<{ data: T[] | null; error: { message: string } | null }>
@@ -97,4 +97,10 @@ export async function searchSegments(
   return unwrap(await db.rpc('search_segments', {
     q, scope_host: scope.hostId ?? null, scope_meeting: scope.meetingId ?? null, max_rows: max,
   })) as SearchHit[]
+}
+
+export async function getMyShares(db: SupabaseClient, meetingId: string): Promise<ShareRow[]> {
+  const result = await db.from('shares').select('slug,start_ms,end_ms')
+    .eq('meeting_id', meetingId).order('created_at', { ascending: false })
+  return unwrap(result) as ShareRow[]
 }

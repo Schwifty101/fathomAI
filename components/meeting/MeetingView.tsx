@@ -2,14 +2,15 @@
 
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
-import { createHighlight, deleteHighlight } from '@/app/meetings/[id]/actions'
+import { createHighlight, createShare, deleteHighlight, deleteShare } from '@/app/meetings/[id]/actions'
 import { SignInDialog } from '@/components/SignInDialog'
+import { Button } from '@/components/ui/Button'
 import { buildHighlight } from '@/lib/highlight'
 import { PlaybackStore } from '@/lib/playback'
 import type { HighlightType } from '@/lib/schema'
-import { findActiveIdx } from '@/lib/speaker-runs'
+import { expandToRun, findActiveIdx } from '@/lib/speaker-runs'
 import { toast } from '@/lib/toast'
-import type { HighlightRow, MeetingBundle } from '@/lib/types'
+import type { HighlightRow, MeetingBundle, ShareRow } from '@/lib/types'
 import { ActionItemsTab } from './ActionItemsTab'
 import { ChaptersTab } from './ChaptersTab'
 import { HighlightPanel } from './HighlightPanel'
@@ -28,12 +29,14 @@ export type MeetingViewProps = {
   userId: string | null
   liveAiEnabled: boolean
   initialMs: number
+  shares: ShareRow[]
 }
 
-export function MeetingView({ bundle, userId, initialMs }: MeetingViewProps) {
+export function MeetingView({ bundle, userId, initialMs, shares: initialShares }: MeetingViewProps) {
   const { meeting, participants, segments, chapters } = bundle
   const [store] = useState(() => new PlaybackStore(meeting.duration_sec * 1000, initialMs))
   const [highlights, setHighlights] = useState<HighlightRow[]>(bundle.highlights)
+  const [shares, setShares] = useState<ShareRow[]>(initialShares)
   const [signIn, setSignIn] = useState<string | null>(null)
   useEffect(() => {
     store.seek(initialMs)
@@ -70,6 +73,43 @@ export function MeetingView({ bundle, userId, initialMs }: MeetingViewProps) {
     }
   }, [highlights])
 
+  const shareWindow = useCallback(async (start_ms: number, end_ms: number) => {
+    if (!userId) {
+      setSignIn('Sign in with Google to share clips.')
+      return
+    }
+    const result = await createShare({ meetingSlug: meeting.slug, start_ms, end_ms })
+    if (!result.ok) {
+      toast(result.error === 'limit' ? 'Daily clip limit reached (20)' : 'Could not create the clip link')
+      return
+    }
+    setShares((current) => [result.share, ...current])
+    try {
+      await navigator.clipboard.writeText(`${location.origin}${result.path}`)
+      toast('Clip link copied')
+    } catch {
+      toast(`Clip link: ${location.origin}${result.path}`)
+    }
+  }, [userId, meeting.slug])
+
+  const shareMoment = () => {
+    if (!userId) {
+      setSignIn('Sign in with Google to share clips.')
+      return
+    }
+    const run = expandToRun(segments, findActiveIdx(segments, store.ms))
+    if (run) shareWindow(run.start_ms, run.end_ms)
+  }
+
+  const removeShare = async (slug: string) => {
+    const removed = shares.find((share) => share.slug === slug)
+    setShares((current) => current.filter((share) => share.slug !== slug))
+    if (!(await deleteShare(slug)).ok) {
+      if (removed) setShares((current) => [removed, ...current])
+      toast('Could not delete the link')
+    }
+  }
+
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null
@@ -99,13 +139,29 @@ export function MeetingView({ bundle, userId, initialMs }: MeetingViewProps) {
       id: 'highlights',
       label: `Highlights (${highlights.length})`,
       content: (
-        <HighlightsTab
-          store={store}
-          segments={segments}
-          highlights={highlights}
-          userId={userId}
-          onDelete={removeHighlight}
-        />
+        <div className="space-y-6">
+          <HighlightsTab
+            store={store}
+            segments={segments}
+            highlights={highlights}
+            userId={userId}
+            onDelete={removeHighlight}
+            onShare={(highlight) => shareWindow(highlight.start_ms, highlight.end_ms)}
+          />
+          {shares.length > 0 && (
+            <section>
+              <h3 className="mb-2 text-sm font-semibold">Your shared clips</h3>
+              <ul className="space-y-1 text-sm">
+                {shares.map((share) => (
+                  <li key={share.slug} className="flex items-center justify-between gap-2">
+                    <a className="truncate text-accent underline" href={`/clip/${share.slug}`}>/clip/{share.slug}</a>
+                    <Button size="sm" variant="ghost" onClick={() => removeShare(share.slug)}>Delete</Button>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+        </div>
       ),
     },
   ]
@@ -122,9 +178,16 @@ export function MeetingView({ bundle, userId, initialMs }: MeetingViewProps) {
       <SpeakerStrip participants={participants} />
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
         <div className="min-w-0 space-y-4">
-          <Player store={store} participants={participants} segments={segments} chapters={chapters} highlights={highlights} />
+          <Player
+            store={store}
+            participants={participants}
+            segments={segments}
+            chapters={chapters}
+            highlights={highlights}
+            extra={<Button size="sm" variant="secondary" onClick={shareMoment}>Share moment</Button>}
+          />
           <HighlightPanel highlights={highlights} signedIn={userId !== null} onAdd={addHighlight} />
-          <Transcript store={store} segments={segments} participants={participants} highlights={highlights} />
+          <Transcript store={store} segments={segments} participants={participants} highlights={highlights} onShare={shareWindow} />
         </div>
         <aside className="min-w-0 lg:sticky lg:top-20 lg:self-start">
           <Tabs tabs={tabs} />

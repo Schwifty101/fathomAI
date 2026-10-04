@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import { MeetingView } from '@/components/meeting/MeetingView'
 import { getUser } from '@/lib/auth'
 import { parseTimeParam } from '@/lib/format'
-import { getMeetingBundle } from '@/lib/queries'
+import { getMeetingBundle, getMyShares } from '@/lib/queries'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function MeetingPage({
@@ -18,12 +18,14 @@ export default async function MeetingPage({
   const user = await getUser(db)
   const bundle = await getMeetingBundle(db, id, user?.id ?? null)
   if (!bundle) notFound()
+  const shares = user ? await getMyShares(db, bundle.meeting.id) : []
   return (
     <MeetingView
       bundle={bundle}
       userId={user?.id ?? null}
       liveAiEnabled={Boolean(process.env.ANTHROPIC_API_KEY)}
       initialMs={parseTimeParam(t, bundle.meeting.duration_sec * 1000)}
+      shares={shares}
     />
   )
 }

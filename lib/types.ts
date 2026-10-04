@@ -44,3 +44,4 @@ export type SearchHit = {
   meeting_id: string; meeting_slug: string; meeting_title: string; segment_idx: number
   start_ms: number; speaker: string; snippet: string; rank: number
 }
+export type ShareRow = { slug: string; start_ms: number; end_ms: number }
