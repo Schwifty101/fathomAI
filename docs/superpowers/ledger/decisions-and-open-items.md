@@ -59,3 +59,38 @@ Spec: `docs/superpowers/specs/2026-10-05-fathom-rebuild-design.md` (header statu
 | Task 29 Step 10 | Approve the GitHub repo creation or push (see section 4) |
 | Task 29 Step 11 | Disable the Supabase Email provider after the last `rls:test`; rotate the DB password |
 | End | User records the walkthrough (camera on, 5 minutes or less) |
+
+## 7. Progress and findings (Tasks 1-9 complete, branch `feat/phase-1-foundation`)
+
+Status: [verified] Tasks 1-9 done and integrated by cherry-pick (linear history, no merge commits). Full suite 11 files / 60 tests pass and `npm run typecheck` is clean. Nothing is pushed.
+
+Newly verified facts:
+- [verified] The linked Supabase CLI connected without the DB password, so `SUPABASE_DB_PASSWORD` in `.env` was not needed for `db push`. The schema was applied once: 12 public tables, RLS on all 12, 16 policies, views `team_stats` and `calendar_upcoming`, functions `search_segments` and `get_clip`.
+- [verified] `npm run rls:test` passes 33/33 against the hosted project, twice in a row, and leaves no fixtures. Email/password sign-in works, so the Email provider is currently enabled (Task 29 disables it).
+- [verified] `claude -p` works with the user's login (`seed/ping.ts` replied OK). It used the subscription; no `ANTHROPIC_API_KEY` is set in the shell.
+- [verified] TypeScript is pinned `^6.0.3` because Next 15.5.27 rejects TypeScript 7 (npm latest is 7.0.2). `globals.d.ts` exists only because TS 6 needs a CSS side-effect module declaration. Both are justified deviations from the plan.
+
+Rulings made so far (each costs only a small rework if wrong):
+- One short-lived branch per phase; per-task commits kept; parallel tasks run in harness-created isolated worktrees (subagents cannot write to a hand-made sibling worktree) and are integrated by `git cherry-pick`, then the temporary worktree and branch are removed.
+- Task 3 got a second commit (`1986801`) instead of an amend because later commits already sat on top. Its checks were hardened beyond the brief: error code `23514`, positive controls, scoped search, no orphaned test users.
+- Task 6: the speaker-run gap rule is `< 3000 ms` (spec: "gaps under 3s"), not the brief's `<=`; boundary tests added.
+- Task 7: UTF-8 chunk decoding, timeout message, and stdin error handler were folded in before integration because the Task 11 seed run is expensive to redo.
+- Task 8: `end of next week`, `next <weekday>` and `eod` were added to `resolveDue` (the brief's regexes resolved the first two wrongly); tests added.
+- Task 9: the brief's `MEETINGS` array had 9 entries but its own test and the later seed checks expect 8; the 9th (`sales-pipeline-review`) was dropped. The roster has 8 members and 8 meetings, the spec says "~6" and "~7". Accepted.
+
+Plan text defects to fix in the plan file:
+- Task 9 brief lists 9 meetings where the test expects 8.
+- Task 1's plan commit command is `git add -A ':!.agent-logs'`, which would also stage the untracked `supabase/` directory and Task 2's `git add` lists `package.json` files it does not change; implementers were told to stage explicit paths instead. Other tasks' commit commands were not audited by the controller.
+
+Deferred minor findings (not blocking, final review should triage):
+- DB hardening migration: default table grants are not revoked (anon/authenticated keep INSERT/UPDATE/DELETE/TRUNCATE on `ai_usage`, `shares`, `summaries`, `segments`; RLS blocks rows and PostgREST does not expose TRUNCATE); `get_clip` should use `search_path = public, pg_temp`; `search_segments` has a mutable search path (advisor WARN); shares 20/day cap and slug length are enforced only in the server action (Task 24); `get_clip` also returns `meeting_slug`.
+- Task 1: `globals.d.ts` uses `const content: {}`; `@types/node ^26` is ahead of the Node 24 runtime.
+- Task 3: cleanup results not inspected; coverage is thin for "no client writes" on `summaries` and anon update/delete.
+- Task 4: `formatMs(NaN)` gives `NaN:NaN`; `parseTimeParam` does not guard a NaN or negative duration.
+- Task 5: no tests for out-of-range or negative `segment_idx`; `askAnswerSchema` citations have no upper bound (consumers must range-check).
+- Task 6: question counting counts `?` characters, not sentences; a run over 5 minutes clamps around the playhead segment rather than from the run start; overlapping same-speaker segments double count talk time.
+- Task 7: `pool` leaves other workers running when `fn` throws, and `n <= 0` is a silent no-op; `extractJson` can mis-parse fences containing triple backticks or prose containing `[` or `{`; `child.kill()` is SIGTERM only; the child inherits `ANTHROPIC_API_KEY` if set, so `claude` might bill the API instead of the subscription (unset it for seed runs if that matters).
+- Task 8: ISO pass-through is not validated; a bare day-name regex can match ordinary words; `end of week` said on a Saturday gives next Friday; `next weekend` returns next Monday; stamp tests lack empty-input, one-word and overlap-occurs cases.
+- Task 9: `validateDefs` reports an unknown member slug but `castOf` then throws a TypeError; `validateDefs` does not check the three-week window or showcase duration (the test does).
+
+Still open: graphify graph build (extraction is done, graph not built; output lives in the main checkout's `graphify-out/`, which is git-ignored).
