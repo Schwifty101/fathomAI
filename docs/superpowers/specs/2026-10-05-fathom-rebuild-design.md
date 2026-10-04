@@ -52,7 +52,9 @@ a scannable summary.
 Real recording bot, real calendar OAuth, billing, real multi-tenant
 teams/orgs and invites, CRM (Salesforce/HubSpot) and Slack integrations, Deals,
 Alerts (keyword notifications), Playlists (a possible cheap stretch: a join
-table over highlights), deal-stage/outcome filters, Refer/points, Settings,
+table over highlights), custom highlight buttons, Slack or CRM push of
+highlights, manual creation of action items after the call, deal-stage/outcome
+filters, Refer/points, Settings,
 Help and onboarding videos, semantic/embedding search, mobile app, action-item
 completion state, per-user settings, highlight range editing.
 
@@ -61,7 +63,7 @@ completion state, per-user settings, highlight range editing.
 | Table               | Columns                                                          | Notes                                                                                                                                        |
 | ------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | `team_members`    | id, name, role, is_demo_user                                     | Seeded team (~6). Exactly one `is_demo_user` row: the "My Calls" persona                                                                     |
-| `meetings`        | id, title, kind, platform, started_at, duration_sec, host_id     | `host_id` references `team_members`. `kind`: sales, standup, one_on_one, interview, postmortem, design_review, planning                      |
+| `meetings`        | id, title, kind, platform, started_at, duration_sec, highlight_sec (derived), host_id     | `host_id` references `team_members`. `kind`: sales, standup, one_on_one, interview, postmortem, design_review, planning                      |
 | `participants`    | id, meeting_id, member_id null, name, role, is_internal, talk_time_sec, questions, longest_monologue_sec | `member_id` set for team members. Last three columns derived from segments at load: talk time; question sentences; longest same-speaker run (gaps under 3s merged) |
 | `ask_answers`     | id, prompt, scope, answer jsonb                                  | Pre-generated Ask Fathom answers with citations (meeting_id, segment idx, start_ms)                                                          |
 | `ai_usage`        | id, user_id, kind, created_at                                    | `kind`: regenerate or ask. Backs per-user rate limits; written by server routes only                                                         |
@@ -69,7 +71,7 @@ completion state, per-user settings, highlight range editing.
 | `chapters`        | id, meeting_id, start_ms, title                                  |                                                                                                                                              |
 | `summaries`       | id, meeting_id, template, content jsonb, user_id null, source    | `template`: general, sales, standup, project_review. `source`: seed or live. Unique (meeting_id, template, coalesce(user_id, zero-uuid)) |
 | `action_items`    | id, meeting_id, owner, task, due, start_ms                       | `start_ms` is the transcript anchor                                                                                                        |
-| `highlights`      | id, meeting_id, user_id, start_ms, end_ms, note, created_at      |                                                                                                                                              |
+| `highlights`      | id, meeting_id, user_id null, type, title, start_ms, end_ms, note, created_at; `type` is action_item, insight, positive, feedback, objection or tech_question; null `user_id` = seeded demo-persona highlight, readable by all      |                                                                                                                                              |
 | `shares`          | slug (pk), meeting_id, start_ms, end_ms, created_by, created_at  | Check: end_ms - start_ms <= 300000                                                                                                           |
 | `calendar_events` | id, title, platform, day_offset, time_of_day                     | Resolved relative to today at read time via a view, so demo data never goes stale                                                            |
 
@@ -83,7 +85,8 @@ completion state, per-user settings, highlight range editing.
   `summaries`: anon and authenticated may read rows where `user_id is null`;
   an authenticated user may also read rows where `user_id = auth.uid()`.
   Writes only via service role (seed loader and server routes).
-- `highlights`: select/insert/update/delete only where `user_id = auth.uid()`.
+- `highlights`: select where `user_id is null` (seeded) or `user_id = auth.uid()`;
+  insert/update/delete only where `user_id = auth.uid()`.
 - `shares`: insert for authenticated with `created_by = auth.uid()`; delete own;
   no direct anon select. Public access goes through security-definer
   `get_clip(slug)`, which returns the clip window's segments, meeting title and
@@ -117,6 +120,10 @@ skips existing files):
    "Summarize my recent meetings", "Surprise me with an insight". The prompt
    says "recent", not "today", because seeded dates are absolute and "today"
    would go stale. Citations are segment indices that code maps to `start_ms`.
+8. Highlights: one call per meeting picks 3-6 moments as a segment index, a
+   `type` and a short title. Code expands each index to its speaker run (the same
+   function the app uses for user highlights) to get `start_ms`/`end_ms`, so
+   seeded and user highlights have identical windows.
 
 Content set: ~7 meetings spread over the three weeks before seeding: the
 8-person planning showcase, sales discovery, standup, 1:1, customer interview,
@@ -125,7 +132,8 @@ incident postmortem, design review.
 `seed:check` asserts: zod schema valid (code fences stripped, one retry on bad
 JSON); every speaker is in the cast; timestamps monotonic; showcase duration
 within 5% of target and all 8 speakers have meaningful talk time; every action
-item, chapter anchor and Ask citation resolves to a segment; no unresolved
+item, chapter anchor, highlight and Ask citation resolves to a segment; every
+highlight type is valid and its window is at most 5 minutes; no unresolved
 relative dates; every meeting has a host from the roster; exactly one demo
 persona; per-meeting talk-time shares sum to ~100%.
 
@@ -163,7 +171,7 @@ have identical shape.
 
 ### Meeting page
 
-- Simulated player: scrubber, play/pause, 1x/1.5x/2x, +-15s skip, per-speaker
+- Simulated player: scrubber, play/pause, 1x/1.5x/2x, +-10s skip, per-speaker
   lanes, chapter and highlight markers. `usePlayback` runs a
   `requestAnimationFrame` clock; the active segment is a binary search over
   `start_ms`, so only the active row re-renders.
@@ -171,6 +179,14 @@ have identical shape.
   to seek; auto-follows playback with a "jump to live" button after manual
   scroll; in-transcript search; speaker filter.
   Ceiling: virtualize above ~5k segments.
+- A highlight panel docked beside the player imitates Fathom's live call panel:
+  six color-coded type buttons (Action item, Insight, Positive, Feedback,
+  Objection, Tech question) with a per-type count chip and an optional note
+  field. Pressing a button while playback runs creates a highlight (section 8).
+- Summary and Action items each have a Copy button (markdown to clipboard) for
+  pasting into Docs, Notion or email.
+- The Action items tab lists AI-extracted items plus the signed-in user's own
+  `action_item` highlights.
 - Right panel tabs: Summary, Action items, Chapters, Highlights, Ask. A speaker
   strip shows each participant's talk-time %, questions and longest monologue
   (from `participants`). Mobile: player on top, tabs below.
@@ -203,15 +219,27 @@ Body: question plus scope (my_calls, team_calls, or a meeting id).
 
 ## 8. Highlights and sharing
 
-- Highlight: `H` or button captures ~5s before to 10s after the playhead,
-  snapped to segment boundaries; optional inline note; optimistic insert via
-  server action. Shown as scrubber markers and in the Highlights tab (click to
-  seek). Signed out: dialog prompts Google sign-in and returns to the same
-  `?t=`; the pending highlight is not replayed.
+- Highlight: a type button (or `H` for Insight) captures the **speaker run
+  containing the playhead**: consecutive segments by the same participant, gaps
+  under 3s merged, clamped to 5 minutes. This mirrors Fathom, which detects when
+  the current speaker started talking and retroactively captures the whole
+  monologue. The window starts at the run start and ends at the run end; there
+  is no manual end-highlight (ceiling; add if a live-ending control matters).
+  Title is the note if given, else the first ~8 words of the run. Optional note;
+  optimistic insert via server action. Shown as typed, color-coded scrubber
+  markers and in the Highlights tab with type chip, title and transcript
+  excerpt (click to seek). Signed out: dialog prompts Google sign-in and returns
+  to the same `?t=`; the pending highlight is not replayed.
+- Seeded highlights: each seeded meeting ships 3-6 typed, titled highlights
+  attributed to the demo persona (`user_id` null), so highlights, markers and the
+  "N mins of highlights" figure on meeting cards are never empty. Highlight
+  duration per meeting is derived at load.
 - Share: from a highlight, the current moment, or selected transcript lines. A
   server action inserts a `shares` row (10-char random slug), copies the URL.
   Window capped at 5 minutes (action and DB constraint); 20 shares/user/day.
-  Creator can delete their links.
+  Creator can delete their links. Sharing a whole meeting is just copying its
+  public URL (the demo workspace is public); a "share with my highlights" view
+  is out of scope.
 - `/clip/[slug]`: no sign-in; data via `get_clip`; looping clip player, window
   transcript, CTAs to full meeting and sign-in; `generateMetadata` plus a
   `next/og` image (title and pull-quote).
@@ -230,7 +258,8 @@ suggestions; failed LLM call shows a toast and keeps the seeded summary.
 Tests:
 
 - `seed:check` (section 6).
-- Unit: active-segment search, clip-window clamping, regenerate route with a
+- Unit: active-segment search, speaker-run expansion (single segment, gap merge,
+  5-minute clamp), clip-window clamping, regenerate route with a
   stub client (success, bad JSON with retry, no key, no session, rate limited);
   `/api/ask` the same way, plus suggested prompt (no model call) and the
   extractive fallback returning cited, in-scope matches.
@@ -269,6 +298,9 @@ Tests:
   generation and `seed:check`; showcase may need manual regeneration of a chapter.
 - Live regeneration and live Ask are verified only against a stub unless a key
   is supplied.
+- A real Fathom sample-call transcript (real people's names) was shared as a
+  reference for format and highlight behavior. It is not committed or seeded;
+  all seeded data stays synthetic.
 - "My Calls" is a fixed demo persona, not the signed-in user. A reviewer may
   find that odd; the README and walkthrough say so.
 - Supabase project choice: an existing project may be reused or a new one
