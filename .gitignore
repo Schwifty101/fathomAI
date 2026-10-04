@@ -1,0 +1,6 @@
+# secrets and local tooling (Task 1 appends the rest of the plan list)
+.env
+.env*.local
+.claude/worktrees/
+.superpowers/
+graphify-out/
