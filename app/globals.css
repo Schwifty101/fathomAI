@@ -16,6 +16,14 @@
   --color-hl-feedback: #fbbf24;
   --color-hl-objection: #f87171;
   --color-hl-tech: #a78bfa;
+  --color-lane-1: #21baf3;
+  --color-lane-2: #34d399;
+  --color-lane-3: #fbbf24;
+  --color-lane-4: #f87171;
+  --color-lane-5: #a78bfa;
+  --color-lane-6: #22d3ee;
+  --color-lane-7: #fb923c;
+  --color-lane-8: #f472b6;
   --radius-card: 12px;
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatMinutes, formatMs, parseTimeParam } from '@/lib/format'
+import { formatMinutes, formatMs, initials, parseTimeParam } from '@/lib/format'
 
 describe('formatMs', () => {
   it('formats m:ss and h:mm:ss', () => {
@@ -34,5 +34,14 @@ describe('parseTimeParam', () => {
   it('clamps negative and past-the-end values', () => {
     expect(parseTimeParam('-500', dur)).toBe(0)
     expect(parseTimeParam('999999999', dur)).toBe(dur)
+  })
+})
+
+describe('initials', () => {
+  it('uses the first letters of the first and last word', () => {
+    expect(initials('Priya Raman')).toBe('PR')
+    expect(initials('Elena Voss')).toBe('EV')
+    expect(initials('Cher')).toBe('C')
+    expect(initials('  ')).toBe('?')
   })
 })

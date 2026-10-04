@@ -17,3 +17,9 @@ export function parseTimeParam(value: string | string[] | undefined, durationMs:
   if (raw === undefined || raw === '' || !Number.isFinite(n)) return 0
   return Math.min(Math.max(0, Math.round(n)), durationMs)
 }
+
+export function initials(name: string): string {
+  const words = name.trim().split(/\s+/).filter(Boolean)
+  if (words.length === 0) return '?'
+  return (words[0][0] + (words.length > 1 ? words.at(-1)![0] : '')).toUpperCase()
+}
