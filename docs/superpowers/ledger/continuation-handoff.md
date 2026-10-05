@@ -4,7 +4,7 @@ Date: 2026-10-05 (rewritten after independent verification and Phase 0). Branch:
 
 ## Stop point
 
-Tasks 1-26 are implemented, independently verified by five read-only agents, and hardened in Phase 0. **Tasks 27 (live summary regeneration) and 28 (calendar stub) are implemented and merged**; both are covered only by unit tests and builds, with no browser or live-model check yet. Task 29 (deploy, smoke test, README, repository) has not started. Task 11 has not produced data.
+Tasks 1-26 are implemented, independently verified by five read-only agents, and hardened in Phase 0. **Tasks 27 (live summary regeneration) and 28 (calendar stub) are implemented and merged**; both are covered only by unit tests and builds, with no browser or live-model check yet. Task 29 is started: Steps 1-2 (the Playwright config and smoke spec) are written and the harness works, but only the 404 test can pass until data is loaded; Steps 3-12 (deploy, README, walkthrough, repository) have not started. Task 11 has not produced data.
 
 `main` and `feat/phase-1-foundation` point at the same commit. Nothing has been pushed or deployed (`origin/main` still holds only "first commit"). Latest local checks on the merged tree: `npm test` 28 files / 234 tests, `npm run typecheck`, and `npm run build` (including `/api/regenerate` and `/calendar`) all pass.
 
@@ -17,6 +17,7 @@ Tasks 1-26 are implemented, independently verified by five read-only agents, and
 | Task 11 synthetic meetings | Not run. No `seed/generated/` output. The generation code was fixed in Phase 0 but never exercised with the real model. The new `claude` CLI flags are confirmed in `--help` only. | In a terminal with working Claude auth and quota, from the feature worktree: `npm run seed:gen -- eng-standup`, inspect the bundle, then `npm run seed:gen`. Review output quality before loading. |
 | Tasks 12-13 data gates | Not run. `seed:check` was hardened (calendar dates, duplicate prompts, scope enum, highlight ranges, per-scope citations, unresolved due phrases). The loader's missing-bundle preflight works. | `npm run seed:check`, then `npm run seed:load` twice (idempotence), then the anon search check from the plan. `seed:load` runs the target guard first. |
 | Tasks 15, 18-28 runtime | Unverified in a browser. Code, unit tests and read-only reviews pass; nothing has run against populated hosted data. Google OAuth and the Supabase redirect allow-list are not configured or tested. | After data is loaded and Google is configured, follow each task's browser acceptance steps. For Ask, check suggested chips per scope, scope restriction, the extractive fallback, and a live answer only if a server-side Anthropic key is deliberately provided. |
+| Task 29 smoke tests | Written: `playwright.config.ts` and `e2e/smoke.spec.ts` (9 tests). Run locally against the production build and the empty hosted DB: 1 passed (friendly 404), 8 failed, all for missing data (page snapshots show "Calls 0 / Team members 0" and the friendly 404 for `q4-planning`). The selectors and strings were checked against the real components. | After `seed:load` and `seed:clips`, run `npm run e2e` (builds and serves the app itself; set `BASE_URL` to test a deployment instead). Fix real app failures, not the tests. |
 | Task 14 visual review | Open. Ignored reference captures exist under `docs/design/refs/`; the design document and `/design` page are tracked. | Review the 1280 px and 390 px captures and the reduced-motion result in a browser. |
 
 ## Decisions still open
@@ -29,9 +30,9 @@ Tasks 1-26 are implemented, independently verified by five read-only agents, and
 ## Repository and environment state
 
 - The main checkout has untracked local state that must be preserved: `.env` (DB password only), `supabase/.temp`, `graphify-out/`, and the session logs under `.agent-logs/` that exist only there. Do not use `git add -A` there.
-- The feature worktree has a real `.env.local` (Supabase URL, anon key, service-role key; values not recorded anywhere). It is gitignored. The main checkout has no `.env.local`.
-- The main checkout's `node_modules` is a partial leftover (8 entries) from an agent that ran `npm ci` against the wrong directory. It is gitignored and nothing depends on it: `rm -rf` it, or run `npm ci` there if tests are ever run from main. The feature worktree's `node_modules` is intact.
-- Merged agent worktrees remain on disk and can be removed once nothing needs them: `.claude/worktrees/agent-aeb014834259fb85a`, `agent-a1fe4b835d9c5bee2` and `agent-af8094821fd0c3479` (branches `worktree-agent-aeb014834259fb85a`, `worktree-agent-a1fe4b835d9c5bee2`, `fix/seed-pipeline-stream-a`). The Task 27 and 28 worktrees (`agent-a3484a91839dfdea6`, `agent-a1d4fa42c461326d6`, branches `feat/task-27-regenerate`, `feat/task-28-calendar`) are merged and removable too.
+- The real `.env.local` (Supabase URL, anon key, service-role key; values not recorded anywhere, gitignored) lives in the feature worktree. The main checkout's `.env.local` is a **symlink** to it, so scripts and tests run from either place. If the feature worktree is ever removed, move the real file into the main checkout first or the keys are lost. `.env` in the main checkout holds only `SUPABASE_DB_PASSWORD` for the `supabase` CLI.
+- Both checkouts have a clean `node_modules` (the main checkout's was rebuilt with `npm ci` after an agent corrupted it).
+- The merged agent worktrees and branches were removed. Only `main` and `feat/phase-1-foundation` (the feature worktree) remain.
 - Isolated agent worktrees start from `origin/main`, not local `main`. Every agent prompt must check `git log --oneline -1` and `ls package.json` first and `git reset --hard <base>` if needed, before any `npm` command.
 
 ## Logs
@@ -41,4 +42,5 @@ The capture hook writes to the main checkout's `.agent-logs/` (via `$CLAUDE_PROJ
 ## Next planned work
 
 1. You run `seed:gen` (Task 11); then Tasks 12-13 gates, Google OAuth, and browser acceptance.
-2. Task 29: Playwright smoke tests, deploy (needs your approval), Supabase Site URL and redirect URLs, README, walkthrough, log secret scan, repository (needs your approval), disable the Email provider, rotate the DB password.
+2. Task 29 from Step 3: deploy (needs your approval; `vercel` is logged in but no project is linked yet), put the three Supabase variables into Vercel, set Supabase Site URL and redirect URLs, run `BASE_URL=<live> npm run e2e`, README, walkthrough, log secret scan, repository (needs your approval), disable the Email provider, rotate the DB password.
+3. Before the public deploy, decide on the `postcss` advisory in `next` (ledger 9.8).
