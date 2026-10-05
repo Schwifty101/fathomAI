@@ -4,6 +4,7 @@ import { scheduleCall } from '@/app/calendar/actions'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import type { CalEvent } from '@/lib/google-calendar'
+import { safeHref } from '@/lib/safe-href'
 import { toast } from '@/lib/toast'
 
 const DURATIONS = [15, 30, 45, 60, 90]
@@ -80,8 +81,8 @@ export function ScheduleCallForm() {
         {error && <p role="alert" className="text-sm text-danger">{error}</p>}
         {created && (
           <p role="status" className="text-sm">
-            {created.meetUrl ? (
-              <>Scheduled. <a href={created.meetUrl} target="_blank" rel="noopener noreferrer" className="font-medium text-accent underline underline-offset-2">Open the Meet link</a></>
+            {safeHref(created.meetUrl) ? (
+              <>Scheduled. <a href={safeHref(created.meetUrl) ?? undefined} target="_blank" rel="noopener noreferrer" className="font-medium text-accent underline underline-offset-2">Open the Meet link</a></>
             ) : (
               'Scheduled. Google is still creating the Meet link. Refresh in a moment.'
             )}

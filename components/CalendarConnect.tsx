@@ -6,6 +6,7 @@ import { ScheduleCallForm } from '@/components/ScheduleCallForm'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import type { CalEvent } from '@/lib/google-calendar'
+import { safeHref } from '@/lib/safe-href'
 import { connectGoogleCalendar } from '@/lib/supabase/client'
 import type { UpcomingEvent } from '@/lib/types'
 
@@ -64,6 +65,8 @@ function DemoList({ events }: { events: UpcomingEvent[] }) {
 
 function GoogleEvent({ e }: { e: CalEvent }) {
   const when = e.allDay ? dayFmt.format(new Date(e.start)) : `${timedFmt.format(new Date(e.start))} UTC`
+  const meetUrl = safeHref(e.meetUrl)
+  const htmlLink = safeHref(e.htmlLink)
   return (
     <Card className="space-y-2 p-4">
       <p className="break-words font-medium">{e.title}</p>
@@ -72,10 +75,10 @@ function GoogleEvent({ e }: { e: CalEvent }) {
         {e.allDay && <span className="ml-2 rounded bg-surface-2 px-2 py-0.5 text-xs">All day</span>}
         {e.attendees > 0 && ` · ${e.attendees} ${e.attendees === 1 ? 'attendee' : 'attendees'}`}
       </p>
-      {(e.meetUrl || e.htmlLink) && (
+      {(meetUrl || htmlLink) && (
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-          {e.meetUrl && <a href={e.meetUrl} target="_blank" rel="noopener noreferrer" className={link}>Join Meet</a>}
-          {e.htmlLink && <a href={e.htmlLink} target="_blank" rel="noopener noreferrer" className={link}>Open in Google Calendar</a>}
+          {meetUrl && <a href={meetUrl} target="_blank" rel="noopener noreferrer" className={link}>Join Meet</a>}
+          {htmlLink && <a href={htmlLink} target="_blank" rel="noopener noreferrer" className={link}>Open in Google Calendar</a>}
         </div>
       )}
     </Card>
