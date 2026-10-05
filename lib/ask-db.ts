@@ -1,7 +1,8 @@
 import 'server-only'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { AskDb, AskScope } from './ask'
-import { getDemoPersona, listAskAnswers, searchSegments } from './queries'
+import { getDemoPersona, searchSegments } from './queries'
+import type { AskAnswerRow } from './types'
 import { createAdminClient } from './supabase/admin'
 
 const NO_MEETING = '00000000-0000-0000-0000-000000000000'
@@ -15,12 +16,14 @@ async function scopeFilter(db: SupabaseClient, scope: AskScope): Promise<{ hostI
 }
 
 export function makeAskDb(db: SupabaseClient): AskDb {
-  const admin = createAdminClient()
+  // Lazy: canned and extractive answers must work without SUPABASE_SERVICE_ROLE_KEY.
+  const admin = () => createAdminClient()
   return {
-    async suggested(prompt) {
-      const answers = await listAskAnswers(db)
+    async suggested(prompt, scopeKind) {
+      const { data, error } = await db.from('ask_answers').select('*').eq('scope', scopeKind)
+      if (error) throw new Error(error.message)
       const normalize = (text: string) => text.trim().toLowerCase()
-      return answers.find((answer) => normalize(answer.prompt) === normalize(prompt)) ?? null
+      return ((data ?? []) as AskAnswerRow[]).find((answer) => normalize(answer.prompt) === normalize(prompt)) ?? null
     },
 
     async search(query, scope, max) {
@@ -46,14 +49,14 @@ export function makeAskDb(db: SupabaseClient): AskDb {
     },
 
     async usageCount(userId, sinceIso) {
-      const { count, error } = await admin.from('ai_usage').select('id', { count: 'exact', head: true })
+      const { count, error } = await admin().from('ai_usage').select('id', { count: 'exact', head: true })
         .eq('user_id', userId).eq('kind', 'ask').gte('created_at', sinceIso)
       if (error) throw new Error(error.message)
       return count ?? 0
     },
 
     async recordUsage(userId) {
-      const { error } = await admin.from('ai_usage').insert({ user_id: userId, kind: 'ask' })
+      const { error } = await admin().from('ai_usage').insert({ user_id: userId, kind: 'ask' })
       if (error) throw new Error(error.message)
     },
   }
