@@ -2,8 +2,10 @@
 
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
+import { Button } from '@/components/ui/Button'
 import type { Clip } from '@/lib/clip'
 import { PlaybackStore } from '@/lib/playback'
+import { signInWithGoogle } from '@/lib/supabase/client'
 import type { ParticipantRow, SegmentRow } from '@/lib/types'
 import { Player } from './Player'
 import { Transcript } from './Transcript'
@@ -42,12 +44,20 @@ export function ClipView({ clip }: { clip: Clip }) {
       </header>
       <Player store={store} participants={participants} segments={segments} chapters={[]} highlights={[]} />
       <Transcript store={store} segments={segments} participants={participants} highlights={[]} />
-      <Link
-        href={`/meetings/${clip.meeting_slug}?t=${clip.start_ms}`}
-        className="inline-block rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-fg"
-      >
-        View the full meeting
-      </Link>
+      <div className="flex flex-wrap items-center gap-3">
+        <Link
+          href={`/meetings/${clip.meeting_slug}?t=${clip.start_ms}`}
+          className="inline-block rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-fg"
+        >
+          View the full meeting
+        </Link>
+        <Button
+          variant="secondary"
+          onClick={() => signInWithGoogle(`/meetings/${clip.meeting_slug}?t=${clip.start_ms}`)}
+        >
+          Sign in with Google to make your own clips
+        </Button>
+      </div>
     </div>
   )
 }

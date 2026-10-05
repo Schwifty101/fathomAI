@@ -1,4 +1,5 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
+import { cache } from 'react'
+import { createAnonClient } from './supabase/anon'
 
 export type Clip = {
   slug: string
@@ -9,8 +10,9 @@ export type Clip = {
   segments: { idx: number; start_ms: number; end_ms: number; speaker: string; text: string }[]
 }
 
-export async function getClip(db: SupabaseClient, slug: string): Promise<Clip | null> {
-  const { data, error } = await db.rpc('get_clip', { p_slug: slug })
+// cache() keys on args, so take only the slug: page, metadata and OG image share one RPC per request.
+export const getClip = cache(async (slug: string): Promise<Clip | null> => {
+  const { data, error } = await createAnonClient().rpc('get_clip', { p_slug: slug })
   if (error) throw new Error(error.message)
   return (data as Clip | null) ?? null
-}
+})
