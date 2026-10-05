@@ -1,7 +1,9 @@
 // Placeholder block for loading screens. Decorative: the loading screen's wrapper carries role="status".
 // The shimmer comes from .animate-shimmer in globals.css, which prefers-reduced-motion already neutralises.
 export function Skeleton({ className = '', ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div aria-hidden className={`animate-shimmer rounded-md ${className}`} {...props} />
+  // Two radius utilities on one element would be settled by stylesheet order, so the default only applies when the caller gave none.
+  const radius = className.includes('rounded') ? '' : 'rounded-md'
+  return <div aria-hidden className={`animate-shimmer ${radius} ${className}`} {...props} />
 }
 
 // Wrapper every loading.tsx uses so assistive tech announces one "Loading <what>" and ignores the blocks.
