@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react'
 import { rovingTarget } from '@/lib/roving'
+import { panelElementId, tabControls, tabElementId } from '@/lib/tabs'
 
 export type TabDef = { id: string; label: string; content: React.ReactNode }
 
@@ -27,9 +28,9 @@ export function Tabs({ tabs }: { tabs: TabDef[] }) {
             key={tab.id}
             ref={(element) => { refs.current[index] = element }}
             role="tab"
-            id={`tab-${tab.id}`}
+            id={tabElementId(tab.id)}
             aria-selected={tab.id === current.id}
-            aria-controls={`panel-${tab.id}`}
+            aria-controls={tabControls(tab.id, current.id)}
             tabIndex={tab.id === current.id ? 0 : -1}
             onClick={() => setId(tab.id)}
             onKeyDown={(event) => onKeyDown(event, index)}
@@ -39,7 +40,7 @@ export function Tabs({ tabs }: { tabs: TabDef[] }) {
           </button>
         ))}
       </div>
-      <div role="tabpanel" id={`panel-${current.id}`} aria-labelledby={`tab-${current.id}`} className="pt-4">
+      <div role="tabpanel" id={panelElementId(current.id)} aria-labelledby={tabElementId(current.id)} className="pt-4">
         {current.content}
       </div>
     </div>
