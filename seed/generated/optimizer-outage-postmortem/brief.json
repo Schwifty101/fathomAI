@@ -1,0 +1,46 @@
+{
+  "agenda": [
+    "Set a blameless frame and reconstruct Tuesday's 52-minute optimizer outage.",
+    "Trace the database index change, nightly table lock, and delayed detection.",
+    "Account for the 31 affected customers and review communication and recovery.",
+    "Agree owners and dates for alert thresholds, deploy checks, and status-page updates."
+  ],
+  "chapters": [
+    {
+      "title": "Incident Timeline and Recovery",
+      "minutes": 7,
+      "beats": [
+        "Mei establishes a blameless review of Tuesday's 52-minute incident; Lucas reconstructs the index deploy and the nightly job's table lock.",
+        "The optimizer returned empty route results rather than its last good plan, and dispatchers first reported missing routes before the alert paged engineering.",
+        "The team stopped the job, rolled back the index change, and checked route regeneration before declaring recovery."
+      ]
+    },
+    {
+      "title": "Root Cause and Detection Gap",
+      "minutes": 7,
+      "beats": [
+        "Lucas explains how the changed index caused the nightly job to take a locking query path; the job and optimizer contended for the same tables.",
+        "Mei and Lucas disagree about whether an alert on empty route results or database lock duration should be the primary page; they agree to pair a customer-visible route signal with a lock diagnostic.",
+        "Jonas challenges the empty-state design because it looked like a successful zero-route result rather than an error."
+      ]
+    },
+    {
+      "title": "Customer Impact and Communication",
+      "minutes": 6,
+      "beats": [
+        "Amara verifies 31 affected customers and distinguishes failed route requests from customers who merely opened the board during the window.",
+        "Amara and Omar challenge the delayed status-page post and the lack of a dependable notification owner.",
+        "The group agrees on evidence-based customer follow-up without implying that all 31 customers lost deliveries."
+      ]
+    },
+    {
+      "title": "Prevention, Owners, and Close",
+      "minutes": 5,
+      "beats": [
+        "Mei commits to a deploy checklist that checks index and nightly-job interaction and requires an explicit rollback owner.",
+        "Lucas commits to alert thresholds and a replay test; Jonas owns an explicit route-error state, while Amara owns customer and status-page wording.",
+        "Omar requests measurable completion evidence and a short review, and Mei closes with owners and deadlines."
+      ]
+    }
+  ]
+}

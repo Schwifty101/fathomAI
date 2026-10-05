@@ -1,0 +1,123 @@
+{
+  "general": {
+    "sections": [
+      {
+        "heading": "Overview",
+        "bullets": [
+          "Priya Raman and Mei Tanaka discussed platform workload, candidate Q4 bets, two backend hires, Mei’s growth toward a director role, and how product and engineering plan together."
+        ]
+      },
+      {
+        "heading": "Key points",
+        "bullets": [
+          "Mei said three platform engineers had handled eleven after-hours pages in two weeks, alongside about twenty-six estimated hours of unplanned work.",
+          "Priya described mobile v2, an ETA accuracy model, and a staged self-serve onboarding pilot as proposals for the next day’s Q4 planning, not approved commitments.",
+          "Mei estimated ten usable engineering weeks after holidays and support work, with four weeks for mobile, three for ETA, and two reserved for reliability.",
+          "Mei said a new senior backend engineer would need about thirty days to learn the architecture and incident history before adding net capacity."
+        ]
+      },
+      {
+        "heading": "Decisions",
+        "bullets": [
+          "Priya backed a protected recovery afternoon after on-call duty, and Mei agreed to route urgent reviews to herself.",
+          "Priya and Mei agreed that the onboarding proposal should specify one carrier configuration, an import template, human review before activation, and a fallback that delays customer activation.",
+          "Priya agreed to invite Mei into a forty-five-minute scoping session before circulating the next cycle’s candidate bets."
+        ]
+      },
+      {
+        "heading": "Open questions",
+        "bullets": [
+          "The Q4 planning group had not yet chosen its bets, approved the two backend hires, or decided whether to activate the onboarding pilot.",
+          "Mei and Priya still needed evidence that a pilot could shorten the nineteen-day onboarding process without increasing support tickets."
+        ]
+      }
+    ]
+  },
+  "sales": {
+    "sections": [
+      {
+        "heading": "Pain points",
+        "bullets": [
+          "Priya said new customers take an average of nineteen days to reach a first usable dispatch, creating pressure to improve onboarding.",
+          "Mei warned that a broken carrier import could damage customer trust more than a staged pilot would."
+        ]
+      },
+      {
+        "heading": "Current solution",
+        "bullets": [
+          "Mei proposed testing one carrier configuration with an import template and human review before activation, while preserving a fallback to an import prototype without customer activation."
+        ]
+      },
+      {
+        "heading": "Objections",
+        "bullets": [
+          "Mei objected to describing a broad self-serve launch for Q4 because platform reliability, mobile delivery, and ETA deployment already consume almost all estimated capacity."
+        ]
+      },
+      {
+        "heading": "Next steps",
+        "bullets": [
+          "Priya will present the three Q4 bets as proposals and include the gated pilot option in the next day’s planning draft.",
+          "Mei will send a capacity note by Friday so the planning group can evaluate the scope against pages and unplanned work."
+        ]
+      }
+    ]
+  },
+  "standup": {
+    "sections": [
+      {
+        "heading": "Today",
+        "bullets": [
+          "Mei Tanaka will tell the team today that the optional platform migration review is postponed to protect recovery time.",
+          "Priya Raman will revise the Q4 draft tonight and send it to Mei Tanaka tomorrow morning for a final read."
+        ]
+      },
+      {
+        "heading": "Blockers",
+        "bullets": [
+          "Mei Tanaka said three platform engineers had handled eleven after-hours pages in two weeks and lacked a protected handoff after on-call duty.",
+          "Mei Tanaka said platform deployment, monitoring, and rollback work must be included in the three-week ETA estimate, while the two proposed hires cannot immediately relieve the Q4 load."
+        ]
+      }
+    ]
+  },
+  "project_review": {
+    "sections": [
+      {
+        "heading": "Goals",
+        "bullets": [
+          "Priya Raman proposed evaluating mobile v2, ETA accuracy, and a staged self-serve onboarding pilot at the next day’s Q4 planning meeting.",
+          "Mei Tanaka wants to grow toward a director role by facilitating cross-team capacity decisions and delegating a service review."
+        ]
+      },
+      {
+        "heading": "Progress",
+        "bullets": [
+          "Mei Tanaka estimated ten usable engineering weeks after holidays and existing support work, with four for mobile, three for ETA, and two reserved for reliability.",
+          "Priya Raman and Mei Tanaka defined a possible one-carrier onboarding pilot with an import template and human review."
+        ]
+      },
+      {
+        "heading": "Risks",
+        "bullets": [
+          "Mei Tanaka reported eleven after-hours pages in two weeks for three platform engineers and about twenty-six estimated hours of unplanned work.",
+          "Mei Tanaka said the hiring plan must not be counted as immediate Q4 capacity because a senior hire needs about thirty days to learn the system."
+        ]
+      },
+      {
+        "heading": "Decisions",
+        "bullets": [
+          "Priya Raman agreed that reliability reserves are planned work and that she would present the three Q4 bets as proposals rather than settled commitments.",
+          "Priya Raman and Mei Tanaka agreed to try a forty-five-minute joint scoping session before the next planning cycle’s candidate bets circulate."
+        ]
+      },
+      {
+        "heading": "Next steps",
+        "bullets": [
+          "Mei Tanaka will send a capacity note by Friday, draft two backend role briefs and an onboarding sketch by next week, and ask an engineer to lead the next optimizer review by end of week.",
+          "Priya Raman will schedule the joint scoping session next week and send Mei a revised Q4 draft tomorrow morning."
+        ]
+      }
+    ]
+  }
+}

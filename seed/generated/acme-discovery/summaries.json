@@ -1,0 +1,144 @@
+{
+  "general": {
+    "sections": [
+      {
+        "heading": "Overview",
+        "bullets": [
+          "Daniel Ortiz and Priya Raman met Elena Voss and Tom Brandt to evaluate Kestrel Dispatch for Acme Freight's 140-truck regional fleet.",
+          "The group designed a conditional two-week pilot on Acme's north corridor and named data mapping and security approval as gates before live use."
+        ]
+      },
+      {
+        "heading": "Key points",
+        "bullets": [
+          "Tom said seven dispatchers use a shared load sheet plus personal copies, with driver updates passed by phone and reconciled across shifts.",
+          "Elena said customers lack live ETAs, two late deliveries last Tuesday were reported by receivers first, and a large account escalated three missed windows last month.",
+          "Tom estimated about 30 customer status calls on a busy Monday and said idle trucks occur when dispatchers miss a ready next load.",
+          "The proposed pilot covers about 20 trucks, two dispatchers, one north-corridor lane, and one customer contact after security approval.",
+          "Elena has roughly $60,000 in approved annual software budget and must choose among Kestrel Dispatch and two competitors by the end of next month."
+        ]
+      },
+      {
+        "heading": "Decisions",
+        "bullets": [
+          "Elena and Tom accepted an active-record-only pilot that would import drivers, vehicles, and open loads, without moving six years of history.",
+          "The two-week measurement period will begin only after Tom approves the field mapping and Acme's security team clears live pilot access.",
+          "The scorecard will cover earlier warning of late arrivals, status calls, dispatcher use, missing inputs, and import exceptions rather than promise fewer late deliveries."
+        ]
+      },
+      {
+        "heading": "Open questions",
+        "bullets": [
+          "Tom still needs to confirm that inconsistent customer codes can be mapped safely from a scrubbed 50-row sample and that dispatchers can correct wrong records.",
+          "Acme's security lead must decide whether the packet permits live pilot access and a customer-facing status view.",
+          "Acme has not selected a vendor or approved a purchase, pending pilot evidence, operations review, and security approval."
+        ]
+      }
+    ]
+  },
+  "sales": {
+    "sections": [
+      {
+        "heading": "Pain points",
+        "bullets": [
+          "Tom said Acme's seven dispatchers reconcile separate spreadsheet copies and phone updates for a 140-truck fleet.",
+          "Elena said late deliveries can surface through receivers before Acme's team knows about them, while customers have no live ETA view.",
+          "Tom estimated about 30 customer status calls on a busy Monday and described idle drivers caused by delayed assignment visibility."
+        ]
+      },
+      {
+        "heading": "Current solution",
+        "bullets": [
+          "Acme dispatches with a shared load spreadsheet, personal dispatcher copies, driver phone calls, and manual appointment times.",
+          "Tom said old driver IDs and inconsistent customer codes make the workbook unsuitable for an unchecked full import."
+        ]
+      },
+      {
+        "heading": "Budget and timeline",
+        "bullets": [
+          "Elena said roughly $60,000 per year of software budget is approved, while any setup cost needs separate review.",
+          "Elena must select among Kestrel Dispatch and two competitors by the end of next month, after operations and security reviews.",
+          "Daniel said the two-week pilot clock will start after mapping and security approval, so preparation does not reduce live measurement time."
+        ]
+      },
+      {
+        "heading": "Objections",
+        "bullets": [
+          "Tom objected that a dashboard-only pilot or months of double entry would not prove that dispatchers can run a real shift.",
+          "Tom worried that six years of inconsistent spreadsheet history and customer codes would make migration painful or link loads to the wrong customers.",
+          "Elena said Acme requires a security review before production access or any real customer-facing pilot status."
+        ]
+      },
+      {
+        "heading": "Next steps",
+        "bullets": [
+          "Daniel will send a security packet tomorrow and a scoped pilot proposal with annual pricing by end of week.",
+          "Tom will send a scrubbed 50-row export by Friday, including awkward customer codes, and Priya will review its field mapping with him.",
+          "Elena will introduce Acme's security lead next week, and Priya will draft the pilot scorecard and rollback outline."
+        ]
+      }
+    ]
+  },
+  "standup": {
+    "sections": [
+      {
+        "heading": "Today",
+        "bullets": [
+          "Daniel Ortiz will prepare the security packet for tomorrow and the scoped pilot and pricing proposal for end of week.",
+          "Priya Raman will draft a north-corridor scorecard and rollback outline for a two-week pilot covering about 20 trucks and two dispatchers.",
+          "Tom Brandt will prepare a scrubbed 50-row sample with difficult customer codes for review by Friday.",
+          "Elena Voss will introduce Acme's security lead next week so the team can assess pilot access and customer status visibility."
+        ]
+      },
+      {
+        "heading": "Blockers",
+        "bullets": [
+          "Tom Brandt needs to see that unmatched customer codes are flagged and wrong imported records can be corrected without moving six years of history.",
+          "Elena Voss requires security approval before Acme grants production access or exposes real customer-facing pilot statuses."
+        ]
+      }
+    ]
+  },
+  "project_review": {
+    "sections": [
+      {
+        "heading": "Goals",
+        "bullets": [
+          "Elena wants credible live ETAs and evidence that dispatchers will use Kestrel Dispatch before choosing software for Acme's 140-truck fleet.",
+          "Priya proposed measuring earlier warning, status calls, dispatcher use, and import exceptions during two weeks of live north-corridor use."
+        ]
+      },
+      {
+        "heading": "Progress",
+        "bullets": [
+          "Elena and Tom agreed in principle to a pilot of about 20 trucks, two dispatchers, and one customer contact after security approval.",
+          "Tom said an active-only import and a 50-row mapping review reduced his concern about moving six years of spreadsheet history."
+        ]
+      },
+      {
+        "heading": "Risks",
+        "bullets": [
+          "Tom warned that inconsistent customer codes can link loads to the wrong account and that a pilot requiring double entry would fail on the dispatch floor.",
+          "Elena said Acme's security review is mandatory before live access or a customer-facing status view.",
+          "Priya cautioned that a two-week pilot cannot promise fewer late deliveries because dock delays and traffic still affect actual arrival times."
+        ]
+      },
+      {
+        "heading": "Decisions",
+        "bullets": [
+          "The pilot will use active drivers, vehicles, and open loads on the north corridor, with unmatched customer codes stopped for review.",
+          "Tom's mapping sign-off and Acme's security clearance are gates before the two-week live-use period begins.",
+          "Elena will compare Kestrel Dispatch with two competitors using operational adoption and ETA evidence rather than a dashboard demonstration alone."
+        ]
+      },
+      {
+        "heading": "Next steps",
+        "bullets": [
+          "Tom will export 50 scrubbed rows by Friday, and Priya will return a mapping and exception list for review.",
+          "Daniel will send a security packet tomorrow and a scoped proposal with annual pricing by end of week.",
+          "Elena will introduce Acme's security lead next week, while Priya prepares the scorecard and rollback outline."
+        ]
+      }
+    ]
+  }
+}

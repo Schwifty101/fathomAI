@@ -1,0 +1,45 @@
+{
+  "agenda": [
+    "Map Rafael Mendes's dispatch day at Harbor Logistics and identify where Kestrel Dispatch saves time.",
+    "Examine bulk import and reporting friction with concrete examples.",
+    "Test demand and willingness to pay for proactive delay alerts and an API.",
+    "Agree follow-ups and close the interview without promising an unplanned release."
+  ],
+  "chapters": [
+    {
+      "title": "A Day in Harbor Dispatch",
+      "beats": [
+        "Amara asks Rafael to walk through a 6 a.m. shift with 68 trucks and roughly 110 stops.",
+        "Rafael explains how the live map and auto-assign reduce morning phone calls and where human dispatchers still intervene."
+      ],
+      "minutes": 5
+    },
+    {
+      "title": "Imports and Reports",
+      "beats": [
+        "Rafael describes a 420-row Monday import, 17 rejected rows, and weak error messages.",
+        "Amara tests whether a preview and row-level fixes would beat a complete importer redesign.",
+        "Rafael compares the slow weekly report with a dispatcher-built spreadsheet."
+      ],
+      "minutes": 5
+    },
+    {
+      "title": "Delay Alerts and API Demand",
+      "beats": [
+        "Rafael describes a missed delay that reached the customer before Harbor's dispatcher and says a useful alert must arrive before the commitment window.",
+        "Amara tests a monthly premium for proactive alerts and asks how Harbor would use an API.",
+        "Rafael distinguishes useful export access from competitor sales claims."
+      ],
+      "minutes": 5
+    },
+    {
+      "title": "Priority and Follow-up",
+      "beats": [
+        "Rafael ranks import preview above reports, delay alerts, and API access for immediate impact while separating willingness to pay from urgency.",
+        "Amara commits to specific research follow-ups; Rafael agrees to share a redacted file and review alert wording.",
+        "Both recap what is known, what remains unpromised, and close the call."
+      ],
+      "minutes": 5
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "owner": "Mei Tanaka",
+    "task": "Send the platform capacity note with page counts and estimated unplanned work.",
+    "due": "2026-10-02",
+    "due_phrase": "by Friday",
+    "segment_idx": 13,
+    "start_ms": 152098
+  },
+  {
+    "owner": "Mei Tanaka",
+    "task": "Tell the team the optional platform migration review is postponed.",
+    "due": "2026-09-30",
+    "due_phrase": "today",
+    "segment_idx": 15,
+    "start_ms": 173963
+  },
+  {
+    "owner": "Mei Tanaka",
+    "task": "Draft two backend role briefs and a thirty-day onboarding sketch.",
+    "due": "2026-10-05",
+    "due_phrase": "by next week",
+    "segment_idx": 47,
+    "start_ms": 547744
+  },
+  {
+    "owner": "Mei Tanaka",
+    "task": "Ask a platform engineer to lead the next optimizer review.",
+    "due": "2026-10-02",
+    "due_phrase": "by end of week",
+    "segment_idx": 57,
+    "start_ms": 666932
+  },
+  {
+    "owner": "Priya Raman",
+    "task": "Schedule a forty-five-minute product-engineering scoping session.",
+    "due": "2026-10-05",
+    "due_phrase": "next week",
+    "segment_idx": 66,
+    "start_ms": 781996
+  },
+  {
+    "owner": "Priya Raman",
+    "task": "Revise the Q4 draft and send it to Mei for a final read.",
+    "due": "2026-10-01",
+    "due_phrase": "tomorrow morning",
+    "segment_idx": 72,
+    "start_ms": 850523
+  }
+]

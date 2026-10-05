@@ -1,0 +1,66 @@
+[
+  {
+    "owner": "Jonas Weber",
+    "task": "Deliver the thin guided setup flow with error states, review handoff, and exclusions.",
+    "due": "2026-10-05",
+    "due_phrase": "by next week",
+    "segment_idx": 120,
+    "start_ms": 2255626
+  },
+  {
+    "owner": "Amara Nwosu",
+    "task": "Recruit driver testers from three carriers, including rural and city routes.",
+    "due": "2026-10-05",
+    "due_phrase": "by next week",
+    "segment_idx": 58,
+    "start_ms": 1097570
+  },
+  {
+    "owner": "Lucas Ferreira",
+    "task": "Deliver the ETA evaluation plan with cohorts, weekend evidence, rollback, and compute cost.",
+    "due": "2026-10-02",
+    "due_phrase": "by Friday",
+    "segment_idx": 94,
+    "start_ms": 1771139
+  },
+  {
+    "owner": "Mei Tanaka",
+    "task": "Share the mobile release checklist with stability, sync, support, and rollback gates.",
+    "due": "2026-10-02",
+    "due_phrase": "by Friday",
+    "segment_idx": 176,
+    "start_ms": 3337914
+  },
+  {
+    "owner": "Omar Haddad",
+    "task": "Open two backend searches within the approved compensation bands.",
+    "due": "2026-10-05",
+    "due_phrase": "by next week",
+    "segment_idx": 180,
+    "start_ms": 3407226
+  },
+  {
+    "owner": "Hannah Cole",
+    "task": "Prepare the pilot invitation, customer FAQ, and sales message pack.",
+    "due": "2026-10-05",
+    "due_phrase": "by next week",
+    "segment_idx": 181,
+    "start_ms": 3426275
+  },
+  {
+    "owner": "Daniel Ortiz",
+    "task": "Give sales a one-page roadmap that distinguishes pilots from releases.",
+    "due": "2026-10-05",
+    "due_phrase": "by next week",
+    "segment_idx": 182,
+    "start_ms": 3446697
+  },
+  {
+    "owner": "Priya Raman",
+    "task": "Post the Q4 decision log with owners and release gates.",
+    "due": "2026-10-01",
+    "due_phrase": "today",
+    "segment_idx": 197,
+    "start_ms": 3700389
+  }
+]

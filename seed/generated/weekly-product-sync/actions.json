@@ -1,0 +1,58 @@
+[
+  {
+    "owner": "Amara Nwosu",
+    "task": "Attach three redacted import examples with expected and actual outcomes to the issue.",
+    "due": "2026-09-29",
+    "due_phrase": "today",
+    "segment_idx": 13,
+    "start_ms": 167910
+  },
+  {
+    "owner": "Lucas Ferreira",
+    "task": "Pull slow report jobs with durations and row volumes and identify whether the issue is one query or broader capacity.",
+    "due": "2026-10-02",
+    "due_phrase": "by Friday",
+    "segment_idx": 17,
+    "start_ms": 221645
+  },
+  {
+    "owner": "Daniel Ortiz",
+    "task": "Bring three more prospect migration examples with file requirements and willingness to use assisted setup.",
+    "due": "2026-10-02",
+    "due_phrase": "by Friday",
+    "segment_idx": 30,
+    "start_ms": 406695
+  },
+  {
+    "owner": "Lucas Ferreira",
+    "task": "Prepare four weeks of lane-level ETA accuracy by pickup window with sample counts.",
+    "due": "2026-10-02",
+    "due_phrase": "by Friday",
+    "segment_idx": 37,
+    "start_ms": 505025
+  },
+  {
+    "owner": "Lucas Ferreira",
+    "task": "Review the three redacted import files and estimate a row-level error change if they share a cause.",
+    "due": "2026-09-30",
+    "due_phrase": "tomorrow",
+    "segment_idx": 51,
+    "start_ms": 690859
+  },
+  {
+    "owner": "Priya Raman",
+    "task": "Write a one-page planning evidence sheet with customer impact, sample sizes, timing, and unresolved questions.",
+    "due": "2026-10-02",
+    "due_phrase": "by Friday",
+    "segment_idx": 56,
+    "start_ms": 759682
+  },
+  {
+    "owner": "Amara Nwosu",
+    "task": "Send deduplicated support counts and Harbor interview notes, marking workaround time as an estimate.",
+    "due": "2026-09-30",
+    "due_phrase": "tomorrow",
+    "segment_idx": 59,
+    "start_ms": 797972
+  }
+]

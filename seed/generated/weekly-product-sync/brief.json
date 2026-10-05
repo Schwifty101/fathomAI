@@ -1,0 +1,38 @@
+{
+  "agenda": [
+    "Review requests heard from carriers and prospects this week.",
+    "Compare sales pipeline feedback with support ticket trends.",
+    "Agree what evidence and fixes to bring to the next planning cycle."
+  ],
+  "chapters": [
+    {
+      "title": "Customer Requests and Workflow Friction",
+      "beats": [
+        "Amara reports that 11 of 27 recent support requests mention bulk import or report speed, and recounts Harbor Logistics asking for proactive delay alerts and an API.",
+        "Priya asks whether the request count reflects separate carriers, and Amara explains that six carriers account for those 11 tickets.",
+        "Lucas distinguishes a slow report query from a broad reporting redesign and commits to a sample of slow jobs by Friday."
+      ],
+      "minutes": 5
+    },
+    {
+      "title": "Pipeline Signals and ETA Trust",
+      "beats": [
+        "Daniel says Acme Freight has 140 trucks, an approximately $60,000 annual budget, and a security review, but Tom worries that migration will be painful.",
+        "Daniel argues for a migration feature; Priya and Lucas push back on prioritizing a product build from one sales opportunity.",
+        "The group agrees that Daniel will bring three more prospect examples and Amara will compare existing customer import failures before planning.",
+        "Lucas says ETA accuracy is around 82 percent and calls for lane-level evidence before promising a model improvement."
+      ],
+      "minutes": 5
+    },
+    {
+      "title": "Planning Inputs and Near-Term Owners",
+      "beats": [
+        "Priya frames driver mobile app v2, ETA accuracy, and self-serve onboarding as proposals for the upcoming Q4 planning discussion, not settled bets.",
+        "Amara wants a narrow import fix immediately, while Daniel worries it will distract from Acme's migration conversation; Lucas proposes measuring the failure modes first.",
+        "The team agrees to prepare an evidence sheet and scope options rather than decide the Q4 roadmap in this sync.",
+        "Priya closes by assigning owners and deadlines for the planning inputs."
+      ],
+      "minutes": 5
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "owner": "Rafael Mendes",
+    "task": "Send a redacted Monday import file with safe customer references, report filters, and the reassignment sequence.",
+    "due": "2026-10-02",
+    "due_phrase": "by Friday",
+    "segment_idx": 29,
+    "start_ms": 371030
+  },
+  {
+    "owner": "Amara Nwosu",
+    "task": "Bring Harbor's possible duplicate report count to the analytics team and return a finding.",
+    "due": "2026-09-28",
+    "due_phrase": "next week",
+    "segment_idx": 42,
+    "start_ms": 544622
+  },
+  {
+    "owner": "Amara Nwosu",
+    "task": "Check whether a two-week proactive alert pilot on Harbor's 30 busiest routes is feasible.",
+    "due": "2026-09-28",
+    "due_phrase": "next week",
+    "segment_idx": 62,
+    "start_ms": 806243
+  },
+  {
+    "owner": "Amara Nwosu",
+    "task": "Share Harbor's read-only status API use case with Priya Raman.",
+    "due": "2026-10-02",
+    "due_phrase": "by Friday",
+    "segment_idx": 70,
+    "start_ms": 905215
+  },
+  {
+    "owner": "Amara Nwosu",
+    "task": "Prepare three sample delay-alert messages for Nadia to review.",
+    "due": "2026-09-28",
+    "due_phrase": "next week",
+    "segment_idx": 84,
+    "start_ms": 1083957
+  },
+  {
+    "owner": "Amara Nwosu",
+    "task": "Send Rafael Mendes a recap of Harbor's priorities and follow-ups.",
+    "due": "2026-09-26",
+    "due_phrase": "tomorrow",
+    "segment_idx": 88,
+    "start_ms": 1132488
+  }
+]

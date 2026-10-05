@@ -1,0 +1,149 @@
+{
+  "general": {
+    "sections": [
+      {
+        "heading": "Overview",
+        "bullets": [
+          "Mei Tanaka led a blameless review of Tuesday's 52-minute route optimizer outage, during which dispatchers could see empty routes and 31 customer accounts had at least one affected request.",
+          "The group separated confirmed route-generation failures from unverified delivery outcomes and kept the index change rolled back pending further evidence."
+        ]
+      },
+      {
+        "heading": "Key points",
+        "bullets": [
+          "Lucas Ferreira said a changed database index altered the nightly job's query plan, and the job held a lock on route-input tables while optimizer requests waited and timed out.",
+          "The service translated optimizer timeouts into empty route arrays, so Jonas Weber's board showed a blank state that looked like a legitimate zero-route result.",
+          "Lucas placed the first alert about 18 minutes after the first empty result, while a support ticket arrived roughly nine minutes before the page.",
+          "Amara Nwosu counted 31 affected accounts from failed requests, but only eleven contacted support, and the team could not confirm delivery impact for every account.",
+          "Mei paused the nightly job, Lucas rolled back the index, and the team checked two successful optimizer cycles before treating route generation as stable.",
+          "Amara said the status page stayed green after customer reports because no owner or symptom-based declaration trigger had been clear."
+        ]
+      },
+      {
+        "heading": "Decisions",
+        "bullets": [
+          "Mei and Lucas agreed that timeout-derived route failures should drive the primary page, with lock-wait duration serving as a diagnostic signal and replay data used to tune thresholds.",
+          "Mei agreed to return an explicit service error rather than an empty route array, and Jonas will design a route-error state that labels any last good plan with its timestamp.",
+          "The incident lead will name a communications owner and decide on a status-page post within ten minutes of confirmed route-generation impact, without waiting for a root-cause diagnosis.",
+          "Mei will keep the index change rolled back and treat restarting the nightly job separately from another index deploy."
+        ]
+      },
+      {
+        "heading": "Open questions",
+        "bullets": [
+          "Lucas has not yet verified whether a bounded replay under the changed index reproduces the lock and would trigger the proposed alert within five minutes.",
+          "The team cannot tell from existing logs whether every affected account saw a blank board or whether any particular delivery was missed."
+        ]
+      }
+    ]
+  },
+  "sales": {
+    "sections": [
+      {
+        "heading": "Pain points",
+        "bullets": [
+          "Amara Nwosu said dispatchers saw empty routes during a 52-minute period, and one dispatcher reported that every truck appeared unassigned.",
+          "Eleven customers contacted support; one dispatcher used a printed morning route sheet, while another waited to release trucks.",
+          "Amara said the status page still showed green after support had customer reports, which made the outage harder to explain."
+        ]
+      },
+      {
+        "heading": "Current solution",
+        "bullets": [
+          "Mei paused the nightly job and Lucas rolled back the index; support then told callers to refresh after route generation recovered.",
+          "Lucas said request logs confirm regenerated routes, but the team cannot prove every open browser tab refreshed automatically."
+        ]
+      },
+      {
+        "heading": "Objections",
+        "bullets": [
+          "Omar Haddad objected to treating the 31 affected accounts as 31 missed deliveries because the count comes from failed optimizer requests.",
+          "Amara objected to promising a permanent fix in customer notes while the index change was only rolled back and controlled validation remained unfinished."
+        ]
+      },
+      {
+        "heading": "Next steps",
+        "bullets": [
+          "Amara will draft a factual note for the 31 affected accounts by end of week and make a separate call list for the eleven customers who contacted support.",
+          "Omar will review Amara's wording about financial impact today without delaying the operational facts.",
+          "Amara will prepare status-page templates by tomorrow, and the incident lead will name a communications owner when an incident is declared."
+        ]
+      }
+    ]
+  },
+  "standup": {
+    "sections": [
+      {
+        "heading": "Yesterday",
+        "bullets": [
+          "Amara Nwosu reconciled support tickets and route-request logs, identifying 31 affected accounts and eleven customers who contacted support.",
+          "Lucas Ferreira reconstructed how the changed index and the nightly job's long transaction locked route-input tables during Tuesday's outage."
+        ]
+      },
+      {
+        "heading": "Today",
+        "bullets": [
+          "Mei Tanaka will identify an engineer for the timeout-to-error service change and put incident owners in the tracker today.",
+          "Amara Nwosu will send Omar Haddad the draft customer note today and prepare status-page templates by tomorrow.",
+          "Omar Haddad will review the customer note today, especially any claim about financial impact.",
+          "Lucas Ferreira will prepare a bounded replay and an alert proposal by Friday before the team considers redeploying the changed index.",
+          "Jonas Weber will draft a route-error state by next week and then test its wording with two dispatchers alongside Amara Nwosu."
+        ]
+      },
+      {
+        "heading": "Blockers",
+        "bullets": [
+          "Lucas Ferreira cannot treat the changed index as safe until the production-sized replay tests its interaction with the nightly job.",
+          "Jonas Weber needs an explicit optimizer error from Mei Tanaka's service change before the board can reliably distinguish unavailable routes from zero routes.",
+          "Amara Nwosu cannot describe a permanent fix or verified delivery outcome in customer communication because the team has only confirmed route restoration."
+        ]
+      }
+    ]
+  },
+  "project_review": {
+    "sections": [
+      {
+        "heading": "Goals",
+        "bullets": [
+          "Mei Tanaka wants a deploy review that tests index changes against scheduled jobs and names a rollback owner.",
+          "Lucas Ferreira wants customer-visible route-failure alerts to catch an incident like Tuesday's within five minutes.",
+          "Amara Nwosu wants a status-page decision within ten minutes of confirmed route-generation impact."
+        ]
+      },
+      {
+        "heading": "Progress",
+        "bullets": [
+          "Mei paused the nightly job and Lucas rolled back the index; two successful optimizer cycles supported the decision to declare route generation stable.",
+          "Amara reconciled logs and tickets to identify 31 affected accounts and eleven customers who contacted support."
+        ]
+      },
+      {
+        "heading": "Risks",
+        "bullets": [
+          "The nightly job is paused, and Lucas has not yet proved that a full run and the changed index can coexist without locking route-input tables.",
+          "The service currently converts optimizer timeouts into empty routes, leaving dispatchers with a misleading blank board.",
+          "Server-health alerts fired roughly 18 minutes after the first empty result, and the status page remained green while customers contacted support.",
+          "The logs do not establish which of the 31 affected accounts saw a blank board or lost a delivery."
+        ]
+      },
+      {
+        "heading": "Decisions",
+        "bullets": [
+          "Mei and Lucas chose timeout-derived route failures as the primary paging signal and lock-wait duration as a diagnostic signal.",
+          "Mei will keep the index rolled back until the replay and evidence review, while handling the nightly job restart as a separate decision.",
+          "The incident lead will name a communications owner and make a status-page decision within ten minutes of confirmed impact."
+        ]
+      },
+      {
+        "heading": "Next steps",
+        "bullets": [
+          "Mei will publish the revised deploy checklist by Friday and identify the engineer for the timeout-to-error service change today.",
+          "Lucas will bring alert thresholds and replay evidence by Friday, including whether the alert would have paged within five minutes on Tuesday.",
+          "Jonas will draft a route-error state by next week, and Amara will test its wording with two dispatchers.",
+          "Amara will draft status-page templates by tomorrow and a factual customer note by end of week, with Omar reviewing financial-impact language today.",
+          "Mei will hold an evidence review next week covering the replay, alert path, status update exercise, and board error state."
+        ]
+      }
+    ]
+  }
+}

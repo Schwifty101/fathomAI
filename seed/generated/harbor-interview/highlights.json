@@ -1,0 +1,44 @@
+[
+  {
+    "segment_idx": 7,
+    "type": "positive",
+    "title": "Live map replaces morning calls",
+    "start_ms": 93621,
+    "end_ms": 107440
+  },
+  {
+    "segment_idx": 22,
+    "type": "feedback",
+    "title": "Import rejects lack useful row context",
+    "start_ms": 280401,
+    "end_ms": 292528
+  },
+  {
+    "segment_idx": 39,
+    "type": "objection",
+    "title": "Report count may duplicate reassigned stops",
+    "start_ms": 505493,
+    "end_ms": 519169
+  },
+  {
+    "segment_idx": 55,
+    "type": "insight",
+    "title": "Alerts need a twenty-minute response window",
+    "start_ms": 716037,
+    "end_ms": 729938
+  },
+  {
+    "segment_idx": 65,
+    "type": "tech_question",
+    "title": "Harbor requests read-only stop status access",
+    "start_ms": 839372,
+    "end_ms": 854104
+  },
+  {
+    "segment_idx": 73,
+    "type": "feedback",
+    "title": "Import preview outranks alert pilot",
+    "start_ms": 941634,
+    "end_ms": 953871
+  }
+]

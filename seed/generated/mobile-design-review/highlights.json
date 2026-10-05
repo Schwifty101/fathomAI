@@ -1,0 +1,44 @@
+[
+  {
+    "segment_idx": 11,
+    "type": "insight",
+    "title": "Stop list works without background location",
+    "start_ms": 157667,
+    "end_ms": 169609
+  },
+  {
+    "segment_idx": 39,
+    "type": "feedback",
+    "title": "Queued completion must not look final",
+    "start_ms": 525643,
+    "end_ms": 542848
+  },
+  {
+    "segment_idx": 55,
+    "type": "feedback",
+    "title": "Contrast and screen reader gaps found",
+    "start_ms": 746579,
+    "end_ms": 760650
+  },
+  {
+    "segment_idx": 65,
+    "type": "objection",
+    "title": "Swipe raises glove and accessibility concerns",
+    "start_ms": 890137,
+    "end_ms": 903356
+  },
+  {
+    "segment_idx": 72,
+    "type": "action_item",
+    "title": "Test both controls with real drivers",
+    "start_ms": 987296,
+    "end_ms": 1003247
+  },
+  {
+    "segment_idx": 94,
+    "type": "insight",
+    "title": "Accepted completions need no default push",
+    "start_ms": 1297805,
+    "end_ms": 1311287
+  }
+]

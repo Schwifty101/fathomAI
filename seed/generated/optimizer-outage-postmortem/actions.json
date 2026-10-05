@@ -1,0 +1,58 @@
+[
+  {
+    "owner": "Lucas Ferreira",
+    "task": "Run a bounded replay and compare optimizer and nightly-job query plans before resuming the full batch.",
+    "due": null,
+    "due_phrase": null,
+    "segment_idx": 78,
+    "start_ms": 1239597
+  },
+  {
+    "owner": "Mei Tanaka",
+    "task": "Publish a revised database deploy checklist covering scheduled jobs, production-sized plan checks, and a rollback owner.",
+    "due": "2026-09-25",
+    "due_phrase": "by Friday",
+    "segment_idx": 80,
+    "start_ms": 1271845
+  },
+  {
+    "owner": "Lucas Ferreira",
+    "task": "Bring an alert proposal with replay evidence showing whether Tuesday's route failures would have paged within five minutes.",
+    "due": "2026-09-25",
+    "due_phrase": "by Friday",
+    "segment_idx": 81,
+    "start_ms": 1287877
+  },
+  {
+    "owner": "Jonas Weber",
+    "task": "Draft an explicit route-error state with a timestamped last good plan and safe retry.",
+    "due": "2026-09-28",
+    "due_phrase": "by next week",
+    "segment_idx": 82,
+    "start_ms": 1304856
+  },
+  {
+    "owner": "Amara Nwosu",
+    "task": "Draft investigating, identified, and monitoring status-page templates.",
+    "due": "2026-09-25",
+    "due_phrase": "by tomorrow",
+    "segment_idx": 83,
+    "start_ms": 1322694
+  },
+  {
+    "owner": "Amara Nwosu",
+    "task": "Prepare a factual incident note for the affected customer accounts.",
+    "due": "2026-09-25",
+    "due_phrase": "by end of week",
+    "segment_idx": 83,
+    "start_ms": 1322694
+  },
+  {
+    "owner": "Mei Tanaka",
+    "task": "Identify the engineer for the timeout-to-error service change.",
+    "due": "2026-09-24",
+    "due_phrase": "today",
+    "segment_idx": 84,
+    "start_ms": 1341224
+  }
+]

@@ -1,0 +1,681 @@
+{
+  "lines": [
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Hi Rafael, thanks for making time. I want to understand an ordinary dispatch day, including the parts where Kestrel Dispatch helps and the parts where your team works around it.",
+      "idx": 0,
+      "start_ms": 1000,
+      "end_ms": 12782
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Morning, Amara. Ordinary is a generous word for our Mondays, but yes, I can walk you through one. Please stop me if I use Harbor shorthand that makes no sense outside this office.",
+      "idx": 1,
+      "start_ms": 13214,
+      "end_ms": 25914
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "That is exactly what I want. Start when the first dispatcher arrives, before the screens are tidy or anybody has had enough coffee. What is the first decision they make?",
+      "idx": 2,
+      "start_ms": 26264,
+      "end_ms": 38302
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "At six, Nadia opens the live map and checks which of our 68 trucks are actually available. A roster says 68, but a late return or maintenance hold changes the morning before it starts.",
+      "idx": 3,
+      "start_ms": 38611,
+      "end_ms": 53011
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "So the live map is your reality check against the roster. What happens next, and how many stops are you trying to cover on a typical day?",
+      "idx": 4,
+      "start_ms": 53853,
+      "end_ms": 65730
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "We have roughly 110 stops, sometimes 125 after a weekend. Nadia imports the order sheet, then auto-assign gives her a first pass that is far better than dragging every job onto a driver herself.",
+      "idx": 5,
+      "start_ms": 66376,
+      "end_ms": 80902
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "When you say better, is that mainly time saved or fewer bad assignments? I hear those as different benefits, and I do not want to put words in your mouth.",
+      "idx": 6,
+      "start_ms": 81233,
+      "end_ms": 92961
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Both, but the visible win is time. Before Kestrel, two dispatchers spent nearly an hour calling drivers to establish location and availability. Now the map answers most of those questions before seven.",
+      "idx": 7,
+      "start_ms": 93621,
+      "end_ms": 107440
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "That is useful. Does auto-assign usually survive the first review, or does Nadia still rebuild a lot of the plan before drivers can leave?",
+      "idx": 8,
+      "start_ms": 108221,
+      "end_ms": 118202
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "She keeps maybe four assignments out of five. The fifth needs a person because a loading dock opens late, a regular driver knows the route, or a customer wants a specific arrival window.",
+      "idx": 9,
+      "start_ms": 118504,
+      "end_ms": 129250
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I am hearing a strong first draft, with the local knowledge still on Nadia's side. What does she watch after the trucks leave, especially when a route starts slipping?",
+      "idx": 10,
+      "start_ms": 129851,
+      "end_ms": 139961
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "The map stays on a wall screen all day. She checks a truck if its dot stops moving, then calls the driver and often calls the customer. The painful part is noticing the delay early enough.",
+      "idx": 11,
+      "start_ms": 140493,
+      "end_ms": 155145
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Do you already use the ETA in the customer view as a warning signal, or is it mostly something you read after you have noticed a problem on the map?",
+      "idx": 12,
+      "start_ms": 155758,
+      "end_ms": 168275
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Mostly after. The ETA is useful, but nobody can stare at 110 moving stops. A red number buried in the list does not compete with a driver calling about a broken trailer.",
+      "idx": 13,
+      "start_ms": 169132,
+      "end_ms": 180697
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Right, and the alert idea may matter for exactly that reason. Before we get there, what do drivers tell you they like or dislike about the current experience?",
+      "idx": 14,
+      "start_ms": 181418,
+      "end_ms": 193551
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "They like seeing the next stop without phoning us, and dispatch likes proof of delivery arriving in one place. When reception drops, though, I still hear them ask whether a tap went through.",
+      "idx": 15,
+      "start_ms": 193783,
+      "end_ms": 205572
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "That uncertainty around a tap is worth recording. Is it a daily source of duplicate work, or more of a worry that comes up on the rural runs?",
+      "idx": 16,
+      "start_ms": 205764,
+      "end_ms": 217813
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Mostly the rural runs, perhaps six drivers on a bad day. They call to confirm a completion, Nadia checks the board, and sometimes they wait a minute for sync. It is annoying, but imports hurt more.",
+      "idx": 17,
+      "start_ms": 218310,
+      "end_ms": 230116
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "That helps me put the complaints in order. Let us move to the import. Could you describe the last file that caused trouble, from the moment someone sent it to Harbor?",
+      "idx": 18,
+      "start_ms": 230781,
+      "end_ms": 244383
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Monday's file is fresh in my mind. One customer sent a spreadsheet with 420 rows, including three changed pickup addresses. We needed it live quickly because the first pickups were scheduled before eight.",
+      "idx": 19,
+      "start_ms": 244638,
+      "end_ms": 255452
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "And the system took the whole sheet at once, or did Nadia have to work through chunks? Tell me exactly where she lost confidence in what it accepted.",
+      "idx": 20,
+      "start_ms": 255860,
+      "end_ms": 267356
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "It rejected 17 rows, but the error screen said there were invalid locations without listing the offending cells beside the original rows. Nadia opened the spreadsheet again and hunted through it by hand.",
+      "idx": 21,
+      "start_ms": 267865,
+      "end_ms": 279881
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I can see why that is painful under a two-hour clock. Let's stay with those 17 rows for a minute and separate the actual bad data from the effort of finding it.",
+      "idx": 22,
+      "start_ms": 280401,
+      "end_ms": 292528
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Yes, because a bad postcode is our mistake to fix. Making one dispatcher play detective across 420 rows is the part I expect the software to help with. That distinction matters to me.",
+      "idx": 23,
+      "start_ms": 293250,
+      "end_ms": 304627
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "For those 17 rejected rows, could Nadia correct them on a preview screen and keep the other 403, or did a failure make her start the entire upload again?",
+      "idx": 24,
+      "start_ms": 304388,
+      "end_ms": 315326
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "She had to edit the source file and upload it again. The second try worked for most rows, but one customer code still failed, so she went around once more before the board looked complete.",
+      "idx": 25,
+      "start_ms": 315592,
+      "end_ms": 330152
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "If we showed row 26 with the bad postcode and let her correct it before committing the import, would that solve the main issue, or is the file format itself too brittle?",
+      "idx": 26,
+      "start_ms": 330617,
+      "end_ms": 344086
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "A row-level preview would solve most of it. Please show the customer reference too, because row 26 in our file may become row 25 if somebody deletes a blank line. We need to know which delivery it is.",
+      "idx": 27,
+      "start_ms": 344580,
+      "end_ms": 359013
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Good point. I would like to bring a redacted example to our designer so we can test the reference alongside the error. Can you share Monday's file with names and addresses removed?",
+      "idx": 28,
+      "start_ms": 359506,
+      "end_ms": 370173
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "I can send a redacted version by Friday. I will leave the column names, customer references as fake values, and the kinds of errors intact, so your team sees the shape without seeing anyone's address.",
+      "idx": 29,
+      "start_ms": 371030,
+      "end_ms": 383210
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Thanks. I will make sure our discussion uses only that safe copy. What happens to the routes while the importer is in that failed state; can Nadia assign the accepted stops?",
+      "idx": 30,
+      "start_ms": 383814,
+      "end_ms": 397188
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "She can, which is why Monday did not collapse. But she cannot be sure that all 420 made it in until she compares counts, and those missing stops are exactly the ones that become frantic calls later.",
+      "idx": 31,
+      "start_ms": 397981,
+      "end_ms": 411881
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Would an accepted and rejected count on the review screen give her enough confidence, or would she still need a downloadable list for another person to reconcile against the customer sheet?",
+      "idx": 32,
+      "start_ms": 412152,
+      "end_ms": 423012
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Give me both eventually, but show the count first. If I can see 403 accepted and 17 to repair, I know what state we are in. A download is useful when we have to explain it to the customer.",
+      "idx": 33,
+      "start_ms": 423451,
+      "end_ms": 440431
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "That is concrete. You also mentioned slow reports in your email. Which report do you mean, when do you run it, and what happens while you wait?",
+      "idx": 34,
+      "start_ms": 440602,
+      "end_ms": 450926
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Every Friday I pull completed stops by carrier and exception reason for our operations review. Last week the seven-day report took almost nine minutes, and I had to leave the tab open to see whether it finished.",
+      "idx": 35,
+      "start_ms": 450687,
+      "end_ms": 465355
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Nine minutes is long enough to break the flow of a meeting. What do you do instead when somebody asks a question in the room and the report is not ready?",
+      "idx": 36,
+      "start_ms": 466029,
+      "end_ms": 478825
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Nadia keeps her own spreadsheet of missed windows. It is less complete, but she can filter it immediately. That is embarrassing when we pay for a reporting screen and still trust the homemade sheet first.",
+      "idx": 37,
+      "start_ms": 479555,
+      "end_ms": 491906
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I hear two things there: speed and trust. If the report loaded in under a minute but still differed from Nadia's sheet, which problem would you want us to investigate first?",
+      "idx": 38,
+      "start_ms": 492194,
+      "end_ms": 504729
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Trust first. We found one exception counted twice after a reassignment, and that made the weekly number look worse than reality. I do not mind waiting a minute for a number I can defend.",
+      "idx": 39,
+      "start_ms": 505493,
+      "end_ms": 519169
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Could you send the report filter settings and that one reassigned stop identifier in the redacted sample? I will ask our analytics team to check whether reassignment is being counted twice.",
+      "idx": 40,
+      "start_ms": 519578,
+      "end_ms": 532767
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Yes. I will include the filter settings and a fake identifier that preserves the sequence of events. I want someone to tell me whether the duplicate was a one-off or a predictable rule.",
+      "idx": 41,
+      "start_ms": 533143,
+      "end_ms": 544346
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I will bring the duplicate-count example to our analytics team today and get you a finding by next week. I cannot promise a fix date before they establish what is happening.",
+      "idx": 42,
+      "start_ms": 544622,
+      "end_ms": 557428
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Fair. I prefer a clear investigation over a date that quietly slips. One of your competitors talks a lot about instant dashboards, but they have not shown me whether their numbers match our sheet either.",
+      "idx": 43,
+      "start_ms": 557709,
+      "end_ms": 572431
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Is that comparison coming from an active evaluation, or are you collecting options because the report has been frustrating? It changes how I understand the urgency on your side.",
+      "idx": 44,
+      "start_ms": 572656,
+      "end_ms": 585273
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "We are looking around, but we are not running a formal replacement process. The live map and auto-assign are strong enough that I would rather fix these rough edges than retrain everyone on another tool.",
+      "idx": 45,
+      "start_ms": 585693,
+      "end_ms": 597311
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Understood. I will record that as a real comparison, not a procurement deadline. Let us spend the next few minutes on the delay alert you raised; I think that has a different kind of value.",
+      "idx": 46,
+      "start_ms": 597876,
+      "end_ms": 611781
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "It does. Reports make my Friday harder, but a missed delay reaches a customer in the middle of their working day. The consequences feel much more immediate when we are late.",
+      "idx": 47,
+      "start_ms": 612062,
+      "end_ms": 623883
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Tell me about the last delay that caught Harbor too late. What could a useful alert have told Nadia, and how much time would she have needed to act?",
+      "idx": 48,
+      "start_ms": 624224,
+      "end_ms": 636882
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Last Thursday a truck was stuck outside a loading dock for 38 minutes. The customer called us at 10:20 because their receiving crew could see the arrival window closing, and Nadia had not noticed the ETA move.",
+      "idx": 49,
+      "start_ms": 637295,
+      "end_ms": 653469
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "That is a hard phone call. Was the original window already narrow, or did the wait at the dock create most of the risk to the next stop?",
+      "idx": 50,
+      "start_ms": 653804,
+      "end_ms": 663820
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "The next stop had a half-hour window. Once the truck waited more than twenty minutes, it was likely to miss. If Nadia had known at ten, she could have swapped one nearby delivery to another driver.",
+      "idx": 51,
+      "start_ms": 664077,
+      "end_ms": 677833
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "So the alert has to precede a likely missed commitment, not merely announce that a truck is late. Who should receive it, and would the driver need the same warning?",
+      "idx": 52,
+      "start_ms": 678022,
+      "end_ms": 688844
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Start with the dispatcher responsible for that route. Drivers already know they are waiting, and sending them a warning does not create another truck. Let Nadia decide whether to reassign or call the customer.",
+      "idx": 53,
+      "start_ms": 689254,
+      "end_ms": 703876
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Would a ten-minute threshold be too noisy? I am testing the wording, because a stream of warnings can make people ignore the one that actually needs a call.",
+      "idx": 54,
+      "start_ms": 704566,
+      "end_ms": 715769
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "A fixed ten minutes would be noisy at every dock. I want the signal tied to the promised window: alert when the predicted arrival is likely to miss it, preferably with at least twenty minutes to respond.",
+      "idx": 55,
+      "start_ms": 716037,
+      "end_ms": 729938
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "We have work planned around ETA accuracy, but the model is not perfect today. Would you rather see a cautious alert with its confidence stated, or fewer alerts that come later?",
+      "idx": 56,
+      "start_ms": 730781,
+      "end_ms": 743152
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Give me an early warning if it says why. A message like 'stop 44 may miss its 10:30 window by 15 minutes' is useful. 'Delay detected' with no next action is just another red badge.",
+      "idx": 57,
+      "start_ms": 743885,
+      "end_ms": 756362
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Would you pay extra for proactive delay alerts if they reliably gave dispatchers that twenty-minute response window? I am asking about the value, not suggesting a price is set.",
+      "idx": 58,
+      "start_ms": 756713,
+      "end_ms": 767651
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Potentially, yes. Around $300 a month for our 68 trucks would be an easy conversation if it prevented even one angry customer escalation. At $1,000 I would want evidence over several weeks.",
+      "idx": 59,
+      "start_ms": 768284,
+      "end_ms": 781014
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "That gives me a useful range, though I will not treat it as a purchase commitment. What evidence would convince you that the alert was doing more than restating what Nadia already knew?",
+      "idx": 60,
+      "start_ms": 781236,
+      "end_ms": 793381
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Show me how often it arrived before the customer called and whether Nadia took a meaningful action. A pilot for two weeks across our busiest 30 routes would tell us more than a polished demo.",
+      "idx": 61,
+      "start_ms": 794148,
+      "end_ms": 805928
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I will ask our product team whether a two-week alert pilot on 30 routes is feasible and come back next week. There is no launch or pricing promise in that ask.",
+      "idx": 62,
+      "start_ms": 806243,
+      "end_ms": 818050
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Good. If it cannot happen yet, say that. We can still review the alert wording with Nadia, because she knows which messages deserve a glance in the middle of a shift.",
+      "idx": 63,
+      "start_ms": 818707,
+      "end_ms": 829320
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "You also requested an API. What would Harbor connect first, and is this about creating routes, reading status, or getting reports into another system?",
+      "idx": 64,
+      "start_ms": 830102,
+      "end_ms": 838643
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Read status first. Our customer service team has a small portal, and they copy Kestrel ETAs into it twice a day. I want the portal to read stop status and predicted arrival without somebody copying values.",
+      "idx": 65,
+      "start_ms": 839372,
+      "end_ms": 854104
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Who would build that connection? I ask because an API can be valuable but still stall if the team expected to integrate it has no time or owner.",
+      "idx": 66,
+      "start_ms": 854632,
+      "end_ms": 865019
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Our operations analyst could build a narrow integration, perhaps with a contractor for authentication. We are not asking you to replace our portal. We need documented read access and sensible limits.",
+      "idx": 67,
+      "start_ms": 865696,
+      "end_ms": 879300
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "What is the cost of waiting six months for that access? I want to distinguish a missing deal blocker from a future efficiency project before I take a priority claim back to Priya.",
+      "idx": 68,
+      "start_ms": 879525,
+      "end_ms": 890498
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "It is an efficiency project. Manual copy takes maybe forty minutes a day, but it has not made us miss a shipment. The competitor shows an API on its slide, yet I have not tested its documentation.",
+      "idx": 69,
+      "start_ms": 891110,
+      "end_ms": 904572
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "That distinction helps. I will share the read-only status use case, including the forty-minute daily copy, with Priya by Friday. I will not characterize it as an urgent migration threat.",
+      "idx": 70,
+      "start_ms": 905215,
+      "end_ms": 917635
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Exactly. I am asking for a path, not a surprise deadline. The missed-window alerts are the only idea here that could change how we respond to a customer on the same day.",
+      "idx": 71,
+      "start_ms": 918301,
+      "end_ms": 929327
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Let me check the ordering before we close. For the next month, would you put the import preview first, then trustworthy reports, then delay alerts, then API access?",
+      "idx": 72,
+      "start_ms": 929612,
+      "end_ms": 940808
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "For daily friction, yes. The import preview comes first because every Monday starts with that sheet. Reports come second because the duplicate count erodes trust even when the screen is fast.",
+      "idx": 73,
+      "start_ms": 941634,
+      "end_ms": 953871
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "And delay alerts might be worth a separate premium even though they are third on your immediate fix list. I want to keep priority and willingness to pay from being confused.",
+      "idx": 74,
+      "start_ms": 954484,
+      "end_ms": 964747
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "That is right. If a delay alert prevents a customer complaint, I can justify a new line item. But I cannot ask Nadia to tolerate the same blind import every Monday while we test it.",
+      "idx": 75,
+      "start_ms": 965137,
+      "end_ms": 976935
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Suppose we could show rejected rows beside customer references but could not edit them within Kestrel yet. Would a clean export of the failures still save meaningful time?",
+      "idx": 76,
+      "start_ms": 977131,
+      "end_ms": 987217
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Some time, certainly, but do not call that done. Nadia would still repair the original file and re-upload. The preview is successful when she can see exactly what survived and what needs a second pass.",
+      "idx": 77,
+      "start_ms": 987842,
+      "end_ms": 1002980
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I appreciate the distinction. You are helping us test a smaller first step without letting a partial fix masquerade as a complete one. I will include that in the product notes.",
+      "idx": 78,
+      "start_ms": 1003673,
+      "end_ms": 1015276
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Please do. I have seen plenty of release notes that say 'improved imports' while the dispatcher still spends the same forty minutes searching for one cell. A specific outcome is easier to trust.",
+      "idx": 79,
+      "start_ms": 1015892,
+      "end_ms": 1028873
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "On the reporting issue, I will ask Lucas to inspect reassigned stops against your redacted example, then send you what we find next week. If the count is wrong, we will say so plainly.",
+      "idx": 80,
+      "start_ms": 1029120,
+      "end_ms": 1043060
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "That works. If the count is correct under a rule we misunderstood, explain the rule too. I do not need a favorable number; I need to know which number to defend in our review.",
+      "idx": 81,
+      "start_ms": 1043625,
+      "end_ms": 1057143
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "For the alert wording, can I send Nadia three sample messages next week and ask her which one she would act on? We can make the exercise short, perhaps fifteen minutes.",
+      "idx": 82,
+      "start_ms": 1057290,
+      "end_ms": 1070568
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Yes, send them to me first and I will put you in touch with Nadia. She will tell you very quickly whether a message belongs on her screen or in a quiet report.",
+      "idx": 83,
+      "start_ms": 1070981,
+      "end_ms": 1083805
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Thank you. I will prepare the three messages by next week, centered on the promised window, expected miss, and time to respond. I will avoid implying we have an alert feature ready.",
+      "idx": 84,
+      "start_ms": 1083957,
+      "end_ms": 1097011
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "That sounds honest. We can talk about a pilot after your team checks feasibility. I do not want Nadia rehearsing a workflow she will not be able to use for months.",
+      "idx": 85,
+      "start_ms": 1097321,
+      "end_ms": 1109746
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Could I share one more observation back to you? The live map and auto-assign seem to make the work manageable, while import uncertainty consumes attention before the trucks even move.",
+      "idx": 86,
+      "start_ms": 1109927,
+      "end_ms": 1120414
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Yes, that is the shape of it. The morning starts in a good place when our data enters cleanly. If the first step is shaky, every later screen makes us wonder what went missing.",
+      "idx": 87,
+      "start_ms": 1120848,
+      "end_ms": 1131974
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I will send a short recap tomorrow with the four priorities, the redacted-file request, the report investigation, and the pilot question. Please correct any wording that overstates what you said.",
+      "idx": 88,
+      "start_ms": 1132488,
+      "end_ms": 1143143
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "I will read it. I can send the redacted file by Friday, including the column names, fake customer references, filter settings, and the reassignment sequence we discussed.",
+      "idx": 89,
+      "start_ms": 1143352,
+      "end_ms": 1153074
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "One last check: there is no active replacement decision at Harbor, and the competitor API claim has not been tested. Is that a fair way to describe your evaluation?",
+      "idx": 90,
+      "start_ms": 1153880,
+      "end_ms": 1164674
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Yes. We are comparing options because we want leverage to improve the workflow, not because we have set a switch date. Please do not turn curiosity into a renewal ultimatum.",
+      "idx": 91,
+      "start_ms": 1165439,
+      "end_ms": 1177297
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Understood. I will keep the notes precise and follow up on what I own. Thanks for walking through a real Monday instead of giving me a feature wish list, Rafael.",
+      "idx": 92,
+      "start_ms": 1177576,
+      "end_ms": 1188134
+    },
+    {
+      "speaker": "Rafael Mendes",
+      "text": "Thanks, Amara. I will get that safe file to you by Friday, and I am happy to introduce Nadia when you have the alert examples. Talk next week.",
+      "idx": 93,
+      "start_ms": 1188712,
+      "end_ms": 1200996
+    }
+  ],
+  "chapters": [
+    {
+      "title": "A Day in Harbor Dispatch",
+      "start_idx": 0
+    },
+    {
+      "title": "Imports and Reports",
+      "start_idx": 24
+    },
+    {
+      "title": "Delay Alerts and API Demand",
+      "start_idx": 48
+    },
+    {
+      "title": "Priority and Follow-up",
+      "start_idx": 72
+    }
+  ],
+  "duration_ms": 1200996
+}

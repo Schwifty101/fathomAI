@@ -1,0 +1,37 @@
+[
+  {
+    "segment_idx": 7,
+    "type": "insight",
+    "title": "On-call calendar hides recovery gap",
+    "start_ms": 80559,
+    "end_ms": 92352
+  },
+  {
+    "segment_idx": 29,
+    "type": "objection",
+    "title": "Pilot label could hide broad scope",
+    "start_ms": 332624,
+    "end_ms": 344163
+  },
+  {
+    "segment_idx": 47,
+    "type": "action_item",
+    "title": "Two backend roles and onboarding sketch",
+    "start_ms": 547744,
+    "end_ms": 557977
+  },
+  {
+    "segment_idx": 61,
+    "type": "feedback",
+    "title": "Engineering enters roadmap discussion too late",
+    "start_ms": 712865,
+    "end_ms": 726247
+  },
+  {
+    "segment_idx": 74,
+    "type": "positive",
+    "title": "Priya commits to revisiting overwide scope",
+    "start_ms": 877590,
+    "end_ms": 889680
+  }
+]

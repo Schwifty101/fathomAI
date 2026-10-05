@@ -1,0 +1,1425 @@
+{
+  "lines": [
+    {
+      "speaker": "Priya Raman",
+      "text": "Thanks for making the time. We have sixty-two minutes, and I want to leave with three funded bets, the things we will deliberately defer, and a named owner for every release gate. Let us start with Q3, because a long wish list without the numbers will get us nowhere.",
+      "idx": 0,
+      "start_ms": 1000,
+      "end_ms": 18338
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "From the customer side, the headline is that churn closed at 4.1 percent. That is above the 3 percent goal we carried into the quarter. The exit conversations do not point to one missing button; they point to the first month feeling hard and to dispatchers losing confidence when ETAs drift.",
+      "idx": 1,
+      "start_ms": 19090,
+      "end_ms": 39643
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "I would add the sales version of that. When prospects hear it takes nineteen days to get a new customer live, they start asking who on their own team will spend three weeks cleaning files. The contract may be signed, but the excitement leaks away before the first route moves.",
+      "idx": 2,
+      "start_ms": 40465,
+      "end_ms": 58572
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "For accuracy, our 82 percent figure means a stop ETA landed within ten minutes of actual arrival. It is not a measure of whether the model predicted the correct route or whether every carrier had an 82 percent experience. Weekend freight lanes are materially worse, and the blended number conceals that.",
+      "idx": 3,
+      "start_ms": 59379,
+      "end_ms": 81464
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That distinction matters, Lucas. If we announce a model that hits a tidy company-wide number while a carrier misses its Saturday handoffs, we will call it a win and they will call it unusable. Can you put a segment view beside the blended number as we plan?",
+      "idx": 4,
+      "start_ms": 82146,
+      "end_ms": 98310
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Yes. We have the data to break it out by weekday, lane length, region, and carriers with at least fifty stops. I do not want a tiny sample to swing the headline, so I would show confidence intervals and a minimum stop count in the review.",
+      "idx": 5,
+      "start_ms": 98797,
+      "end_ms": 119302
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "I want to anchor the financial frame before we choose work. Q3 revenue grew, but support and onboarding labor grew nearly as fast. The 4.1 percent churn figure is expensive because replacement customers require more implementation time than an expansion does. A Q4 bet should move one of those costs, not only create a demo.",
+      "idx": 6,
+      "start_ms": 120084,
+      "end_ms": 142849
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "The marketing language has also outrun the evidence at times. We called the current ETA view live in a campaign, and then support had to explain why some loads were last updated twenty minutes earlier. If the October message is narrower, I can work with it. I need the truth early enough to write around it.",
+      "idx": 7,
+      "start_ms": 143514,
+      "end_ms": 163481
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "On the driver side, the app has a different kind of trust problem. A driver taps complete, loses coverage, and cannot tell whether the dispatcher sees the stop as finished. The screen looks tidy, but the uncertainty causes a phone call. I want us to treat that as the design problem, not an icon refresh.",
+      "idx": 8,
+      "start_ms": 164073,
+      "end_ms": 183946
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "And every phone call becomes an exception for the team running dispatch. I agree with Jonas about the problem, but there are only so many engineering weeks. We still own the route optimizer, support escalations, and the platform cleanup. We need to say what gets less attention if we promise all three bets.",
+      "idx": 9,
+      "start_ms": 184485,
+      "end_ms": 204326
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Mei, I hear the capacity point. Still, the customers who churned did not separate platform cleanup from product experience. One operations manager told me their dispatcher had to call five drivers after a coverage gap because the board showed stale stops. They blame Kestrel Dispatch as a whole.",
+      "idx": 10,
+      "start_ms": 204689,
+      "end_ms": 225591
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "That is what I am hearing in evaluations too. The live map gets us the second meeting, but the question that closes it is whether drivers can finish their day without fighting the app. I cannot sell a roadmap slide as proof if the basic handoff is still fragile.",
+      "idx": 11,
+      "start_ms": 226101,
+      "end_ms": 243899
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Let us keep those customer words in front of us. Our three Q3 numbers are 4.1 percent churn, 82 percent ETA accuracy on a ten-minute window, and nineteen days to onboard. We will test each proposal against at least one of those, with a metric we can actually measure.",
+      "idx": 12,
+      "start_ms": 244464,
+      "end_ms": 265526
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "Could we also distinguish controllable cost from aspiration? Two backend hires may make sense, but they will not arrive on October first and instantly create capacity. I can budget the roles now. I cannot count unfilled seats as completed engineering weeks in this plan.",
+      "idx": 13,
+      "start_ms": 265818,
+      "end_ms": 283813
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Absolutely. My baseline assumes the current team. New hires reduce risk later if recruiting goes well, but I will not put them on the critical path for the driver release. That would be a schedule we could not defend to ourselves.",
+      "idx": 14,
+      "start_ms": 284598,
+      "end_ms": 299868
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "Good. I also need a single sentence about what success looks like by December. If we say three launches, the market will hear general availability for three things. We may actually mean one app release, one validated model, and a small onboarding pilot.",
+      "idx": 15,
+      "start_ms": 300100,
+      "end_ms": 315659
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That is exactly the distinction we are here to decide. I am not asking for three shiny announcements. I am asking for three investments with separate gates. By the close, Hannah should be able to say what can be told publicly and what stays inside a pilot.",
+      "idx": 16,
+      "start_ms": 316487,
+      "end_ms": 334611
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "One caution before we move on: the current 82 percent baseline includes both city routes and longer freight lanes. If we chase only easy urban stops, we can make that number look better while the carriers with long hauls get no benefit. We should protect against that.",
+      "idx": 17,
+      "start_ms": 334769,
+      "end_ms": 353944
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Please do. Harlan Freight is a good example, although their escalation is still being worked through. Their operations lead cares about the misses that run forty minutes late. A two-minute improvement on already accurate city stops will not change that conversation.",
+      "idx": 18,
+      "start_ms": 354385,
+      "end_ms": 369752
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "All right. The scorecard is a starting point, not permission to game an average. Daniel, can you take us through what buyers and current customers are asking for, then we will put the three proposed bets on the table?",
+      "idx": 19,
+      "start_ms": 370316,
+      "end_ms": 385594
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Yes. The short version is that the app issue can lose a deal, ETA confidence can win or lose renewal trust, and onboarding delay makes a signed deal feel like a stalled deal. The order of those problems varies by customer, which is why I do not want us to pick by anecdote alone.",
+      "idx": 20,
+      "start_ms": 386342,
+      "end_ms": 404554
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That is a useful place to hand off. We will work from evidence, settle scope, and name a gate for each bet. If a claim cannot pass a gate, it stays a proposal. Let us move into the customer needs.",
+      "idx": 21,
+      "start_ms": 404959,
+      "end_ms": 419160
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "In the last six discovery calls, four operations leaders asked to see the driver workflow before they asked about reporting. They have heard too many dispatch vendors say the app is easy and then watched drivers ignore it. I need a pilot story where drivers actually complete stops without calling dispatch.",
+      "idx": 22,
+      "start_ms": 419757,
+      "end_ms": 440151
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Among current customers, the request mix is different. The loudest support category is uncertainty after a weak connection, but new accounts also struggle to import their locations and assign the right fields. The nineteen-day onboarding average hides a long tail. A few accounts take more than a month.",
+      "idx": 23,
+      "start_ms": 441018,
+      "end_ms": 458764
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "I would split mobile v2 into three jobs: a driver understands today's stops, a driver can finish a stop with confidence, and a driver can recover after losing a signal. Those are all connected. A fresh visual treatment without offline clarity would make the app feel newer and leave the phone calls intact.",
+      "idx": 24,
+      "start_ms": 459586,
+      "end_ms": 478897
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "That is a good user story, Jonas. I can support it if we constrain it to those jobs. The current draft also lists route chat, photo markup, automatic document extraction, and four notification types. Each one adds backend paths, permissions, and failure modes. We need a launchable center.",
+      "idx": 25,
+      "start_ms": 479474,
+      "end_ms": 496350
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "From a story perspective, dependable under poor coverage is stronger than faster by a vague percentage. But I need to know whether we can prove it in a carrier pilot, and whether we are allowed to say offline when the app only queues some actions. A half-true adjective becomes a support problem.",
+      "idx": 26,
+      "start_ms": 497068,
+      "end_ms": 516655
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "For the ETA bet, I can commit to an accuracy improvement experiment, not a blanket accuracy promise today. We can compare the candidate against the 82 percent baseline by route type and customer cohort. We also need to measure how often prediction freshness drops, because an accurate old estimate is misleading.",
+      "idx": 27,
+      "start_ms": 517454,
+      "end_ms": 534886
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "Before the third bet goes in, what did we learn about onboarding cost? If self-serve reduces the time from nineteen days but creates bad imports that support has to repair, we might simply move the cost to another line. I want a measure for human hours and a clear boundary on what the customer can do alone.",
+      "idx": 28,
+      "start_ms": 535084,
+      "end_ms": 555222
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "We have that. Support spends roughly eleven staff hours per new account cleaning and mapping the first import. The customer waits on us, then sends another file when the map is wrong. A guided import with a review step could cut both elapsed days and rework, but I would not remove the review for complex fleets.",
+      "idx": 29,
+      "start_ms": 555910,
+      "end_ms": 580367
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "And it matters to the sale. An approved buyer asks when the first load will run. I can say implementation starts next week, but if it takes nineteen days on average I have to qualify that promise. A credible pilot that shortens basic setups is more useful than calling the flow fully self-serve.",
+      "idx": 30,
+      "start_ms": 580689,
+      "end_ms": 604462
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "I do not disagree with the pain. I disagree with putting a full onboarding product on the same quarter as mobile v2 and the model. Import validation, identity, permissions, billing handoffs, and support tooling are a platform project. If we call it a third full launch, we will cut corners somewhere.",
+      "idx": 31,
+      "start_ms": 605072,
+      "end_ms": 626537
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That is the decision in front of us. My proposed bets are driver mobile app v2, the ETA-accuracy model, and self-serve onboarding as a staged pilot. The third bet would have a much narrower Q4 result than general availability. I want to hear the strongest objection before we settle it.",
+      "idx": 32,
+      "start_ms": 627240,
+      "end_ms": 648866
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "The strongest objection is opportunity cost. Our two most experienced backend people would be split among offline sync, model serving, and import validation. Even if every feature is individually small, coordination costs and interrupt work are not. One serious incident can consume a sprint.",
+      "idx": 33,
+      "start_ms": 649331,
+      "end_ms": 666583
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "There is also a user-experience cost if the pilot is too narrow to teach us anything. A customer who can upload a file but still needs an email thread for field mapping will not experience a shorter setup. We need a complete thin path from a valid sample file to a first draft route.",
+      "idx": 34,
+      "start_ms": 666776,
+      "end_ms": 686085
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Exactly. The pilot should include human review as a deliberate safety step, but the customer should see progress and know what comes next. Right now they send a spreadsheet and hear silence. Even a good partial flow can remove that uncertainty, provided it actually works end to end.",
+      "idx": 35,
+      "start_ms": 686234,
+      "end_ms": 703005
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "How many pilot accounts would make this a meaningful business bet rather than a side project? I am comfortable funding discovery and a small pilot if we set a cost ceiling. I do not want the word pilot to hide an open-ended build.",
+      "idx": 36,
+      "start_ms": 703833,
+      "end_ms": 721263
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Five to eight new accounts, with at least three different file patterns, would teach us more than fifty interviews about import errors. We should measure median elapsed days and support hours alongside completion rate. We can stop after the first cohort if it is making onboarding worse.",
+      "idx": 37,
+      "start_ms": 721526,
+      "end_ms": 739381
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "I would also track where the pilot fails. If half the files need manual column repair, we learn something about the template and help text. If the product cannot match a customer location to a valid service area, the failure should be visible rather than silently patched in support.",
+      "idx": 38,
+      "start_ms": 740195,
+      "end_ms": 760581
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "That is useful for sales as long as we do not turn prospects into unwitting testers. We can offer the pilot to accounts with a straightforward setup and explain the review step. For complex migrations, I would keep the assisted process until we have a better answer.",
+      "idx": 39,
+      "start_ms": 761259,
+      "end_ms": 778521
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "I can write two messages: one for selected pilot accounts that accurately explains the boundaries, and one for the broader audience that says we are improving setup. I will not announce self-serve availability while most customers still need us to fix the first file.",
+      "idx": 40,
+      "start_ms": 779246,
+      "end_ms": 794659
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "That helps, but I am still not ready to say yes until we see the capacity and the cut line. If the app's offline path slips, what stops us from borrowing its engineers for onboarding? I need a rule now, not a sympathetic conversation in November.",
+      "idx": 41,
+      "start_ms": 794867,
+      "end_ms": 813365
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "We will put that rule in the decision log. Mobile's reliability gates come first; the onboarding pilot pauses if it threatens the critical path. We can make that explicit when we size work. For now, are we aligned that these are the three candidate bets with different release shapes?",
+      "idx": 42,
+      "start_ms": 814029,
+      "end_ms": 835886
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "Candidate bets, yes. I want the budget and headcount discussion to approve the shape, not an impression that I signed an uncapped number here. The third one needs a cap and a checkpoint.",
+      "idx": 43,
+      "start_ms": 836447,
+      "end_ms": 847788
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I can live with that condition. I would rather make a small, honest improvement to onboarding than drop it and keep explaining the same nineteen-day wait in every customer call.",
+      "idx": 44,
+      "start_ms": 848118,
+      "end_ms": 858501
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Good. We have the working list and the unresolved capacity condition. We will go through the app and ETA gates first, then come back to the onboarding cut line with the engineering weeks on the table.",
+      "idx": 45,
+      "start_ms": 858930,
+      "end_ms": 874321
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Jonas, take the first pass at the app. I want the driver journey we are changing, the things we will leave out, and a specific way to know whether the new flow is safer than the one people use today.",
+      "idx": 46,
+      "start_ms": 874920,
+      "end_ms": 892099
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "The driver opens a simple stop list, sees what must happen next, and can mark a stop complete after reviewing the address and required proof. If coverage disappears, the action stays visibly queued and later confirms when it reaches dispatch. The driver should never have to guess whether a tap vanished.",
+      "idx": 47,
+      "start_ms": 892953,
+      "end_ms": 913512
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "I like the visible queue. The risk is that sync conflicts can make the board and the phone disagree, especially if a dispatcher reassigns a stop while the driver is offline. We need a defined rule: what the driver sees, what gets rejected, and who can fix it.",
+      "idx": 48,
+      "start_ms": 913886,
+      "end_ms": 930906
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "For the first release, I would let the driver see a clear conflict card instead of pretending the completion succeeded. The card can say dispatch changed this stop and ask them to call their dispatcher. That is not elegant, but it is safer than silently merging two stories.",
+      "idx": 49,
+      "start_ms": 931666,
+      "end_ms": 950668
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Can we be careful with call your dispatcher as the default? During a busy shift, the dispatcher may already be handling six exceptions. I would rather the card preserve the driver's note and show an exact reason. A support agent then has something useful if they get involved.",
+      "idx": 50,
+      "start_ms": 951479,
+      "end_ms": 972294
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Yes, preserving the note is feasible. We can show that the stop was reassigned at a particular time and give a retry path when it is a network problem. True conflicts should remain explicit. That separates a temporary queue from a business-rule rejection.",
+      "idx": 51,
+      "start_ms": 973008,
+      "end_ms": 992164
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "I can instrument three transitions: a driver action queued, accepted by the server, or rejected with a reason. Then we can measure sync success by carrier and device. If we only count taps, a broken queue looks like strong usage until support starts getting calls.",
+      "idx": 52,
+      "start_ms": 992469,
+      "end_ms": 1008589
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "That gives us a credible claim later. We can say drivers see their work reflected back after reconnecting if the pilot proves it. I do not want to use works offline without a sentence explaining which actions are available, because customers will hear that as everything, including route edits.",
+      "idx": 53,
+      "start_ms": 1008948,
+      "end_ms": 1026197
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "There is still the completion control. My design uses a swipe because accidental taps are common when the phone is on a dashboard mount. A confirmation button is clearer for some drivers, but an extra modal after every stop may slow a fifty-stop day. I want to observe real hands.",
+      "idx": 54,
+      "start_ms": 1026385,
+      "end_ms": 1046056
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "I lean toward a button with a confirmation state. Swipe can be hard with gloves and for drivers who use accessibility settings, and it is not obvious the first time. We had that argument in the design review; I do not think our own preferences should decide it.",
+      "idx": 55,
+      "start_ms": 1046549,
+      "end_ms": 1066089
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Agreed. Let us test both with drivers in the pilot. Jonas, can you prepare a prototype that puts the swipe and the explicit confirmation in the same context, then record errors and time to complete rather than just which one they say they like?",
+      "idx": 56,
+      "start_ms": 1066936,
+      "end_ms": 1083345
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "Yes. I will have the side-by-side prototype ready by Friday, and I will include high-contrast states and the queued badge. I want to watch at least eight drivers, including some who work in poor coverage, before we lock the control.",
+      "idx": 57,
+      "start_ms": 1083544,
+      "end_ms": 1097195
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I can recruit those drivers from three carriers by next week. We need one group with long rural lanes and one with dense city stops; otherwise the test will overrepresent the easiest environment. I will ask consent for observation, not just send a survey link.",
+      "idx": 58,
+      "start_ms": 1097570,
+      "end_ms": 1117386
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "What is the actual release gate, beyond eight usability sessions? If the backend looks good in a lab but the first carrier sees a flood of conflicts, are we still calling the pilot successful? I need a threshold we can use to hold spending on promotion.",
+      "idx": 59,
+      "start_ms": 1117141,
+      "end_ms": 1134217
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "For a carrier pilot, I propose crash-free sessions above 99 percent on the supported devices, at least 98 percent of queued actions syncing within five minutes of reconnection, and no unresolved completion conflict left hidden from the driver. We can measure all three.",
+      "idx": 60,
+      "start_ms": 1134790,
+      "end_ms": 1153262
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "The 98 percent threshold is measurable if we specify a cohort and count. I will put the denominator in the dashboard. We should also sample the failures by device and coverage type; a high average can conceal one carrier being unusable, which is the ETA problem again.",
+      "idx": 61,
+      "start_ms": 1154002,
+      "end_ms": 1171953
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "From sales, I need the pilot carriers to be referenceable eventually, but I do not need their names in a public announcement right away. If one dispatch manager says the calls fell and a driver says the queue is clear, that is far stronger than a polished video.",
+      "idx": 62,
+      "start_ms": 1172450,
+      "end_ms": 1192944
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "I would wait for the observed result before asking for a quote. We can draft a pilot invitation with the exact supported devices and actions. If the thresholds fail, the campaign date moves; it should not pressure Mei into shipping with a known sync gap.",
+      "idx": 63,
+      "start_ms": 1193692,
+      "end_ms": 1213220
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That is our gate. The scope is onboarding, stop list, offline completion queue, and a tested completion control. Route chat, photo markup, and document extraction wait. We will pilot before any general launch statement, with the reliability thresholds Mei gave.",
+      "idx": 64,
+      "start_ms": 1213575,
+      "end_ms": 1229032
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Please add one more dependency: the Android 14 crash regression has to be fixed and held stable before we expand the pilot. That incident showed how a permission change can turn a good flow into an unusable app. I will own the release checklist and the rollback switch.",
+      "idx": 65,
+      "start_ms": 1229844,
+      "end_ms": 1250661
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "That is fair. I also want us to test the first-run flow, because the clearest stop list does not help if a new driver cannot sign in at five in the morning. I can trim the welcome screens, but permission education needs to be in context, especially for location.",
+      "idx": 66,
+      "start_ms": 1250875,
+      "end_ms": 1270395
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I will bring the top ten driver complaints into the test script. Some are about language, not software: drivers do not understand why location is requested before the first route loads. The wording can be fixed without building another permission system.",
+      "idx": 67,
+      "start_ms": 1270958,
+      "end_ms": 1284979
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "We should collect a baseline on the current app before the pilot. If we discover calls are already falling for another reason, we need to know. I can join support ticket tags with pilot carriers without putting driver names in the analysis view.",
+      "idx": 68,
+      "start_ms": 1285851,
+      "end_ms": 1304400
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "That is enough for me to understand the app bet. The business case is fewer calls, fewer abandoned actions, and a better sales proof point, provided the reliability gate is real. Please keep the pilot costs visible in the capacity section.",
+      "idx": 69,
+      "start_ms": 1304712,
+      "end_ms": 1318726
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "We will. The app is the first protected critical path. Next, Lucas, show us how the model moves beyond a blended 82 percent and what would make us decline to promote it.",
+      "idx": 70,
+      "start_ms": 1319548,
+      "end_ms": 1330385
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Our candidate model uses a richer lane history and recent stop behavior. On the holdout set it cuts mean absolute error from 11.8 minutes to 9.6 minutes, but that average is not yet a release decision. Weekend freight lanes improve less, and the data is thin on some routes.",
+      "idx": 71,
+      "start_ms": 1331230,
+      "end_ms": 1350258
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "That is precisely where the customer pain sits. Harlan Freight, with forty-two trucks, reported that more than forty minutes of error affected about eighteen percent of stops last week. Their operations lead will not be comforted by a two-minute average improvement if those long misses remain.",
+      "idx": 72,
+      "start_ms": 1350704,
+      "end_ms": 1366234
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "I agree. I want two primary gates: the share of ETAs within ten minutes should move from 82 percent to at least 88 percent, and the rate of misses above forty minutes must not rise in any sufficiently sized lane cohort. We should examine Harlan separately, without claiming it represents everyone.",
+      "idx": 73,
+      "start_ms": 1366868,
+      "end_ms": 1389328
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "What makes the new feature set safe in production? We can shadow predictions without sending them to dispatchers, but the serving path is still a dependency. A retraining job failed twice this week because the GPU quota stopped at four nodes. That operational risk belongs in the bet.",
+      "idx": 74,
+      "start_ms": 1389841,
+      "end_ms": 1408623
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "The shadow path can run against a copy of live events and log its output without changing customer ETAs. I want at least three days of shadow data, including a weekend slice if the calendar allows, then a review of the worst misses. The GPU request is for eight nodes so retraining does not stall.",
+      "idx": 75,
+      "start_ms": 1409322,
+      "end_ms": 1432382
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "If we need a weekend slice, three days starting on a Tuesday would not cover it. Let us define the evidence rather than an arbitrary clock. How many weekend days do we need before we can make a decision on the freight lanes?",
+      "idx": 76,
+      "start_ms": 1433080,
+      "end_ms": 1448381
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "One full weekend in shadow and a backtest over the last six weekends. That should separate a bad Saturday from a pattern. I will publish the cohort sizes and error distribution, then we can decide whether the candidate goes to a small production cohort.",
+      "idx": 77,
+      "start_ms": 1448750,
+      "end_ms": 1466534
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "Does the model bet include the infrastructure cost of those extra GPU nodes, or is that hidden under general engineering? I would like a monthly ceiling and an alert if the retraining job runs longer than expected. We have had cost drift on experiments before.",
+      "idx": 78,
+      "start_ms": 1467352,
+      "end_ms": 1487624
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "I can give you a ceiling after the quota test. Based on current runs, moving from four to eight nodes should shorten the window rather than double ongoing spend, because the nodes are released after training. I will send a measured estimate, not a guessed one.",
+      "idx": 79,
+      "start_ms": 1488413,
+      "end_ms": 1508511
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Can sales use 88 percent in a pitch if the gate passes? I know Hannah will want caution, but buyers ask for a number. If they hear a company-wide accuracy figure from us and then test on long rural routes, that may backfire harder than saying we are improving it.",
+      "idx": 80,
+      "start_ms": 1509090,
+      "end_ms": 1526036
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "I would not lead with 88 percent without defining the ten-minute window, time period, and eligible stops. It may be useful in a technical appendix. The promise in broad copy should be dependable estimates, and only after we have the pilot and a customer willing to confirm their experience.",
+      "idx": 81,
+      "start_ms": 1526536,
+      "end_ms": 1546406
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "And I need an account-level view before I call Harlan. They do not need a marketing statement. They need to know whether their worst fifty stops have a fixable pattern, which routes are still hard, and when we will update them. I would rather promise a status call than a model date.",
+      "idx": 82,
+      "start_ms": 1547077,
+      "end_ms": 1565778
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "That is a key distinction. We should not tie Harlan's renewal to a promotion that has not passed the shadow gate. If the candidate fails on long misses, we keep the current model and work the data quality problem. What is the rollback mechanism once we do release a cohort?",
+      "idx": 83,
+      "start_ms": 1566471,
+      "end_ms": 1586655
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "The serving layer can keep the existing model loaded and switch the cohort flag back without a deploy. I will test that in staging before the pilot. We can compare predictions side by side for the same stop after rollback, so we know whether a complaint traces to the model or stale events.",
+      "idx": 84,
+      "start_ms": 1587212,
+      "end_ms": 1608598
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "From the user view, can the dispatcher see when an ETA is stale? A better model will not fix a missing location update. We should not make the number look precise when the underlying event is twenty minutes old. Even a subtle freshness label could change the conversation.",
+      "idx": 85,
+      "start_ms": 1608992,
+      "end_ms": 1629026
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Yes, but I would keep that as a separate interface change unless it is needed for the pilot. We already record the last event time. I can expose it to the board and the app team without inventing a confidence score that nobody understands.",
+      "idx": 86,
+      "start_ms": 1629701,
+      "end_ms": 1645611
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Let us include freshness as a risk and a small discovery item, not bundle a full confidence interface into the model release. The model gate is 88 percent within ten minutes, no worse long-tail misses by meaningful cohort, a weekend shadow slice, and a tested rollback.",
+      "idx": 87,
+      "start_ms": 1646469,
+      "end_ms": 1665569
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "I want the incident path spelled out too. If a nightly job locks a table or a deploy shifts an index, a shadow experiment must not harm route planning. The optimizer outage taught us that analytical work can still touch the production path indirectly.",
+      "idx": 88,
+      "start_ms": 1666416,
+      "end_ms": 1683809
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "I will isolate the read load from the optimizer tables and add a time limit to the backtest queries. I can show Mei the query plan before running the six-weekend job. If it is too heavy, we use an export rather than a direct scan.",
+      "idx": 89,
+      "start_ms": 1683961,
+      "end_ms": 1702459
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "That is a useful control. I can approve a capped experiment when the measured compute and query risk are documented. I cannot approve an undefined production model line item today, so please keep the spend stage separate from the eventual rollout.",
+      "idx": 90,
+      "start_ms": 1702699,
+      "end_ms": 1719009
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "For customer conversations, I can say we are testing a more accurate ETA model and we will share evidence before promising any improvement. That is still a real answer. I will stop repeating the holdout number as if it is what customers already see.",
+      "idx": 91,
+      "start_ms": 1719711,
+      "end_ms": 1735017
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I will do the same with Harlan. I will ask Lucas for the worst-stop review, then explain what we found and when they can expect another update. If the problem is missing events rather than prediction, we should say that directly and fix the source.",
+      "idx": 92,
+      "start_ms": 1735463,
+      "end_ms": 1753511
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Lucas, can you own a written evaluation plan by Friday, including cohort definitions, weekend coverage, rollback test, and the compute estimate for Omar? That is the piece we need to fund the next stage without pretending the experiment is a release.",
+      "idx": 93,
+      "start_ms": 1754115,
+      "end_ms": 1770495
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Yes, I will deliver the evaluation plan by Friday and put the Harlan worst-stop analysis in the appendix if the data is clean enough. I will call out missing observations instead of replacing them with a polished aggregate.",
+      "idx": 94,
+      "start_ms": 1771139,
+      "end_ms": 1784707
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "That gives me a safe message: evidence first, no date on an unvalidated model. I can prepare language for sales and customer success that explains what the ten-minute window means and why the pilot cohort may differ from the full fleet.",
+      "idx": 95,
+      "start_ms": 1785148,
+      "end_ms": 1799497
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Good. We have an outcome target and a stop rule. Now let us return to the bet with the strongest scope disagreement: self-serve onboarding. Mei, please put the opportunity cost in plain terms, then we will decide the cut line.",
+      "idx": 96,
+      "start_ms": 1800274,
+      "end_ms": 1817920
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Here is the blunt version. I would cut self-serve from Q4 and protect the app. We have one platform group supporting offline sync, model serving, imports, and the route optimizer. If the same senior engineer reviews three critical paths every day, nobody gets the uninterrupted time to make any of them safe.",
+      "idx": 97,
+      "start_ms": 1818197,
+      "end_ms": 1839244
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I understand the staffing math. I also need us to see what cutting it means to customers. Nineteen days is the average from contract to first live load, and support spends about eleven hours per account cleaning that first file. That is a costly, frustrating first impression before they have used the product.",
+      "idx": 98,
+      "start_ms": 1839555,
+      "end_ms": 1863347
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "There is a sales cost too. I had a buyer ready to start a forty-truck trial, and when I described the implementation sequence, they moved the date out by a month. We did not lose the deal, but we lost urgency. If onboarding stays untouched all quarter, that pattern repeats.",
+      "idx": 99,
+      "start_ms": 1863983,
+      "end_ms": 1886099
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "Both costs are real. The question is what level of investment changes them. A full self-serve product could cost far more than eleven hours per account in the first year. A narrow path that cuts rework may repay itself sooner. I want the team to distinguish those two cases.",
+      "idx": 100,
+      "start_ms": 1886475,
+      "end_ms": 1903378
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "The narrow path is possible if we make it coherent. Let a customer upload a standard locations file, map fields with understandable examples, see validation errors in place, and submit a draft for a human review. They are not configuring billing, roles, routing rules, and integrations alone.",
+      "idx": 101,
+      "start_ms": 1903629,
+      "end_ms": 1922291
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "That is a better shape. It still needs a safe import service and support visibility. We have learned that a bad location ID can create duplicate stops downstream. I will not accept a flow that saves an invalid import just because the screen says setup complete.",
+      "idx": 102,
+      "start_ms": 1922675,
+      "end_ms": 1942392
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "We can make validation measurable. Count rows rejected, fields corrected by the customer, and records changed during assisted review. If we see the same correction on every file, the product should learn from that. I would not automate those corrections before we know which are safe.",
+      "idx": 103,
+      "start_ms": 1942147,
+      "end_ms": 1958109
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "And the customer should see who has the ball. Today the file disappears into an email thread. If it needs our review, the product can say reviewing, with an expected next update. That would remove a lot of anxious follow-up even if the elapsed time does not drop immediately.",
+      "idx": 104,
+      "start_ms": 1958486,
+      "end_ms": 1977860
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "That language is crucial. Self-serve is a loaded phrase. If a customer still waits on a human before the first route, we should call this a guided setup pilot. We can say they upload and correct their own file, and we review the draft before it goes live.",
+      "idx": 105,
+      "start_ms": 1978510,
+      "end_ms": 2000032
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Mei, if we use Jonas's thin path and Hannah's honest name, does your objection change? I do not want to vote by semantics; I want to know whether it fits behind the app and model gates without borrowing their critical engineers at the wrong time.",
+      "idx": 106,
+      "start_ms": 2000422,
+      "end_ms": 2017046
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "It changes if we put a hard limit on the build and a pause condition. I could allocate one backend engineer for a short discovery and validation spike, then a bounded pilot build if the import service is simpler than we fear. I cannot promise general availability in December.",
+      "idx": 107,
+      "start_ms": 2017438,
+      "end_ms": 2038601
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "I can live with that. A guided setup pilot for five to eight appropriate accounts is a sales asset, even if we use assisted onboarding for bigger migrations. But please do not make me tell a prospect they are selected for a pilot after I have already promised them a production workflow.",
+      "idx": 108,
+      "start_ms": 2039365,
+      "end_ms": 2058383
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "We can cap the first stage at four engineering weeks and a fixed pilot budget. At the checkpoint, I want to see import completion, support hours, and median days to first live load. If we are not getting a clear signal, we stop. That is a business decision, not a failure to support onboarding.",
+      "idx": 109,
+      "start_ms": 2058138,
+      "end_ms": 2077491
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Four engineering weeks can work only if we exclude identity redesign, custom integrations, billing setup, and automatic route configuration. I want that list written down. Otherwise every edge case becomes a reasonable request that doubles the pilot.",
+      "idx": 110,
+      "start_ms": 2078343,
+      "end_ms": 2092945
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "Agreed. The customer sees a draft route after their file is mapped, and support verifies it before activation. We will design the status states so the customer knows exactly why the workflow stops. I can produce the annotated flow without waiting for the service to exist.",
+      "idx": 111,
+      "start_ms": 2093163,
+      "end_ms": 2109373
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I will recruit accounts that have ordinary CSV exports and a willingness to share the file problems they hit. We need some variation, but we should not hand the first pilot to the most complex migration in the pipeline. That would tell us about a different product.",
+      "idx": 112,
+      "start_ms": 2109735,
+      "end_ms": 2127329
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "For measurement, I propose a before-and-after view using the existing assisted accounts as context, not a promise that five pilot accounts prove causality. We can report their elapsed days and support hours transparently, with the file complexity noted. Averages alone could mislead us.",
+      "idx": 113,
+      "start_ms": 2128040,
+      "end_ms": 2145916
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That is a good discipline. The decision I hear is yes to staged self-serve onboarding as a Q4 bet, but only as a guided pilot capped at four engineering weeks in its first stage. The app's reliability critical path is protected, and the pilot pauses if it threatens that gate.",
+      "idx": 114,
+      "start_ms": 2146705,
+      "end_ms": 2165204
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "If that wording goes in the decision log, I am on board. I want a weekly review of the remaining platform load. If the Android crash or another optimizer incident consumes the week, we do not quietly ask people to make it up at night.",
+      "idx": 115,
+      "start_ms": 2166063,
+      "end_ms": 2185219
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "I will approve the first stage under that condition, with the larger spend held for the checkpoint. Please do not put the two backend hires into the pilot schedule. We can fund recruiting, but the plan must work with the people already here.",
+      "idx": 116,
+      "start_ms": 2185896,
+      "end_ms": 2201481
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "I will keep guided setup pilot out of the broad launch calendar. It can have an invitation and a careful customer note, but the public Q4 story should not imply every new customer can onboard without help. We can revisit that after the first cohort's data.",
+      "idx": 117,
+      "start_ms": 2202281,
+      "end_ms": 2220923
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "That lets me set expectations honestly. For a simple account, I can ask whether they want to participate; for a complex account, I can still explain assisted implementation. The important part is that we are testing an actual way to shorten the nineteen days, not just changing a form.",
+      "idx": 118,
+      "start_ms": 2221286,
+      "end_ms": 2240295
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Jonas, can you put the thin path and exclusion list into a flow by next week? Mei can size the service against it. Amara, can you identify candidate accounts at the same time, without promising dates before we see the prototype?",
+      "idx": 119,
+      "start_ms": 2240798,
+      "end_ms": 2254805
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "I will deliver the flow by next week with the error states and review handoff, and I will flag any step that requires a new backend service. I will show the smallest complete journey, not a menu of possible later features.",
+      "idx": 120,
+      "start_ms": 2255626,
+      "end_ms": 2271174
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I will bring a shortlist of five to eight candidate accounts by next week and note their file patterns, carrier size, and appetite for a pilot. Nobody gets a launch promise until Mei and I agree that the flow can handle their case.",
+      "idx": 121,
+      "start_ms": 2271347,
+      "end_ms": 2286237
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "That resolves my objection enough to plan. I still want the capacity table to show what drops if the pilot stops. It should be an intentional gate, not a failure that forces a last-minute reshuffle.",
+      "idx": 122,
+      "start_ms": 2286899,
+      "end_ms": 2299009
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "It will. We have the third bet with its boundary. Let us now test the whole quarter against actual engineering weeks and dollars, because this decision only holds if the numbers do.",
+      "idx": 123,
+      "start_ms": 2298764,
+      "end_ms": 2309503
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "The capacity calculation starts with the people we have, not the people we hope to hire. After planned leave, support rotation, release work, and the recurring optimizer and platform load, I count thirty effective engineering weeks available for discretionary Q4 work. That is across the team, not thirty weeks per project.",
+      "idx": 124,
+      "start_ms": 2309675,
+      "end_ms": 2331931
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "Walk me through the reserve in that number. I do not want a generous contingency hidden in a line item, but I also do not want another plan that assumes incidents and customer escalations stop on October first. What did you actually remove from the calendar?",
+      "idx": 125,
+      "start_ms": 2332172,
+      "end_ms": 2350133
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "I removed six weeks for scheduled leave, eight for the on-call and support rotation, and four for maintenance that we already know is due. The thirty is what remains. If we get a major incident, the first thing to pause is onboarding discovery, not the reliability fix that keeps customers operating.",
+      "idx": 126,
+      "start_ms": 2350823,
+      "end_ms": 2373430
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "The model evaluation needs four of those weeks for data work, shadow setup, cohort reporting, and a production pilot plan. I can reduce the dashboard polish, but I cannot skip the weekend backtest or rollback test. If we skip those, 88 percent becomes a number we cannot defend.",
+      "idx": 127,
+      "start_ms": 2373955,
+      "end_ms": 2392403
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "Design time is a separate constraint. I have app testing, the onboarding flow, and the dispatch board handoff. I can cover them if we sequence interviews and reviews rather than ask the same eight customers three different questions in the same week. I need decisions within forty-eight hours when I bring evidence back.",
+      "idx": 128,
+      "start_ms": 2392852,
+      "end_ms": 2415392
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Let us put a first allocation on the board: fourteen engineering weeks for mobile v2, six for model evaluation and pilot readiness, four for onboarding's first stage, and six held for reliability and interrupts. That uses all thirty. Mei, where is that wrong?",
+      "idx": 129,
+      "start_ms": 2415896,
+      "end_ms": 2430662
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "The six-week reserve is the minimum I would accept, and the mobile estimate assumes we do not add route chat or document extraction. The model's six includes serving work beyond Lucas's four analytics weeks. I can use this allocation, but only with scope frozen at the release gates we just defined.",
+      "idx": 130,
+      "start_ms": 2431191,
+      "end_ms": 2450213
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "The allocation is clearer than a feature list. I still need to see the dollar side. We have room for two backend requisitions if we phase start dates, but a broad simultaneous launch campaign and extra compute would exceed the budget I brought. Which spend is required before evidence, and which can wait?",
+      "idx": 131,
+      "start_ms": 2450369,
+      "end_ms": 2471668
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "Marketing can stage its spend. We need research, pilot invitations, sales materials, and a small customer story effort now. Paid launch activity can wait until the app passes the carrier pilot. I do not need a large October campaign to say we are testing a better driver flow.",
+      "idx": 132,
+      "start_ms": 2472159,
+      "end_ms": 2489228
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "I do need a current sales story, though. Prospects ask what is changing in Q4. A one-page roadmap with gates and honest dates will help more than a campaign. I want a way to explain the driver pilot and ETA evaluation without turning either into a guaranteed ship promise.",
+      "idx": 133,
+      "start_ms": 2489587,
+      "end_ms": 2511135
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Support needs a similar page for existing accounts. If one customer hears mobile pilot and another hears app launch, the ticket queue fills with mismatched expectations. I can help Hannah write a customer version, but the words have to match Mei's release gates and Priya's decision log.",
+      "idx": 134,
+      "start_ms": 2511884,
+      "end_ms": 2529015
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "For the hires, I propose two backend requisitions with a combined annualized compensation ceiling already in the operating plan, plus recruiting fees capped separately. If either offer exceeds the band, I bring it back for review. We can start searches now and keep Q4 delivery independent of their arrival.",
+      "idx": 135,
+      "start_ms": 2528770,
+      "end_ms": 2547982
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "I support two backend hires. One should be strongest in data and serving reliability; the other in application platform and imports. I will not assign either to a specific Q4 milestone until they join and ramp. The current team needs relief, but hiring is not a substitute for a realistic sprint plan.",
+      "idx": 136,
+      "start_ms": 2548678,
+      "end_ms": 2568246
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "And how will we keep the platform team from absorbing the cost as overtime? The one-on-one conversation made it clear that the current rotation is already stretched. If this plan means thirty weeks of feature work plus the usual unplanned workload, we have simply renamed the overload.",
+      "idx": 137,
+      "start_ms": 2568527,
+      "end_ms": 2589612
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "That is why six weeks stay in reserve and why the onboarding pilot is paused before we steal from mobile. I will report actual load weekly, including on-call hours. If the reserve gets used early, I want permission to move scope, not ask the team to recover by working nights.",
+      "idx": 138,
+      "start_ms": 2590480,
+      "end_ms": 2610279
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "You have that from me. The financial plan is a ceiling, not a demand that every approved dollar be spent. I will fund the two searches and the bounded pilot stage, then release the model compute and launch spend against evidence. I want a checkpoint at the end of October.",
+      "idx": 139,
+      "start_ms": 2611146,
+      "end_ms": 2632650
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "For the compute checkpoint, I will give Omar the measured run cost by Friday with a worst-case upper bound. The GPU quota is a throughput constraint, but the job should release nodes when complete. I will show both duration and cost so we do not optimize one by hiding the other.",
+      "idx": 140,
+      "start_ms": 2633225,
+      "end_ms": 2653743
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "On design capacity, I will make the app prototype the first priority, onboarding flow second, and dispatch board review third unless customer evidence changes that order. The board has been waiting on engineering sign-off, so I need Mei and Priya to give a clear review slot rather than let it drift again.",
+      "idx": 141,
+      "start_ms": 2654383,
+      "end_ms": 2676523
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "I can make that slot tomorrow. I owe you the engineering review, and I will bring the sync engineer so we can resolve what the board can actually show. It should not become another recurring meeting; one focused walkthrough and a written decision will do.",
+      "idx": 142,
+      "start_ms": 2677148,
+      "end_ms": 2695126
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "Could we name the launch spend gate as something I can plan against? If the carrier pilot passes in November, I need time for a case study and a campaign. If it slips, I need to avoid placing paid media that assumes a date we no longer have.",
+      "idx": 143,
+      "start_ms": 2695303,
+      "end_ms": 2714651
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "The gate is a written go or hold after the pilot meets the reliability thresholds and Amara confirms customer readiness. Hannah may prepare assets now. She only books public promotion once Mei signs off on reliability and I sign off on the scope and evidence.",
+      "idx": 144,
+      "start_ms": 2715359,
+      "end_ms": 2731966
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "That keeps the sales team from guessing. I can train reps on the roadmap now, with a line that only pilot customers have the app and onboarding flows. When those gates move, update the one-page source rather than making everyone interpret a chat thread.",
+      "idx": 145,
+      "start_ms": 2732618,
+      "end_ms": 2749735
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Please add a support readiness gate. We need a troubleshooting article for queued actions, a way to identify which carrier is in the pilot, and an escalation owner. If the app is technically sound but support cannot see its state, customers still get a poor first week.",
+      "idx": 146,
+      "start_ms": 2750573,
+      "end_ms": 2771207
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Agreed. That is part of the fourteen-week mobile allocation, not a nice-to-have after release. We will not turn on a new carrier until support can see queue health and knows the rollback contact. I can put that in the release checklist.",
+      "idx": 147,
+      "start_ms": 2770962,
+      "end_ms": 2788496
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "I am comfortable with this budget shape: two approved backend searches, thirty effective engineering weeks allocated as stated, four weeks capped for onboarding's first stage, and staged compute and marketing spend. I will record the ceilings in the finance sheet and flag exceptions before money is committed.",
+      "idx": 148,
+      "start_ms": 2789075,
+      "end_ms": 2805481
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Thank you. That is an actual plan: capacity, reserve, and spend gates. Now we need to make the launch and customer communication coherent across sales, support, and marketing, then close with owners.",
+      "idx": 149,
+      "start_ms": 2806235,
+      "end_ms": 2817161
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "I want to separate three moments that are currently being called launch. October is a pilot invitation and an explanation of what we are testing. A later app release can have a broader campaign after evidence. The ETA model and guided setup pilot each have their own customer communications, with no shared general availability date.",
+      "idx": 150,
+      "start_ms": 2817917,
+      "end_ms": 2841406
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "That makes sense, but buyers still want a roadmap they can evaluate. I suggest one slide with the three bets, the next gate for each, and a clear distinction between pilot and release. I do not want a quarter-by-quarter graphic that looks like a contract promise.",
+      "idx": 151,
+      "start_ms": 2841161,
+      "end_ms": 2860714
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "For existing customers, the words have to include what happens if they have a problem. The app pilot needs a named support path and a way to identify queued actions. The ETA model needs a status update if it misses a gate. The guided setup pilot needs the assisted fallback.",
+      "idx": 152,
+      "start_ms": 2861450,
+      "end_ms": 2883775
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "We should show the customer the difference between queued and completed, not rely entirely on a support article. The app's state is the primary communication. If the queue remains for more than five minutes after reconnection, the driver should see what to do, not a green check that hides the problem.",
+      "idx": 153,
+      "start_ms": 2884389,
+      "end_ms": 2906878
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "I agree. The fallback path is a product requirement. On the platform side, our biggest risks are sync conflicts, stale events, retraining load, and import validation. I will keep a small risk register with severity, owner, and trigger. If a trigger is crossed, the pilot pauses or rolls back.",
+      "idx": 154,
+      "start_ms": 2907580,
+      "end_ms": 2927791
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "For ETA, the trigger should include a rise in long misses in any cohort with enough stops, not just a fall in the overall 88 percent. We can also watch freshness. A model may produce a mathematically plausible prediction on an event stream that has stopped, and that can damage trust quickly.",
+      "idx": 155,
+      "start_ms": 2928491,
+      "end_ms": 2950904
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "I want to see the risk register at the end-of-October checkpoint, but I do not need a decorative spreadsheet updated every day. One row per material risk and a clear owner is enough. If the cost ceiling or a release gate is at risk, I want to hear it before a purchase order appears.",
+      "idx": 156,
+      "start_ms": 2951189,
+      "end_ms": 2971673
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "We can keep it short. I will own the cross-bet decision log, Mei owns reliability triggers, Lucas owns model evidence, Amara owns pilot customer readiness, and Hannah owns the communication calendar. Omar owns budget exceptions. That gives us a place to escalate without a giant steering committee.",
+      "idx": 157,
+      "start_ms": 2972137,
+      "end_ms": 2990306
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "For launch copy, I need a review cadence. If I write a pilot invitation now and learn in two weeks that the offline queue cannot cover a key action, the copy changes. Can Mei and Jonas give me a current list of supported actions every Friday while the app is in build?",
+      "idx": 158,
+      "start_ms": 2990481,
+      "end_ms": 3010112
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Yes, a Friday status note with the supported actions, unresolved conflicts, and pilot gate status is reasonable. I will not ask engineers for daily marketing updates. Jonas can review the wording for the driver experience, and I can sign off on the technical claims.",
+      "idx": 159,
+      "start_ms": 3010355,
+      "end_ms": 3029871
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "I will do that. I also want Hannah to avoid screenshots that imply the completion control is decided before the driver test. The swipe and button prototypes are both live options. We can use neutral stop-list images until the test gives us an answer.",
+      "idx": 160,
+      "start_ms": 3029626,
+      "end_ms": 3044503
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Can the sales team still show a prototype in a discovery call? Some prospects have asked what the driver screen will look like. I would rather be transparent that it is a prototype than hide everything until a release date.",
+      "idx": 161,
+      "start_ms": 3044708,
+      "end_ms": 3061514
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "You can show it in a guided conversation if you label it as exploratory and do not give a delivery date. For a broad deck or follow-up attachment, wait for the design decision. We have seen screenshots outlive their context and become implied promises.",
+      "idx": 162,
+      "start_ms": 3062280,
+      "end_ms": 3080936
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "The onboarding pilot needs the same care. I will ask selected customers to join with a specific objective: shorten file mapping and give them progress visibility. I will tell them a human still reviews the draft. If their import is outside the supported format, we use assisted setup and learn from the failure.",
+      "idx": 163,
+      "start_ms": 3081782,
+      "end_ms": 3103266
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "On model communication, I can prepare a one-page methodology note so Daniel and Amara do not have to invent caveats live. It will define the ten-minute window, the relevant cohorts, the pilot size, and what counts as a long miss. That should prevent a 88 percent figure from floating free of its meaning.",
+      "idx": 164,
+      "start_ms": 3103763,
+      "end_ms": 3125299
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "That would help. I will write a small message pack: pilot invitation, customer FAQ, sales roadmap line, and a holding statement if we delay a gate. The holding statement is not pessimism; it keeps people from making up a new date when the facts change.",
+      "idx": 165,
+      "start_ms": 3125751,
+      "end_ms": 3144570
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "I want the costs of those materials in the existing marketing allocation, which Hannah said they are. The paid campaign remains gated. If we need a customer research incentive, bring me the amount before it is offered, so it does not quietly become an uncapped program.",
+      "idx": 166,
+      "start_ms": 3144890,
+      "end_ms": 3160878
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "One operational risk we have not named is the Android 14 crash regression. The support tickets are recent and the hotfix is still being staged. I will not invite additional driver cohorts until the crash-free rate recovers and holds. An attractive new stop list cannot compensate for an app that quits on launch.",
+      "idx": 167,
+      "start_ms": 3161203,
+      "end_ms": 3179807
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I will tell the pilot candidates that we are selecting cohorts based on device and route patterns, then confirm dates after the hotfix is stable. If a carrier is affected now, their support issue remains separate from the future pilot. They should not hear an invitation as a substitute for help today.",
+      "idx": 168,
+      "start_ms": 3180455,
+      "end_ms": 3201394
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "That separation matters for Harlan too. We should not use the model bet as a promise that their renewal problem is solved. Amara needs an account plan with concrete updates, and I can join that call if commercial terms come up. We will sell the evidence, not the experiment.",
+      "idx": 169,
+      "start_ms": 3201806,
+      "end_ms": 3223462
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "The next planning review will look at gates, not percent complete. For each bet we should be able to say what evidence appeared, what risk changed, and whether the next spend or cohort is approved. That makes a hold a normal decision, not an embarrassment.",
+      "idx": 170,
+      "start_ms": 3223628,
+      "end_ms": 3243086
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "I can make the launch calendar reflect that. It will show review windows and ready-to-publish assets, with the public campaign penciled in only after the app go decision. I will circulate the draft by next week for Priya, Mei, and Amara to correct.",
+      "idx": 171,
+      "start_ms": 3243606,
+      "end_ms": 3261833
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I will send pilot criteria and candidate carriers by next week too. I want each candidate to have a clear reason they teach us something: weak coverage, a different file shape, or a dispatcher willing to report exceptions. We should not pick only the happiest customers.",
+      "idx": 172,
+      "start_ms": 3262119,
+      "end_ms": 3279004
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "And I will make the ETA cohort dashboard available to those reviews. It will include sample size and the long-tail threshold so we can tell a real improvement from a blended-number trick. If the model does poorly on weekends, the next step is more investigation, not a launch message.",
+      "idx": 173,
+      "start_ms": 3279688,
+      "end_ms": 3301111
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That closes the communication frame. Let us use the final minutes to read back the decisions and owners. I want everyone to challenge a date or responsibility that sounds impossible before we leave, not after it appears in the notes.",
+      "idx": 174,
+      "start_ms": 3301679,
+      "end_ms": 3319369
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Here is the decision as I have it. Q4 has three bets: driver mobile app v2, an ETA-accuracy model, and a narrow guided setup pilot for self-serve onboarding. The app is the protected critical path. None of the three has an automatic general availability date attached today.",
+      "idx": 175,
+      "start_ms": 3319855,
+      "end_ms": 3337624
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "That matches my understanding. I own the mobile release checklist, including the Android 14 stability gate, 99 percent crash-free sessions, 98 percent queued-action sync within five minutes of reconnection, support visibility, and rollback. I will share the first checklist by Friday.",
+      "idx": 176,
+      "start_ms": 3337914,
+      "end_ms": 3353425
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "I own the side-by-side completion prototype by Friday, with accessibility states and the queued badge. I will also deliver the thin onboarding flow and its excluded cases by next week. Those are two separate artifacts; the pilot flow will not quietly expand the app scope.",
+      "idx": 177,
+      "start_ms": 3354172,
+      "end_ms": 3371237
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I own recruiting at least eight drivers across three carriers for the app test, and a shortlist of five to eight suitable onboarding accounts by next week. I will make their device, route, and file patterns visible so we know what evidence each cohort can give us.",
+      "idx": 178,
+      "start_ms": 3371615,
+      "end_ms": 3390468
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "I own the ETA evaluation plan by Friday: 82 percent baseline, 88 percent target within ten minutes, no worse forty-minute misses in meaningful cohorts, a six-weekend backtest, a weekend shadow slice, and a tested rollback. I will include the compute cost for Omar.",
+      "idx": 179,
+      "start_ms": 3390682,
+      "end_ms": 3406722
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "I own the budget record and two backend requisitions. I will open both searches by next week, keep offers within the approved bands, and hold the wider model and launch spend until the relevant gates pass. New hires do not count toward this quarter's delivery capacity.",
+      "idx": 180,
+      "start_ms": 3407226,
+      "end_ms": 3425877
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "I own the pilot invitation, customer FAQ, and sales message pack by next week. Public app promotion waits for the pilot go decision and a customer story we can support. I will label guided setup as a pilot and define exactly what customers can do themselves.",
+      "idx": 181,
+      "start_ms": 3426275,
+      "end_ms": 3446336
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "I will give sales the one-page roadmap by next week using those same gates, and I will make sure no rep converts a pilot window into a promised release date. I will work with Amara on accounts where an ETA miss or onboarding delay affects a renewal or an active evaluation.",
+      "idx": 182,
+      "start_ms": 3446697,
+      "end_ms": 3468369
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "I own the decision log and the weekly cross-bet review. The engineering allocation is fourteen weeks mobile, six model, four onboarding first stage, and six reliability reserve, totaling thirty effective weeks. The onboarding stage pauses if it threatens the app gate, and Omar reviews any spend above the cap.",
+      "idx": 183,
+      "start_ms": 3469191,
+      "end_ms": 3487346
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "One correction: the 98 percent sync measure is within five minutes after reconnection, not five minutes after the original tap while the phone is offline. I want the notes to preserve that. Otherwise someone will run a report that makes the pilot look broken for being offline.",
+      "idx": 184,
+      "start_ms": 3488173,
+      "end_ms": 3507392
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Good correction, Mei. I have it exactly that way. Lucas, when you build the dashboard, can you use reconnection as time zero and show the carrier breakdown? I do not want a threshold that hides one cohort behind a strong average.",
+      "idx": 185,
+      "start_ms": 3508030,
+      "end_ms": 3523210
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Yes, I will define time zero as reconnection and show the denominator and failures by carrier. I will share a draft dashboard definition by next week so Mei and Amara can challenge it before a pilot begins.",
+      "idx": 186,
+      "start_ms": 3524059,
+      "end_ms": 3539161
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "For the customer side, I will bring the top driver complaints into Jonas's test, especially around location permission and uncertainty after weak coverage. The numbers are useful, but I want to hear what drivers believed happened when the screen changed.",
+      "idx": 187,
+      "start_ms": 3539552,
+      "end_ms": 3553133
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "That will make the test better. I can watch for wrong assumptions as well as task time and errors. If drivers prefer a fast swipe but keep completing the wrong stop, the preference score will not decide the control.",
+      "idx": 188,
+      "start_ms": 3553780,
+      "end_ms": 3570711
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "And that observation will make our eventual language stronger. We can describe the behavior we saw instead of reaching for broad words like seamless. I will keep the October material focused on the pilot invitation and the problem we are solving.",
+      "idx": 189,
+      "start_ms": 3571075,
+      "end_ms": 3586282
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "I can work with that. A buyer can hear that we are testing a reliable driver flow and see the gates. The same buyer would be skeptical if I claimed everything is already solved. Clear boundaries make the roadmap more credible.",
+      "idx": 190,
+      "start_ms": 3586869,
+      "end_ms": 3605309
+    },
+    {
+      "speaker": "Omar Haddad",
+      "text": "My end-of-October checkpoint will compare actual burn with the thirty-week allocation, hiring progress, pilot evidence, and the cost of the model experiment. If the reserve is being consumed faster than planned, we will reduce scope at that point rather than spend against a fantasy schedule.",
+      "idx": 191,
+      "start_ms": 3605839,
+      "end_ms": 3624236
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "I appreciate that. I will report on-call load honestly, including what it displaces. The team can work hard on this plan without making nights and weekends the hidden fourth bet.",
+      "idx": 192,
+      "start_ms": 3624490,
+      "end_ms": 3635619
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "We have a resolved disagreement, then: self-serve stays in Q4 as a capped guided pilot, with a stop rule that protects mobile. The ETA model moves on evidence, and the app moves on reliability and driver observation. Does anyone hear a different decision or an owner missing from this list?",
+      "idx": 193,
+      "start_ms": 3636207,
+      "end_ms": 3655970
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "No missing owner from me. I will call out if a pilot carrier is not ready rather than fill a cohort for the sake of a date. That is the part customer success has to own honestly.",
+      "idx": 194,
+      "start_ms": 3656614,
+      "end_ms": 3672318
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Nothing missing from the model side. I will show the uncomfortable lane breakdowns, not just the company-wide number. If the candidate fails a gate, the review should be able to see exactly why.",
+      "idx": 195,
+      "start_ms": 3672651,
+      "end_ms": 3684222
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "I am aligned. I will circulate draft language early, and I will ask for a yes or no on specific claims. That will be faster than six people editing the same headline in a meeting.",
+      "idx": 196,
+      "start_ms": 3684681,
+      "end_ms": 3699967
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Thank you, everyone. I will post the decision log today with these owners and gates. Please correct factual errors by tomorrow, and then we will use the weekly review to move decisions as evidence arrives. We have a plan we can explain; let us go execute it.",
+      "idx": 197,
+      "start_ms": 3700389,
+      "end_ms": 3721001
+    }
+  ],
+  "chapters": [
+    {
+      "title": "Opening and Q3 Scorecard",
+      "start_idx": 0
+    },
+    {
+      "title": "Customer Needs and the Three Bets",
+      "start_idx": 22
+    },
+    {
+      "title": "Mobile App v2 Scope and Release Gates",
+      "start_idx": 46
+    },
+    {
+      "title": "ETA Accuracy Model and Evidence",
+      "start_idx": 71
+    },
+    {
+      "title": "Self-Serve Onboarding Decision",
+      "start_idx": 97
+    },
+    {
+      "title": "Capacity, Budget, and Hiring",
+      "start_idx": 124
+    },
+    {
+      "title": "Launch, Customer Communication, and Risks",
+      "start_idx": 150
+    },
+    {
+      "title": "Decisions, Owners, and Close",
+      "start_idx": 175
+    }
+  ],
+  "duration_ms": 3721001
+}

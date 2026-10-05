@@ -1,0 +1,50 @@
+[
+  {
+    "owner": "Tom Brandt",
+    "task": "Export a scrubbed 50-row sample with active records and difficult customer codes.",
+    "due": "2026-10-02",
+    "due_phrase": "by Friday",
+    "segment_idx": 76,
+    "start_ms": 739494
+  },
+  {
+    "owner": "Priya Raman",
+    "task": "Review the sample field mapping and exceptions with Tom.",
+    "due": "2026-10-02",
+    "due_phrase": "by Friday",
+    "segment_idx": 77,
+    "start_ms": 749250
+  },
+  {
+    "owner": "Daniel Ortiz",
+    "task": "Send Acme the security packet and separate sample mapping from live access.",
+    "due": "2026-09-29",
+    "due_phrase": "tomorrow",
+    "segment_idx": 90,
+    "start_ms": 877147
+  },
+  {
+    "owner": "Daniel Ortiz",
+    "task": "Send a scoped pilot proposal and annual pricing with setup cost separated.",
+    "due": "2026-10-02",
+    "due_phrase": "by end of week",
+    "segment_idx": 113,
+    "start_ms": 1092930
+  },
+  {
+    "owner": "Priya Raman",
+    "task": "Write the pilot scorecard and rollback outline.",
+    "due": null,
+    "due_phrase": null,
+    "segment_idx": 111,
+    "start_ms": 1075392
+  },
+  {
+    "owner": "Elena Voss",
+    "task": "Introduce Kestrel to Acme's security lead for a pilot access review.",
+    "due": "2026-10-05",
+    "due_phrase": "next week",
+    "segment_idx": 112,
+    "start_ms": 1084208
+  }
+]

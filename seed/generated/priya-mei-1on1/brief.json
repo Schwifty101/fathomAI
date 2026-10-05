@@ -1,0 +1,46 @@
+{
+  "agenda": [
+    "Check Mei and the platform team workload",
+    "Examine Q4 scope against engineering capacity",
+    "Discuss two backend hires and Mei’s director path",
+    "Improve the product and engineering planning cadence"
+  ],
+  "chapters": [
+    {
+      "title": "Platform Load and Recovery",
+      "minutes": 4,
+      "beats": [
+        "Mei says three platform engineers have handled eleven after-hours pages in two weeks, with Lucas pulled into ETA incidents and no recovery time after the optimizer outage.",
+        "Priya asks whether the load is a temporary spike or an ownership problem; Mei says the shared rotation hides chronic support work.",
+        "They agree Mei will document the rotation and protect an afternoon of recovery time this week."
+      ]
+    },
+    {
+      "title": "Q4 Scope and Capacity",
+      "minutes": 4,
+      "beats": [
+        "Priya outlines tomorrow’s proposed bets: driver mobile v2, an ETA model, and a staged self-serve onboarding pilot.",
+        "Mei argues that promising all three at full scope while platform reliability work remains open will recreate the same burnout.",
+        "They agree to take a capacity-based proposal to Q4 planning, with the onboarding pilot gated behind support and error-rate evidence."
+      ]
+    },
+    {
+      "title": "Backend Hiring and Leadership",
+      "minutes": 4,
+      "beats": [
+        "Mei wants two backend engineers, one senior engineer for platform ownership and one engineer for onboarding integrations, but neither can be counted as immediate capacity.",
+        "Priya asks Mei to show recruiting milestones and a thirty-day onboarding plan instead of treating headcount as a Q4 delivery guarantee.",
+        "Mei describes her goal of growing toward a director role and asks for ownership of cross-team capacity planning and candid feedback."
+      ]
+    },
+    {
+      "title": "Planning Together and Next Steps",
+      "minutes": 3,
+      "beats": [
+        "Mei says engineering often receives a finished roadmap after customer priorities are already presented as promises.",
+        "Priya accepts the feedback and proposes a joint product-engineering scoping session before future planning commitments.",
+        "They close with named follow-ups for a capacity note, hiring brief, shared planning experiment, and Mei’s growth plan."
+      ]
+    }
+  ]
+}

@@ -13,3 +13,5 @@ docs/design/refs/
 playwright-report
 test-results
 .vscode/
+.vercel
+.env*

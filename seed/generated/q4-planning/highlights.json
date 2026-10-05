@@ -1,0 +1,44 @@
+[
+  {
+    "segment_idx": 2,
+    "type": "insight",
+    "title": "Nineteen-day setup weakens sales momentum",
+    "start_ms": 40465,
+    "end_ms": 58572
+  },
+  {
+    "segment_idx": 57,
+    "type": "action_item",
+    "title": "Test completion controls with drivers",
+    "start_ms": 1083544,
+    "end_ms": 1097195
+  },
+  {
+    "segment_idx": 73,
+    "type": "tech_question",
+    "title": "ETA gate protects long-tail misses",
+    "start_ms": 1366868,
+    "end_ms": 1389328
+  },
+  {
+    "segment_idx": 97,
+    "type": "objection",
+    "title": "Mei challenges full self-serve scope",
+    "start_ms": 1818197,
+    "end_ms": 1839244
+  },
+  {
+    "segment_idx": 114,
+    "type": "feedback",
+    "title": "Guided pilot resolves capacity tradeoff",
+    "start_ms": 2146705,
+    "end_ms": 2165204
+  },
+  {
+    "segment_idx": 148,
+    "type": "positive",
+    "title": "Budget backs staged Q4 bets",
+    "start_ms": 2789075,
+    "end_ms": 2805481
+  }
+]

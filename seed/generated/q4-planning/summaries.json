@@ -1,0 +1,141 @@
+{
+  "general": {
+    "sections": [
+      {
+        "heading": "Overview",
+        "bullets": [
+          "Priya Raman led Q4 planning for Kestrel Dispatch around three bets: driver mobile app v2, an ETA-accuracy model, and a guided setup pilot for self-serve onboarding.",
+          "The team used Q3 churn of 4.1 percent, ETA accuracy of 82 percent within ten minutes, and a 19-day average onboarding time to judge priorities."
+        ]
+      },
+      {
+        "heading": "Key points",
+        "bullets": [
+          "Amara Nwosu said support spends about 11 staff hours per new account cleaning the first import, while Daniel Ortiz said slow setup weakens sales momentum.",
+          "Jonas Weber framed mobile v2 around a clear stop list, a visible offline completion queue, and a completion control to be tested with drivers.",
+          "Lucas Ferreira proposed an 88 percent ETA accuracy gate and no worsening of misses over 40 minutes in meaningful cohorts, with weekend evidence and a rollback test.",
+          "Mei Tanaka estimated 30 effective engineering weeks for Q4 after leave, support, and maintenance."
+        ]
+      },
+      {
+        "heading": "Decisions",
+        "bullets": [
+          "Priya Raman and Mei Tanaka agreed that mobile reliability takes priority and that guided setup pauses if it threatens the app's critical path.",
+          "Omar Haddad approved two backend searches and a capped four-engineering-week first stage for the onboarding pilot, while later compute and marketing spend depend on evidence.",
+          "The team allocated 14 engineering weeks to mobile, six to model evaluation and readiness, four to onboarding's first stage, and six to reliability reserve.",
+          "Hannah Cole will treat October as a pilot invitation window rather than announce general availability for all three bets."
+        ]
+      },
+      {
+        "heading": "Open questions",
+        "bullets": [
+          "Jonas Weber and Mei Tanaka will choose between swipe-to-complete and explicit confirmation after observing at least eight drivers across three carriers.",
+          "Lucas Ferreira still needs to show whether the ETA candidate improves weekend freight lanes and stays inside Omar Haddad's compute ceiling.",
+          "The guided setup pilot must show whether five to eight selected accounts can reduce elapsed onboarding time and support effort without unsafe imports."
+        ]
+      }
+    ]
+  },
+  "sales": {
+    "sections": [
+      {
+        "heading": "Pain points",
+        "bullets": [
+          "Daniel Ortiz said buyers question a 19-day average wait to get their first live load and ask to see the driver workflow before buying.",
+          "Amara Nwosu said customers lose trust when offline driver actions are unclear or ETAs drift by more than 40 minutes."
+        ]
+      },
+      {
+        "heading": "Current solution",
+        "bullets": [
+          "Kestrel Dispatch currently offers a driver app and ETA view, but Jonas Weber said drivers cannot always tell whether an offline completion reached dispatch.",
+          "New customers currently send files for assisted import, and Amara Nwosu said support spends about 11 hours per account on the first cleanup and mapping."
+        ]
+      },
+      {
+        "heading": "Budget and timeline",
+        "bullets": [
+          "Omar Haddad approved two backend searches within existing compensation bands and capped onboarding's first stage at four engineering weeks.",
+          "Hannah Cole will prepare October pilot invitations, while public app promotion waits for the mobile reliability and customer readiness gates."
+        ]
+      },
+      {
+        "heading": "Objections",
+        "bullets": [
+          "Mei Tanaka argued that a full self-serve launch would split scarce backend capacity across mobile sync, model serving, and import validation.",
+          "Hannah Cole objected to broad claims such as offline and self-serve until the supported actions and human review step are explicit."
+        ]
+      },
+      {
+        "heading": "Next steps",
+        "bullets": [
+          "Daniel Ortiz will give sales a one-page roadmap by next week that distinguishes pilots from releases and uses the agreed gates.",
+          "Amara Nwosu will identify suitable pilot accounts and coordinate with Daniel Ortiz on customers whose ETA misses or onboarding delays affect renewals or evaluations."
+        ]
+      }
+    ]
+  },
+  "standup": {
+    "sections": [
+      {
+        "heading": "Today",
+        "bullets": [
+          "Priya Raman will post the Q4 decision log today and run a weekly review of the three bets.",
+          "Mei Tanaka will prepare the mobile release checklist and protect the six-week reliability reserve.",
+          "Lucas Ferreira will write the ETA evaluation plan and define the cohort dashboard.",
+          "Jonas Weber will prepare a completion-control prototype and a narrow onboarding flow.",
+          "Amara Nwosu will recruit driver testers and shortlist guided setup pilot accounts.",
+          "Hannah Cole will draft pilot invitations, customer FAQ content, and sales language."
+        ]
+      },
+      {
+        "heading": "Blockers",
+        "bullets": [
+          "Mei Tanaka said the Android 14 crash regression and backend capacity could delay an app pilot or the guided setup stage.",
+          "Lucas Ferreira said GPU quota and weak weekend-lane evidence could block model promotion.",
+          "Jonas Weber said the dispatch board handoff still needs engineering review before its design decision is final."
+        ]
+      }
+    ]
+  },
+  "project_review": {
+    "sections": [
+      {
+        "heading": "Goals",
+        "bullets": [
+          "Priya Raman set Q4 goals around a reliable driver app, ETA accuracy rising from 82 to at least 88 percent within ten minutes, and shorter onboarding than the current 19-day average."
+        ]
+      },
+      {
+        "heading": "Progress",
+        "bullets": [
+          "Lucas Ferreira has a candidate ETA model that cut holdout mean absolute error from 11.8 to 9.6 minutes, though weekend-lane improvement is weaker.",
+          "Jonas Weber has defined the mobile jobs as a clear stop list, completion confidence, and recovery after losing signal."
+        ]
+      },
+      {
+        "heading": "Risks",
+        "bullets": [
+          "Mei Tanaka identified offline sync conflicts, the Android 14 crash regression, and limited platform capacity as release risks.",
+          "Lucas Ferreira warned that an 88 percent blended ETA result could hide worsening misses on longer freight lanes.",
+          "Omar Haddad said unmeasured model compute and premature paid launch spending must stay behind stage gates."
+        ]
+      },
+      {
+        "heading": "Decisions",
+        "bullets": [
+          "The team allocated 14 engineering weeks to mobile, six to model work, four to guided setup's first stage, and six to reliability reserve.",
+          "The team kept guided setup as a capped pilot that pauses before taking capacity from mobile reliability, resolving Mei Tanaka's objection to a full self-serve launch.",
+          "Public promotion requires Mei Tanaka's reliability sign-off and Priya Raman's approval of scope and evidence."
+        ]
+      },
+      {
+        "heading": "Next steps",
+        "bullets": [
+          "Mei Tanaka will share the mobile checklist by Friday, and Lucas Ferreira will share the ETA evaluation plan by Friday.",
+          "Jonas Weber, Amara Nwosu, Hannah Cole, Daniel Ortiz, and Omar Haddad have separate prototype, pilot recruitment, message, roadmap, and hiring work due by next week."
+        ]
+      }
+    ]
+  }
+}

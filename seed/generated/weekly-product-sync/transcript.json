@@ -1,0 +1,488 @@
+{
+  "lines": [
+    {
+      "speaker": "Priya Raman",
+      "text": "Morning, everyone. We have fifteen minutes, so I want to leave with a clean picture of what customers are asking for and what evidence we need before the next planning cycle.",
+      "idx": 0,
+      "start_ms": 1000,
+      "end_ms": 12512
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Morning. I pulled the support queue this morning instead of relying on the loudest ticket. There were twenty-seven product-related requests in the last two weeks, and eleven mentioned either bulk import or report speed.",
+      "idx": 1,
+      "start_ms": 12796,
+      "end_ms": 24900
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "That sounds like the sales calls too. Are those eleven separate accounts, though? One carrier with a broken import could make the problem look much bigger than it is.",
+      "idx": 2,
+      "start_ms": 25712,
+      "end_ms": 36998
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Good catch. Six carriers filed those eleven tickets, and two of them filed repeat tickets after trying the same upload again. I would still call it recurring friction, just not eleven independent votes.",
+      "idx": 3,
+      "start_ms": 37221,
+      "end_ms": 48204
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Okay, six carriers is more useful than eleven tickets. Can you separate import failures from slow reporting? They probably need different fixes and they should not become a single vague request called operations improvements.",
+      "idx": 4,
+      "start_ms": 48848,
+      "end_ms": 61757
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Seven tickets were about bulk import, mostly missing rows or unclear error messages. Four were about reports taking too long at the end of a shift. The report tickets came from three carriers.",
+      "idx": 5,
+      "start_ms": 61944,
+      "end_ms": 75691
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "On the reporting side, I would like actual job identifiers before we call this a redesign. One expensive query could explain the delay, and that is a smaller, much faster piece of work.",
+      "idx": 6,
+      "start_ms": 75848,
+      "end_ms": 87778
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I can pull examples with timestamps and the report names. Harbor Logistics also raised slow reports in the interview last week, so I want us to take that pattern seriously even if the fix is small.",
+      "idx": 7,
+      "start_ms": 88466,
+      "end_ms": 103920
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "What else did Harbor ask for? I heard something about alerts, and prospects have asked whether dispatchers can act before a delay reaches the customer.",
+      "idx": 8,
+      "start_ms": 104300,
+      "end_ms": 114116
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Rafael at Harbor likes the live map and auto-assign, but he wants proactive delay alerts and asked for an API. He did not say those should outrank fixing bulk import, which slows his team down every morning.",
+      "idx": 9,
+      "start_ms": 114856,
+      "end_ms": 128805
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That distinction matters. A feature people would pay more for and a task that repeatedly fails are different signals. Amara, what exactly happens when Harbor imports a large route sheet?",
+      "idx": 10,
+      "start_ms": 128975,
+      "end_ms": 141020
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "They upload a file with several hundred stops. If a few rows have mismatched addresses, the screen says the upload failed but does not identify the rows. They then inspect the sheet by hand and try again.",
+      "idx": 11,
+      "start_ms": 141626,
+      "end_ms": 155319
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "I can inspect the validation logs, but I would not assume all missing rows share that cause. We need the sample files and the row counts before promising a fix or estimating the work.",
+      "idx": 12,
+      "start_ms": 156047,
+      "end_ms": 167390
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I have permission to use three redacted examples from support. I will attach them to the issue today, with what the customer expected and what Dispatch actually accepted.",
+      "idx": 13,
+      "start_ms": 167910,
+      "end_ms": 177293
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Please include how long their workaround takes. If the errors cost Harbor ten minutes every day, that tells us more about urgency than the number of tickets alone.",
+      "idx": 14,
+      "start_ms": 177777,
+      "end_ms": 189735
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Rafael estimated around forty minutes searching for bad cells on a difficult Monday import, but I have not measured it. I will label that as his estimate and ask two other carriers whether they see the same delay.",
+      "idx": 15,
+      "start_ms": 190102,
+      "end_ms": 205682
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "That would help sales too, because prospects ask if we can take their existing files. We should be careful about saying import is simple when current customers still need support to clean up a spreadsheet.",
+      "idx": 16,
+      "start_ms": 206196,
+      "end_ms": 221079
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Right, and the report case needs the same care. I can pull a sample of the slow report jobs by Friday, including duration and row volume, then tell you whether it is one query or a broader capacity issue.",
+      "idx": 17,
+      "start_ms": 221645,
+      "end_ms": 236525
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Let's keep the API request visible, but I do not want to rank it from one interview. Did anyone else ask for an integration this month, or is Harbor still our only concrete example?",
+      "idx": 18,
+      "start_ms": 236935,
+      "end_ms": 251540
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Two customers have asked about exporting data automatically, but neither specified an API. I can follow up with them and learn which workflow they are actually trying to automate before we group those requests together.",
+      "idx": 19,
+      "start_ms": 252157,
+      "end_ms": 266488
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Good. I can say we are researching that workflow rather than imply an API is scheduled. The concrete pain today sounds like getting clean stops into Dispatch and getting the reports out on time.",
+      "idx": 20,
+      "start_ms": 266707,
+      "end_ms": 280136
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Exactly. For this week, we have six carriers behind the eleven tickets, a specific import failure to examine, and report jobs Lucas can inspect. Let's move to what the pipeline is telling us.",
+      "idx": 21,
+      "start_ms": 280411,
+      "end_ms": 291668
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Yesterday's Acme Freight discovery call is the freshest signal. They have one hundred forty trucks, still coordinate much of dispatch by spreadsheet and phone, and want customers to see a reliable live arrival time.",
+      "idx": 22,
+      "start_ms": 292068,
+      "end_ms": 306572
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That is a substantial opportunity. Did they tell you why the current process fails, or are we extrapolating from their truck count? I want the buyer's language before we put it on a planning slide.",
+      "idx": 23,
+      "start_ms": 307165,
+      "end_ms": 319497
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Elena said late deliveries trigger a chain of calls because the customer cannot see where a load is. Tom said idle drivers are hard to spot quickly. They are also comparing two other tools.",
+      "idx": 24,
+      "start_ms": 319962,
+      "end_ms": 332950
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Did Tom explain the data migration concern? Existing carriers complain about importing stops, but moving a whole account could mean historical routes, drivers, customers, and messy names in several files.",
+      "idx": 25,
+      "start_ms": 333690,
+      "end_ms": 346188
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "He did. Tom thinks cleaning years of records will consume his dispatch team's time. There is roughly sixty thousand dollars a year of approved budget, but they need a security review and expect a decision by the end of next month.",
+      "idx": 26,
+      "start_ms": 346637,
+      "end_ms": 364457
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "I would not turn that into a promise that we can migrate years of history. We do not know their schemas, and a one-time assisted import might be enough for a trial without building a general migration system.",
+      "idx": 27,
+      "start_ms": 365028,
+      "end_ms": 377731
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "I hear you, but if the trial starts with a week of manual data cleanup, we might lose them before they see any value. I think migration deserves to be a product priority.",
+      "idx": 28,
+      "start_ms": 378216,
+      "end_ms": 390882
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "It deserves investigation. One sales opportunity with a real budget still does not establish that a reusable migration feature beats the work current customers are asking for. What can we learn before we choose?",
+      "idx": 29,
+      "start_ms": 391348,
+      "end_ms": 406004
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "I can bring three more prospect examples, including the files they would need moved and whether they would accept an assisted setup. I can do that by Friday, before we discuss scope.",
+      "idx": 30,
+      "start_ms": 406695,
+      "end_ms": 419226
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I will compare those examples with the import failures we already have. If the same validation problem blocks both groups, a narrow improvement might help customers and the pipeline without a giant migration project.",
+      "idx": 31,
+      "start_ms": 420022,
+      "end_ms": 434244
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Fair. I still want the planning group to see the deal risk, though. Acme's decision window is real, and saying we might eventually improve import is not a usable answer for Tom.",
+      "idx": 32,
+      "start_ms": 434579,
+      "end_ms": 447256
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "We can tell him what we can actually do now: inspect sample files, outline an assisted path, and schedule a security review. We should avoid selling a feature that has not been sized or approved.",
+      "idx": 33,
+      "start_ms": 448050,
+      "end_ms": 461516
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "On the live ETA question, the aggregate accuracy figure is about eighty-two percent. That number hides a lot: certain lanes and busy pickup windows look much worse, and the sales promise should reflect that.",
+      "idx": 34,
+      "start_ms": 462275,
+      "end_ms": 476234
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "I used eighty-two percent in the call as our current measured figure, not as a guarantee. Elena asked whether we could improve it, and I said the team was investigating where the misses come from.",
+      "idx": 35,
+      "start_ms": 475996,
+      "end_ms": 488582
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That is the right wording. Lucas, can you break the misses down by lane and by time window? I want to know if the improvement idea is plausible before we put an ETA model on a Q4 candidate list.",
+      "idx": 36,
+      "start_ms": 489161,
+      "end_ms": 504567
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "I can prepare a cut of the last four weeks of arrivals by Friday. I will show accuracy by lane and by morning versus afternoon pickup, plus the count behind each slice so tiny samples are obvious.",
+      "idx": 37,
+      "start_ms": 505025,
+      "end_ms": 518397
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Could you flag whether a late departure is being counted as an ETA miss? Support sometimes hears that the estimate was wrong when the driver actually left the depot forty minutes late.",
+      "idx": 38,
+      "start_ms": 518645,
+      "end_ms": 530997
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Yes, but I need to distinguish the original estimate from later updates. I will include departure delay as a separate marker, because otherwise the chart can make a bad dispatch process look like a bad prediction model.",
+      "idx": 39,
+      "start_ms": 530759,
+      "end_ms": 544813
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "That would give me a more honest story for Acme. If morning pickups on their lanes are weak, I would rather say so early than have their dispatcher discover it in a pilot.",
+      "idx": 40,
+      "start_ms": 545582,
+      "end_ms": 558363
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Good. The decision here is evidence gathering, not a migration feature or an ETA launch. Daniel has the prospect examples, Amara has current customer failures, and Lucas has the lane-level analysis.",
+      "idx": 41,
+      "start_ms": 558687,
+      "end_ms": 571185
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I also want to track what the support queue says about live ETAs. There were five accuracy complaints over the same two weeks, but I need to deduplicate them before we call that five customers.",
+      "idx": 42,
+      "start_ms": 571486,
+      "end_ms": 585107
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Please send me the associated stop identifiers where you have them. I can match them to the analysis without treating a repeated complaint as a fresh model failure.",
+      "idx": 43,
+      "start_ms": 585408,
+      "end_ms": 594726
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "We have a planning conversation later this week. The candidates people keep mentioning are the driver mobile app v2, ETA accuracy work, and self-serve onboarding, but none of those is a decided Q4 bet yet.",
+      "idx": 44,
+      "start_ms": 594992,
+      "end_ms": 610144
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "From sales, self-serve onboarding sounds attractive because buyers hate waiting for setup. Acme is a good example, although their migration concern may require help regardless of how polished the onboarding screens are.",
+      "idx": 45,
+      "start_ms": 610314,
+      "end_ms": 623127
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "From customer success, I worry about putting self-serve screens on top of an import step that fails without telling people which rows are wrong. That could shift the support burden onto new customers.",
+      "idx": 46,
+      "start_ms": 623373,
+      "end_ms": 636615
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "I agree with Amara on that dependency. We could measure the existing import failures and perhaps improve row-level errors first, but I need to look at the three redacted files before calling it a small change.",
+      "idx": 47,
+      "start_ms": 636964,
+      "end_ms": 649240
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I would still like a narrow import fix this cycle if we can identify one common failure. Harbor's team repeats that workaround on difficult Mondays, and waiting for a Q4 roadmap decision does not help them.",
+      "idx": 48,
+      "start_ms": 650084,
+      "end_ms": 664695
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "My hesitation is capacity. If engineering dives into import this week, who prepares the assisted migration answer Acme needs? We can lose the opportunity while doing a small fix for someone else.",
+      "idx": 49,
+      "start_ms": 665150,
+      "end_ms": 677789
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Those are two different time horizons. Daniel can draft an assisted migration outline without a code commitment. Lucas can inspect the current failures, and then we decide if a short fix is actually short.",
+      "idx": 50,
+      "start_ms": 678419,
+      "end_ms": 690055
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "That works for me. I can review the three support files tomorrow and estimate a row-level error change if they share a cause. If they do not, I will say that plainly rather than bundle several bugs together.",
+      "idx": 51,
+      "start_ms": 690859,
+      "end_ms": 705488
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "All right. I will give Acme a concrete next conversation about their file shapes and the security review, and I will keep a product migration feature out of the proposal until we have evidence.",
+      "idx": 52,
+      "start_ms": 705999,
+      "end_ms": 719720
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "And I will ask Harbor for the actual time they spend on failed imports, not only Rafael's rough forty-minute estimate for a difficult Monday. That should help us compare the pain with slow reports.",
+      "idx": 53,
+      "start_ms": 720117,
+      "end_ms": 733988
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "For the mobile app, I have heard drivers struggle with steps at a stop, but this group cannot settle the v2 scope. I will bring that feedback alongside the import and ETA evidence to planning.",
+      "idx": 54,
+      "start_ms": 734226,
+      "end_ms": 747250
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Please put the data limitations on the same page. Eighty-two percent is an aggregate, and the support counts include repeats. If the slide makes those figures look more certain than they are, we will choose badly.",
+      "idx": 55,
+      "start_ms": 747558,
+      "end_ms": 759920
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "I will write a one-page evidence sheet by Friday: confirmed customer problems, sample sizes, candidate approaches, and what we still do not know. That is an input to planning, not a roadmap announcement.",
+      "idx": 56,
+      "start_ms": 759682,
+      "end_ms": 773224
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Could we add a column for customer timing? Acme's end-of-next-month decision and Harbor's daily import problem put different clocks on the table, even if both relate to getting data into Dispatch.",
+      "idx": 57,
+      "start_ms": 773974,
+      "end_ms": 785827
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Yes, I will add timing and distinguish existing customer impact from prospective revenue. I do not want a large deal to erase repeated customer friction, but we should see both clearly.",
+      "idx": 58,
+      "start_ms": 786146,
+      "end_ms": 797197
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "That is useful. I will send the deduplicated support counts and the Harbor notes by tomorrow, with the reported workaround time clearly marked as an estimate until we verify it.",
+      "idx": 59,
+      "start_ms": 797972,
+      "end_ms": 810450
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "I will send the import triage tomorrow, and the slow report sample plus lane-level ETA cut by Friday. The ETA cut will include counts, so we can see where apparent precision rests on only a handful of stops.",
+      "idx": 60,
+      "start_ms": 811034,
+      "end_ms": 823620
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "I will send three prospect migration examples by Friday and set up the Acme file and security follow-up this week. I will keep the sales team from implying that self-serve or migration has been approved.",
+      "idx": 61,
+      "start_ms": 823764,
+      "end_ms": 837542
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "One last check: are we comfortable asking planning to compare mobile v2, ETA accuracy, and self-serve onboarding as options, with import reliability as a possible prerequisite? We are not picking winners in this sync.",
+      "idx": 62,
+      "start_ms": 838202,
+      "end_ms": 851396
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Yes, as long as the customer cost of failed imports is visible and the proactive alert and API requests stay in the research column. They are useful signals, not promises to Harbor.",
+      "idx": 63,
+      "start_ms": 851584,
+      "end_ms": 862985
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "That matches my understanding. The reports may turn out to be one query, and the ETA misses may cluster on particular lanes. I would rather bring those findings than a confident guess.",
+      "idx": 64,
+      "start_ms": 863467,
+      "end_ms": 877345
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Agreed. I have enough to call Acme back without implying the roadmap is set. Priya, send me the evidence sheet when it is ready and I will check the prospect language.",
+      "idx": 65,
+      "start_ms": 877663,
+      "end_ms": 890722
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "I will. Thanks, everyone. We have owners and dates for the inputs, and the actual Q4 choices belong in the planning meeting later this week. Let's close here.",
+      "idx": 66,
+      "start_ms": 891322,
+      "end_ms": 900996
+    }
+  ],
+  "chapters": [
+    {
+      "title": "Customer Requests and Workflow Friction",
+      "start_idx": 0
+    },
+    {
+      "title": "Pipeline Signals and ETA Trust",
+      "start_idx": 22
+    },
+    {
+      "title": "Planning Inputs and Near-Term Owners",
+      "start_idx": 44
+    }
+  ],
+  "duration_ms": 900996
+}

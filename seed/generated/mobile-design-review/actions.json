@@ -1,0 +1,66 @@
+[
+  {
+    "owner": "Jonas Weber",
+    "task": "Revise the first-run screens with carrier confirmation, permission timing, loading states, and failure paths.",
+    "due": "2026-09-24",
+    "due_phrase": "by Thursday",
+    "segment_idx": 23,
+    "start_ms": 318055
+  },
+  {
+    "owner": "Mei Tanaka",
+    "task": "Document invitation revocation and second-device behavior, including offline server and phone states.",
+    "due": "2026-09-25",
+    "due_phrase": "by Friday",
+    "segment_idx": 24,
+    "start_ms": 329691
+  },
+  {
+    "owner": "Jonas Weber",
+    "task": "Revise the stop list and offline conflict cards with stale ETA and proof requirements.",
+    "due": "2026-09-25",
+    "due_phrase": "by end of week",
+    "segment_idx": 52,
+    "start_ms": 705037
+  },
+  {
+    "owner": "Mei Tanaka",
+    "task": "Send the queued, accepted, and rejected state contract with receipt and conflict details.",
+    "due": "2026-09-25",
+    "due_phrase": "by Friday",
+    "segment_idx": 53,
+    "start_ms": 719695
+  },
+  {
+    "owner": "Jonas Weber",
+    "task": "Bring revised status labels and focus order with high-contrast and screen reader evidence.",
+    "due": "2026-09-28",
+    "due_phrase": "by next week",
+    "segment_idx": 79,
+    "start_ms": 1087474
+  },
+  {
+    "owner": "Mei Tanaka",
+    "task": "Confirm the server receipt event and the rejection details that can safely appear on the phone.",
+    "due": "2026-09-25",
+    "due_phrase": "by Friday",
+    "segment_idx": 97,
+    "start_ms": 1338926
+  },
+  {
+    "owner": "Hannah Cole",
+    "task": "Revise lock-screen and in-app copy for queued, accepted, needs-review, and route-change states.",
+    "due": "2026-09-28",
+    "due_phrase": "by next week",
+    "segment_idx": 98,
+    "start_ms": 1356331
+  },
+  {
+    "owner": "Priya Raman",
+    "task": "Ask Amara Nwosu to recruit drivers across route types, including drivers who regularly lose signal.",
+    "due": "2026-09-28",
+    "due_phrase": "by next week",
+    "segment_idx": 100,
+    "start_ms": 1381324
+  }
+]

@@ -1,0 +1,50 @@
+{
+  "agenda": [
+    "Map Acme Freight's current dispatch process and the cost of late deliveries.",
+    "Explore live ETA needs and a practical Kestrel Dispatch pilot.",
+    "Resolve Tom's data migration concern and define the security review.",
+    "Confirm the approved budget, competitive timeline, decision process, and owners."
+  ],
+  "chapters": [
+    {
+      "title": "Acme's Dispatch Reality",
+      "beats": [
+        "Elena describes 140 trucks across regional lanes, with dispatch still coordinated through spreadsheets and phone calls.",
+        "Tom explains how seven dispatchers copy status updates into separate sheets and lose time chasing drivers.",
+        "Elena says customers ask for live ETAs, and late deliveries currently surface only after a manual call.",
+        "Daniel and Priya separate late departures from inaccurate arrival predictions before discussing a solution."
+      ],
+      "minutes": 5
+    },
+    {
+      "title": "A Pilot That Shows Value",
+      "beats": [
+        "Priya proposes a two-week pilot on one regional lane, measuring ETA visibility, dispatcher time, and late deliveries.",
+        "Tom challenges a dashboard-only pilot because a dispatcher still has to use the live board during a real shift.",
+        "The group narrows the pilot to 20 trucks, two dispatchers, and one customer contact, with manual and Kestrel views side by side.",
+        "Elena wants a decision based on actual dispatcher use, not a polished sales demo."
+      ],
+      "minutes": 6
+    },
+    {
+      "title": "Migration and Security Gates",
+      "beats": [
+        "Tom objects that six years of inconsistent spreadsheet columns and customer codes make a full migration risky.",
+        "Priya says the pilot can import only active drivers, vehicles, and open loads after a sample mapping review, without moving old records.",
+        "Elena confirms Acme requires a security review before production access or customer-facing pilot data.",
+        "Daniel commits to sending the security packet tomorrow, and Priya and Tom agree to review a 50-row export by Friday."
+      ],
+      "minutes": 5
+    },
+    {
+      "title": "Buying Decision and Next Steps",
+      "beats": [
+        "Elena confirms a roughly $60,000 annual budget is approved and a selection is due by the end of next month.",
+        "Acme is evaluating two competing products; Elena will compare ease of adoption and credible live ETAs as well as price.",
+        "Daniel commits to a written pilot proposal and pricing by end of week; Elena will introduce Acme's security lead next week.",
+        "The group closes with named owners, a pilot gate, and no commitment to purchase before Acme sees results."
+      ],
+      "minutes": 4
+    }
+  ]
+}

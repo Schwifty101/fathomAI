@@ -1,0 +1,83 @@
+{
+  "agenda": [
+    "Review Q3 retention, ETA accuracy, and onboarding results against the goals for Kestrel Dispatch.",
+    "Choose the Q4 product bets and settle the disagreement about self-serve onboarding.",
+    "Define the driver mobile app v2 release and the ETA model's safety gates.",
+    "Size engineering capacity, budget, and two backend hires.",
+    "Align customer communication, launch marketing, risks, owners, and dates."
+  ],
+  "chapters": [
+    {
+      "title": "Opening and Q3 Scorecard",
+      "beats": [
+        "Priya frames Q4 as a choice among three bets, not a list of every requested feature.",
+        "Amara explains 4.1% churn and customers taking 19 days to onboard; Daniel connects those numbers to lost sales momentum.",
+        "Lucas clarifies that ETA accuracy is 82% under a ten-minute arrival window and weak on weekend freight lanes."
+      ],
+      "minutes": 6
+    },
+    {
+      "title": "Customer Needs and the Three Bets",
+      "beats": [
+        "Daniel makes the case for a dependable driver app; Amara argues onboarding needs a Q4 answer.",
+        "Jonas describes app v2 as fewer driver steps, offline clarity, and a reliable stop list rather than a visual refresh.",
+        "Priya proposes mobile v2, an ETA-accuracy model, and staged self-serve onboarding as the three bets."
+      ],
+      "minutes": 8
+    },
+    {
+      "title": "Mobile App v2 Scope and Release Gates",
+      "beats": [
+        "Jonas and Mei debate swipe-to-complete against an explicit confirmation control and agree to validate both with drivers.",
+        "Mei limits the first release to onboarding, stop list, offline queue, and safer completion; Lucas specifies event tracking.",
+        "Hannah and Amara require a carrier pilot before launch claims, with crash-free sessions and sync success as gates."
+      ],
+      "minutes": 8
+    },
+    {
+      "title": "ETA Accuracy Model and Evidence",
+      "beats": [
+        "Lucas proposes moving ETA accuracy from 82% to 88% without worsening weekend lanes.",
+        "Amara challenges a broad accuracy claim with the Harlan Freight escalation and a 42-truck carrier's long misses.",
+        "Mei and Lucas settle on shadow evaluation, segment reporting, and a rollback path before production."
+      ],
+      "minutes": 9
+    },
+    {
+      "title": "Self-Serve Onboarding Decision",
+      "beats": [
+        "Mei argues for cutting self-serve to protect the mobile app and the platform team's workload.",
+        "Daniel and Amara explain why a 19-day onboarding cycle damages conversion and early retention.",
+        "Priya resolves the disagreement with a narrow, gated self-serve pilot: imports, field mapping, and assisted review, without general availability in Q4."
+      ],
+      "minutes": 8
+    },
+    {
+      "title": "Capacity, Budget, and Hiring",
+      "beats": [
+        "Mei sizes the quarter at 30 effective engineering weeks after operations, holidays, and support load.",
+        "Omar challenges the cost of two backend hires and a broad launch budget; Mei explains the platform bottleneck.",
+        "The group approves two backend requisitions within a capped budget and stages spending against milestones."
+      ],
+      "minutes": 9
+    },
+    {
+      "title": "Launch, Customer Communication, and Risks",
+      "beats": [
+        "Hannah separates an October pilot message from a later public app launch and asks for evidence behind every claim.",
+        "Amara sets customer communication needs around delays, offline use, and onboarding expectations.",
+        "Priya assigns owners for risk tracking, launch readiness, sales enablement, and customer pilot recruitment."
+      ],
+      "minutes": 8
+    },
+    {
+      "title": "Decisions, Owners, and Close",
+      "beats": [
+        "Priya restates the three bets and the self-serve pilot boundary.",
+        "Each owner confirms a concrete next step and spoken due date.",
+        "The team closes with a shared decision log and a review cadence."
+      ],
+      "minutes": 6
+    }
+  ]
+}

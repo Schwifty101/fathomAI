@@ -1,0 +1,44 @@
+[
+  {
+    "segment_idx": 3,
+    "type": "insight",
+    "title": "Six carriers behind eleven tickets",
+    "start_ms": 37221,
+    "end_ms": 48204
+  },
+  {
+    "segment_idx": 11,
+    "type": "feedback",
+    "title": "Bulk import hides failing rows",
+    "start_ms": 141626,
+    "end_ms": 155319
+  },
+  {
+    "segment_idx": 28,
+    "type": "objection",
+    "title": "Acme migration could stall trial",
+    "start_ms": 378216,
+    "end_ms": 390882
+  },
+  {
+    "segment_idx": 34,
+    "type": "insight",
+    "title": "ETA average hides weak lanes",
+    "start_ms": 462275,
+    "end_ms": 476234
+  },
+  {
+    "segment_idx": 56,
+    "type": "action_item",
+    "title": "Priya to prepare planning evidence",
+    "start_ms": 759682,
+    "end_ms": 773224
+  },
+  {
+    "segment_idx": 63,
+    "type": "positive",
+    "title": "Keep customer costs visible",
+    "start_ms": 851584,
+    "end_ms": 862985
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "segment_idx": 17,
+    "type": "insight",
+    "title": "Thirty status calls interrupt a busy Monday",
+    "start_ms": 158427,
+    "end_ms": 168105
+  },
+  {
+    "segment_idx": 32,
+    "type": "objection",
+    "title": "A demo dashboard cannot prove shift adoption",
+    "start_ms": 309083,
+    "end_ms": 318491
+  },
+  {
+    "segment_idx": 66,
+    "type": "feedback",
+    "title": "Acme will compare adoption and ETA evidence",
+    "start_ms": 643762,
+    "end_ms": 653626
+  },
+  {
+    "segment_idx": 81,
+    "type": "positive",
+    "title": "Active-only import eases Tom's migration concern",
+    "start_ms": 792449,
+    "end_ms": 801081
+  },
+  {
+    "segment_idx": 90,
+    "type": "action_item",
+    "title": "Security packet goes to Acme tomorrow",
+    "start_ms": 877147,
+    "end_ms": 886820
+  },
+  {
+    "segment_idx": 99,
+    "type": "insight",
+    "title": "Approved budget and competitive deadline confirmed",
+    "start_ms": 964721,
+    "end_ms": 972580
+  }
+]

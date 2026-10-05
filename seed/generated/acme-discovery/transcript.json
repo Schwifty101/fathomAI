@@ -1,0 +1,898 @@
+{
+  "lines": [
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Thanks for making the time, Elena and Tom. Priya leads product at Kestrel, and I work with carriers considering Dispatch. I'd like to understand your day before showing anything.",
+      "idx": 0,
+      "start_ms": 1000,
+      "end_ms": 9361
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "That is exactly why we took this call, Daniel. We have 140 trucks moving across regional lanes, and our customers have started asking for arrival times we cannot confidently give them.",
+      "idx": 1,
+      "start_ms": 9885,
+      "end_ms": 18769
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "I manage the dispatch floor. Seven dispatchers work from a shared load sheet, but each keeps a personal copy for notes. Updates move by phone, which means the sheet is always behind.",
+      "idx": 2,
+      "start_ms": 19338,
+      "end_ms": 29186
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "When you say behind, is the delay mostly driver location, the customer's delivery appointment, or the fact that someone has to reconcile the different copies?",
+      "idx": 3,
+      "start_ms": 29316,
+      "end_ms": 38353
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "All three, but reconciling copies is the daily tax. A driver calls one desk, that dispatcher changes a cell, and the next shift may still be reading yesterday's status.",
+      "idx": 4,
+      "start_ms": 38675,
+      "end_ms": 47279
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "Tom is understating the customer side. We learned about two late deliveries last Tuesday from the receivers, not from our own board. That is a terrible call to take.",
+      "idx": 5,
+      "start_ms": 48016,
+      "end_ms": 56750
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "I can see why. If a load is late, how soon can you usually tell a customer now, and what do they receive between pickup and arrival?",
+      "idx": 6,
+      "start_ms": 56545,
+      "end_ms": 64117
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "Usually nothing automatic. We might spot a problem an hour before arrival, or we might learn only when the driver calls. Customers have to ring us for an update.",
+      "idx": 7,
+      "start_ms": 63912,
+      "end_ms": 74449
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "So a live ETA matters, but it also matters whether the dispatcher trusts it enough to act. How often are your trucks on the same regional routes?",
+      "idx": 8,
+      "start_ms": 75156,
+      "end_ms": 83789
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "Most weekdays we repeat the same corridors. Weather and warehouse waits make those familiar routes unpredictable, though, and our appointment times are still entered by hand.",
+      "idx": 9,
+      "start_ms": 84473,
+      "end_ms": 91779
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "The late delivery number is not formally measured yet. I do know our largest account escalated three missed windows last month, and my team could not reconstruct the exact sequence.",
+      "idx": 10,
+      "start_ms": 92322,
+      "end_ms": 102153
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "That distinction helps. We should not turn three escalations into a fleetwide percentage. What would a useful first measure look like for your operations team?",
+      "idx": 11,
+      "start_ms": 102736,
+      "end_ms": 111219
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "Give me the scheduled time, the driver's latest check-in, the predicted time, and the actual arrival in one place. Then I can tell which delay we could have influenced.",
+      "idx": 12,
+      "start_ms": 111465,
+      "end_ms": 121693
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "And if we find that a late departure caused the miss, rather than the ETA model, you would want that visible too. Otherwise we would be claiming credit or blame incorrectly.",
+      "idx": 13,
+      "start_ms": 122158,
+      "end_ms": 130862
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "Exactly. A map dot alone does not tell me whether a truck sat at a dock for ninety minutes before anyone marked it loaded.",
+      "idx": 14,
+      "start_ms": 131067,
+      "end_ms": 138549
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "Our commercial team also needs something they can pass to customers without asking Tom's dispatchers to narrate every load. That request volume is becoming its own staffing problem.",
+      "idx": 15,
+      "start_ms": 138344,
+      "end_ms": 147143
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "How many calls does that create on a normal day? An estimate is fine; we can validate it during a pilot instead of presenting it as a precise baseline.",
+      "idx": 16,
+      "start_ms": 147784,
+      "end_ms": 158164
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "On a busy Monday, maybe thirty customer status calls. I would need to count. What bothers me is that each call interrupts a dispatcher who is already handling exceptions.",
+      "idx": 17,
+      "start_ms": 158427,
+      "end_ms": 168105
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That makes dispatcher time another measure. We could compare the same lane's status calls and update time before and during the pilot, provided you can record a simple baseline.",
+      "idx": 18,
+      "start_ms": 167900,
+      "end_ms": 176828
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "That sounds useful, but please do not assume the only problem is customer calls. Idle drivers are a cost too, especially when a dispatcher misses that the next load is ready.",
+      "idx": 19,
+      "start_ms": 177011,
+      "end_ms": 187335
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "Right. Two trucks can sit while someone searches for the right assignment in the sheet. It is not every hour, but it happens often enough that everyone remembers it.",
+      "idx": 20,
+      "start_ms": 187785,
+      "end_ms": 198727
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Does anyone currently track those gaps, even roughly? I want to know whether a pilot can measure them honestly or whether we should treat them as interviews.",
+      "idx": 21,
+      "start_ms": 198945,
+      "end_ms": 208761
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "The driver logs have timestamps, and the sheet has load assignments. Combining them is painful. For a pilot lane, I could probably pull a sample and compare.",
+      "idx": 22,
+      "start_ms": 209267,
+      "end_ms": 217433
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That is enough for a directional view. I would rather label a small sample than promise a savings number we cannot defend after two weeks.",
+      "idx": 23,
+      "start_ms": 217754,
+      "end_ms": 224895
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "Good. I am looking for a system that helps the floor, not a slide claiming every idle minute disappears. Tom has to be able to use it at 6 a.m.",
+      "idx": 24,
+      "start_ms": 225045,
+      "end_ms": 234860
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "And the first handoff on a Monday has to work. If the dispatcher has to double-enter each load for months, we will keep the spreadsheet and ignore the new screen.",
+      "idx": 25,
+      "start_ms": 235164,
+      "end_ms": 245216
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Understood. I hear four needs: a shared current view, dependable ETAs, fewer status calls, and fewer idle gaps. Which one would make you say the trial was worthwhile?",
+      "idx": 26,
+      "start_ms": 245011,
+      "end_ms": 254594
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "A board that two dispatchers can run without calling me every ten minutes. If the ETA is useful and customers can see a status, that would make it more than a nicer spreadsheet.",
+      "idx": 27,
+      "start_ms": 255029,
+      "end_ms": 267153
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "For me the threshold is evidence that our team will use it and that the ETA is more credible than our manual guess. I do not need a miracle in two weeks.",
+      "idx": 28,
+      "start_ms": 267334,
+      "end_ms": 276925
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That gives us a clear starting point. Let us take the next part of the call to shape a pilot that can test those claims with your actual operating day.",
+      "idx": 29,
+      "start_ms": 277260,
+      "end_ms": 288511
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "We have about fifteen minutes left, so I want to put a concrete pilot on the table. Priya, could you describe what a narrow start would include?",
+      "idx": 30,
+      "start_ms": 289128,
+      "end_ms": 298192
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "I would start with one regional lane for two weeks, perhaps 20 trucks and two dispatchers. We would compare planned arrival, predicted arrival, actual arrival, and status-call volume.",
+      "idx": 31,
+      "start_ms": 298806,
+      "end_ms": 308808
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "If you just load twenty trucks into a demo dashboard while my team keeps dispatching in the sheet, the trial will tell us nothing about whether this works during a shift.",
+      "idx": 32,
+      "start_ms": 309083,
+      "end_ms": 318491
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Agreed. One dispatcher should use Kestrel Dispatch as the live board for that lane, with the second person covering handoffs, while we keep the existing sheet as a safety record.",
+      "idx": 33,
+      "start_ms": 318286,
+      "end_ms": 326964
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "That is closer, but calling the sheet a safety record still means somebody has to update both. I cannot ask a team already taking thirty calls to perform twice the work.",
+      "idx": 34,
+      "start_ms": 327169,
+      "end_ms": 338156
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "Tom is right to push on that. The change has to fit their morning rhythm. Priya, how much can you prepare before the first live shift?",
+      "idx": 35,
+      "start_ms": 338532,
+      "end_ms": 346380
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "We can map the active driver, vehicle, and open load fields from a sample export beforehand. For pilot loads, we can agree on one update owner rather than asking everyone to type twice.",
+      "idx": 36,
+      "start_ms": 346175,
+      "end_ms": 357102
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "I want to hear the actual handoff. At 6 a.m., who opens the lane, who marks a driver assigned, and what happens when a driver phones a change?",
+      "idx": 37,
+      "start_ms": 357693,
+      "end_ms": 366864
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Your dispatcher would open the lane board and mark the assignment there. A call that changes the load would be entered once in Dispatch, while your existing sheet stays a daily snapshot.",
+      "idx": 38,
+      "start_ms": 367588,
+      "end_ms": 379644
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "So the sheet is frozen for that lane during a shift, except for our fallback if the pilot fails? That is different from the double-entry picture I had.",
+      "idx": 39,
+      "start_ms": 379988,
+      "end_ms": 390275
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Yes, within that lane. I am not suggesting a fleetwide cutover. We would document when to fall back and how to reconcile a shift if something is wrong.",
+      "idx": 40,
+      "start_ms": 390788,
+      "end_ms": 399822
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "I like the small scope, but twenty trucks might be too easy a sample if we choose only the best-behaved route. I want a lane with normal warehouse delays.",
+      "idx": 41,
+      "start_ms": 400102,
+      "end_ms": 410745
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "We should choose a representative lane, not a showcase lane. Could Tom nominate one with repeat volume, predictable staffing, and enough exceptions to test the board?",
+      "idx": 42,
+      "start_ms": 410967,
+      "end_ms": 419044
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "The north corridor fits. It has around twenty trucks on a normal weekday and two regular dispatchers. It also gets dock delays, so you will see the messy part.",
+      "idx": 43,
+      "start_ms": 419204,
+      "end_ms": 428850
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Great. We can record a week's baseline there: number of status calls, time spent finding the latest load state, and how often predicted arrival misses the actual arrival.",
+      "idx": 44,
+      "start_ms": 429211,
+      "end_ms": 439326
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "Who records time spent finding the state? My people will not run a stopwatch while trucks are waiting, and I do not want a new form every time they click.",
+      "idx": 45,
+      "start_ms": 439708,
+      "end_ms": 448726
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "No stopwatch. A five-minute end-of-shift interview and a small sample of status calls would be more credible. We can ask the same questions before and after.",
+      "idx": 46,
+      "start_ms": 449306,
+      "end_ms": 457093
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "Could one customer contact see a status during the pilot? Our commercial team needs to know whether the information is useful outside dispatch, even if it is limited.",
+      "idx": 47,
+      "start_ms": 457276,
+      "end_ms": 465370
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Yes, if your security process allows it and we define exactly which loads that person can see. We should hold that access until the security review clears the pilot.",
+      "idx": 48,
+      "start_ms": 466015,
+      "end_ms": 476842
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "I also want to inspect the ETA changes. If it jumps by forty minutes without an explanation, a customer view could create a different set of angry calls.",
+      "idx": 49,
+      "start_ms": 477274,
+      "end_ms": 486931
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That is fair. We can show the latest prediction alongside the scheduled appointment and record when the prediction changes. We should review those changes with you each day.",
+      "idx": 50,
+      "start_ms": 487137,
+      "end_ms": 495954
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "Would you promise that the ETA improves late delivery rates during the two weeks? That is what our leadership is likely to ask when they see the pilot proposal.",
+      "idx": 51,
+      "start_ms": 496634,
+      "end_ms": 507585
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "I would not make that promise. We can measure whether the prediction gives earlier warning and whether dispatchers can act on it. Actual late deliveries depend on docks and traffic too.",
+      "idx": 52,
+      "start_ms": 507922,
+      "end_ms": 517793
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "That answer is better than a guarantee. If we can spot a likely miss thirty minutes earlier, we might call the receiver or switch a pickup, even if the truck stays late.",
+      "idx": 53,
+      "start_ms": 518263,
+      "end_ms": 528100
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Let us make earlier warning the hypothesis, then. We can report the lead time on predicted misses and the number of calls answered from the shared view.",
+      "idx": 54,
+      "start_ms": 528374,
+      "end_ms": 536938
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "I want the report to include what did not work. If half the drivers' check-ins are late, do not bury that under a favorable average ETA number.",
+      "idx": 55,
+      "start_ms": 536733,
+      "end_ms": 546743
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Agreed. We can list missing inputs and cases where the ETA was less useful. A small pilot earns trust only if we show the exceptions.",
+      "idx": 56,
+      "start_ms": 547290,
+      "end_ms": 556682
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "What training are you imagining? The two north-corridor dispatchers can spare perhaps an hour before the shift, not a full afternoon of product instruction.",
+      "idx": 57,
+      "start_ms": 556903,
+      "end_ms": 564688
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "One working session with the actual lane data, then a short check-in after their first live shift. We will focus on assigning, updating, and recovering from a wrong entry.",
+      "idx": 58,
+      "start_ms": 564483,
+      "end_ms": 575037
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "And if the security review takes a week, does that consume half of the two-week test? I want the two weeks to mean two weeks of operational use.",
+      "idx": 59,
+      "start_ms": 575697,
+      "end_ms": 583627
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "No. We would start the two-week clock after access and data mapping are approved. The proposal can make those gates explicit rather than hide setup inside the measurement window.",
+      "idx": 60,
+      "start_ms": 584105,
+      "end_ms": 594588
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "Okay, that addresses my timing concern. I still need to know whether the import respects our customer codes, because those are a mess.",
+      "idx": 61,
+      "start_ms": 595066,
+      "end_ms": 603707
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That belongs in the next section. Before we move there, can we agree that twenty trucks, two dispatchers, the north corridor, and one customer contact define the pilot scope?",
+      "idx": 62,
+      "start_ms": 604073,
+      "end_ms": 614126
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "Yes, contingent on the security review and Tom validating the field mapping. The decision afterward should use the same measures we just named, not an expanded wish list.",
+      "idx": 63,
+      "start_ms": 614320,
+      "end_ms": 624048
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "I can support that scope if we have a rollback path and a way to flag wrong records before the first shift. I do not want Friday's reconciliation on Monday morning.",
+      "idx": 64,
+      "start_ms": 624427,
+      "end_ms": 634988
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "I will put those conditions in writing. We should also keep the two products you are evaluating on the same operational questions so you can compare honestly.",
+      "idx": 65,
+      "start_ms": 635269,
+      "end_ms": 643625
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "Exactly. We are looking at two competitors, and I will not choose the prettiest dashboard. I need adoption on the floor and ETA evidence that I can defend.",
+      "idx": 66,
+      "start_ms": 643762,
+      "end_ms": 653626
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That is a fair test. We can prepare a pilot scorecard with those measures and let the north-corridor dispatchers tell us where the workflow slows them down.",
+      "idx": 67,
+      "start_ms": 654168,
+      "end_ms": 663216
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Tom, let us take the import issue directly. What is in the current workbook that would make a twenty-truck pilot harder than it sounds?",
+      "idx": 68,
+      "start_ms": 663011,
+      "end_ms": 670755
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "Six years of history and a lot of inconsistent columns. One dispatcher writes a customer's code with a dash, another leaves the dash out, and old driver IDs get reused.",
+      "idx": 69,
+      "start_ms": 671454,
+      "end_ms": 682117
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "I would not import six years of history for this pilot. We need active drivers, active vehicles, and open loads on the north corridor, with one agreed code for each current customer.",
+      "idx": 70,
+      "start_ms": 682498,
+      "end_ms": 692674
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "That sounds clean when you say it, but our open loads sometimes point to customer names that are not in the master tab. The link is in someone's head.",
+      "idx": 71,
+      "start_ms": 693399,
+      "end_ms": 702656
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "And that is exactly why Tom worries about a migration. We cannot tell the team that the computer is right when it has silently linked a load to the wrong customer.",
+      "idx": 72,
+      "start_ms": 702792,
+      "end_ms": 711488
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Agreed. We should make unmatched customer codes visible and stop those rows for review, not guess. Tom and I can inspect a small export before discussing a larger import.",
+      "idx": 73,
+      "start_ms": 711644,
+      "end_ms": 720976
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "How small? If you ask for the entire workbook, my team will spend a week cleaning fields before we even know whether the board is worth using.",
+      "idx": 74,
+      "start_ms": 721162,
+      "end_ms": 728951
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Fifty rows: a mix of active drivers, vehicles, open loads, and awkward customer codes. I will return a field mapping and an exception list, not a demand for cleaned history.",
+      "idx": 75,
+      "start_ms": 729476,
+      "end_ms": 739208
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "Fifty rows I can manage. I can export that by Friday, but I want the sample scrubbed so it does not include customer phone numbers or notes about individual drivers.",
+      "idx": 76,
+      "start_ms": 739494,
+      "end_ms": 748940
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Yes. Use test identifiers where needed. I can review the mapping with you by Friday after you send it; if it arrives late, we can move that review without pretending it happened.",
+      "idx": 77,
+      "start_ms": 749250,
+      "end_ms": 759534
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "I appreciate that. I still want to know what happens if a load is wrong after import. My dispatchers cannot be stuck waiting for your team to fix a code.",
+      "idx": 78,
+      "start_ms": 759731,
+      "end_ms": 770728
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "The pilot plan should include a correction step owned by your dispatcher and a rollback snapshot for the lane. I will write the exact workflow after we see your fields.",
+      "idx": 79,
+      "start_ms": 771378,
+      "end_ms": 782070
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "That is the first answer today that makes the migration sound manageable. Tom, does an active-only import change your view, or are there other blockers?",
+      "idx": 80,
+      "start_ms": 782502,
+      "end_ms": 791743
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "It changes it. My objection was to moving the whole spreadsheet estate before we knew anything. I still need proof the exceptions are obvious and easy to correct.",
+      "idx": 81,
+      "start_ms": 792449,
+      "end_ms": 801081
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "We can make that a gate before the live shift. If the mapping review reveals too many unmatched codes, we pause and fix the sample instead of pushing it through.",
+      "idx": 82,
+      "start_ms": 801558,
+      "end_ms": 810284
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "Good. Security is the other gate. Our review is required before production access or sharing any real customer-facing pilot status, even on one lane.",
+      "idx": 83,
+      "start_ms": 810547,
+      "end_ms": 818170
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Understood. What does your security team need first? We can send our standard packet, but I would rather address their actual checklist than create another round of email.",
+      "idx": 84,
+      "start_ms": 818563,
+      "end_ms": 828167
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "They usually ask for data handling, access controls, retention, and incident response. They will also want to know who can see a customer status and how that access ends.",
+      "idx": 85,
+      "start_ms": 828673,
+      "end_ms": 837354
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "For the pilot proposal I can describe the roles we expect: your two dispatchers, one customer contact after approval, and our support contact. Your security lead can challenge that scope.",
+      "idx": 86,
+      "start_ms": 837621,
+      "end_ms": 848942
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "Will your team need driver phone numbers to generate an ETA, or can the sample mapping start with synthetic IDs? That is likely to be the first privacy question.",
+      "idx": 87,
+      "start_ms": 849190,
+      "end_ms": 857820
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "For mapping, synthetic IDs are enough. For a live pilot, we will need whatever operational input you approve, and we should document each field before anyone shares it.",
+      "idx": 88,
+      "start_ms": 858494,
+      "end_ms": 867215
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "I need that distinction in writing. I do not want a sample export being treated as permission to load actual driver data into a production account.",
+      "idx": 89,
+      "start_ms": 867946,
+      "end_ms": 876596
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "I will send our security packet tomorrow and separate the scrubbed mapping exercise from any live access request. Nothing customer-facing starts until your team signs off.",
+      "idx": 90,
+      "start_ms": 877147,
+      "end_ms": 886820
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "That works for me. I will mark the fifty-row export as sample data and include the odd customer codes deliberately, because the neat rows are not the problem.",
+      "idx": 91,
+      "start_ms": 887306,
+      "end_ms": 896638
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "And I will return a table showing accepted fields, rejected rows, and questions for Tom. We should review it together by Friday, with no silent substitutions.",
+      "idx": 92,
+      "start_ms": 897234,
+      "end_ms": 905891
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "Can the security lead join that review? If they see the data fields then, they can flag an issue before we schedule training and waste the dispatchers' time.",
+      "idx": 93,
+      "start_ms": 906219,
+      "end_ms": 915141
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Yes. Elena, if you introduce us next week, I will set up a separate security review. The mapping call can include them too if they want to inspect the sample.",
+      "idx": 94,
+      "start_ms": 915688,
+      "end_ms": 925973
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "I am less opposed now, but I need a firm stop rule. If the pilot asks us to clean hundreds of historical rows, I will recommend that Elena delay the trial.",
+      "idx": 95,
+      "start_ms": 926635,
+      "end_ms": 938174
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Agreed. The pilot imports active records only. If those cannot be mapped safely from a small sample, we report the blocker and do not expand scope by stealth.",
+      "idx": 96,
+      "start_ms": 938357,
+      "end_ms": 946953
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "That resolves the argument for me. We have a narrow test and a security gate; neither one asks Tom to rewrite six years of dispatch history.",
+      "idx": 97,
+      "start_ms": 947357,
+      "end_ms": 955497
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Let us close on the buying path. Elena, you mentioned there is an approved budget; what range should the proposal fit, and when do you have to choose?",
+      "idx": 98,
+      "start_ms": 955795,
+      "end_ms": 964239
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "Roughly sixty thousand dollars a year is approved. I need a selection by the end of next month, and I am evaluating two other products alongside Kestrel Dispatch.",
+      "idx": 99,
+      "start_ms": 964721,
+      "end_ms": 972580
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Thanks. Does that approval cover a subscription at that level, or would a pilot fee and implementation work need a separate sign-off?",
+      "idx": 100,
+      "start_ms": 972840,
+      "end_ms": 980889
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "The annual software budget is approved. I would still need to see any setup cost separately, and I will not approve a purchase until operations and security are comfortable.",
+      "idx": 101,
+      "start_ms": 981024,
+      "end_ms": 991748
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "From operations, I will compare how much work each product adds to the shift. A cheap tool that asks my dispatchers to enter each load twice is expensive in practice.",
+      "idx": 102,
+      "start_ms": 992066,
+      "end_ms": 1002638
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "And we should compare earlier warning, the amount of manual chasing, and any import exceptions. I will write a scorecard using the north-corridor pilot measures.",
+      "idx": 103,
+      "start_ms": 1003085,
+      "end_ms": 1010146
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "Please do. One competitor claims it can give a live ETA immediately, and the other says migration is effortless. I need evidence behind those claims, including ours.",
+      "idx": 104,
+      "start_ms": 1010725,
+      "end_ms": 1019550
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "I will avoid claiming either. Our proposal will show what we will measure, who provides each input, and the gates that have to clear before the two-week clock begins.",
+      "idx": 105,
+      "start_ms": 1020207,
+      "end_ms": 1030173
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "Can you put the rollback plan on the same page? My boss will read the price, but my dispatchers will read how they get back to a workable board if something breaks.",
+      "idx": 106,
+      "start_ms": 1030682,
+      "end_ms": 1041846
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Yes. I will put the correction and rollback steps in the pilot outline, and Tom can tell me if the language matches a real north-corridor shift.",
+      "idx": 107,
+      "start_ms": 1042005,
+      "end_ms": 1049823
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "What would you need from us before you can send a proposal that has more substance than a generic quote?",
+      "idx": 108,
+      "start_ms": 1050010,
+      "end_ms": 1056479
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Tom's scrubbed fifty-row sample and your security checklist would help, but I can send a scoped proposal and pricing by end of week with those items called out as gates.",
+      "idx": 109,
+      "start_ms": 1056674,
+      "end_ms": 1065568
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "I will export the fifty rows by Friday and flag the awkward customer codes. I will also ask the two dispatchers whether the north corridor is workable for their schedule.",
+      "idx": 110,
+      "start_ms": 1065893,
+      "end_ms": 1075066
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "I will review the mapping with Tom by Friday and write the scorecard and rollback outline. If the sample arrives late, we will keep the pilot date open.",
+      "idx": 111,
+      "start_ms": 1075392,
+      "end_ms": 1083790
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "I will introduce you to our security lead next week. They will decide whether the packet is enough for a pilot and whether a customer contact can see statuses.",
+      "idx": 112,
+      "start_ms": 1084208,
+      "end_ms": 1092516
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "I will send the security packet tomorrow, then follow with the written pilot scope and annual pricing by end of week. I will distinguish subscription price from any setup cost.",
+      "idx": 113,
+      "start_ms": 1092930,
+      "end_ms": 1102819
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "When do we decide whether to actually start? I do not want a calendar invitation that assumes the import and security review are complete.",
+      "idx": 114,
+      "start_ms": 1103334,
+      "end_ms": 1111692
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "After Tom signs off on mapping and security clears the data. Then I can approve a pilot start. The purchase decision stays at the end of next month.",
+      "idx": 115,
+      "start_ms": 1111961,
+      "end_ms": 1119835
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That sequence works. We can prepare the scorecard now, and we will count two full weeks of live use only after those gates, with a review at the end.",
+      "idx": 116,
+      "start_ms": 1120305,
+      "end_ms": 1129611
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "Would a short call next week to look at the mapping and security questions be useful, or would you rather keep those as separate discussions?",
+      "idx": 117,
+      "start_ms": 1129867,
+      "end_ms": 1139160
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "Separate security from workflow, but send me the notes from both. I need one view of the remaining blockers before I compare the three vendors.",
+      "idx": 118,
+      "start_ms": 1139800,
+      "end_ms": 1147375
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "I will attend the workflow review. If the field map is clean and the rollback steps are credible, I will be the first person to tell Elena the pilot is worth trying.",
+      "idx": 119,
+      "start_ms": 1148064,
+      "end_ms": 1157022
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "And if the exceptions are worse than expected, we will say so early. A small pilot should expose the problem before your whole team depends on the board.",
+      "idx": 120,
+      "start_ms": 1157592,
+      "end_ms": 1167968
+    },
+    {
+      "speaker": "Daniel Ortiz",
+      "text": "That gives me what I need. I will send the packet tomorrow and the proposal by end of week, then follow Elena's introduction for the security review.",
+      "idx": 121,
+      "start_ms": 1168248,
+      "end_ms": 1176061
+    },
+    {
+      "speaker": "Elena Voss",
+      "text": "Thanks, everyone. We have a practical test, a clear stop rule, and owners. I will compare the evidence after the pilot rather than make a decision from today's call.",
+      "idx": 122,
+      "start_ms": 1176320,
+      "end_ms": 1185863
+    },
+    {
+      "speaker": "Tom Brandt",
+      "text": "Thanks, Priya and Daniel. Send me the sample fields, and I will make the Friday export messy enough to tell us something useful.",
+      "idx": 123,
+      "start_ms": 1186064,
+      "end_ms": 1192731
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Thanks, Tom and Elena. I will send the field list with the mapping outline, and I look forward to pressure-testing it with you.",
+      "idx": 124,
+      "start_ms": 1193399,
+      "end_ms": 1201007
+    }
+  ],
+  "chapters": [
+    {
+      "title": "Acme's Dispatch Reality",
+      "start_idx": 0
+    },
+    {
+      "title": "A Pilot That Shows Value",
+      "start_idx": 30
+    },
+    {
+      "title": "Migration and Security Gates",
+      "start_idx": 68
+    },
+    {
+      "title": "Buying Decision and Next Steps",
+      "start_idx": 98
+    }
+  ],
+  "duration_ms": 1201007
+}

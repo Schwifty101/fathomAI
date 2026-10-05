@@ -1,0 +1,144 @@
+{
+  "general": {
+    "sections": [
+      {
+        "heading": "Overview",
+        "bullets": [
+          "Priya Raman led a review of Kestrel Dispatch's driver mobile app v2 across first run, the stop list, offline completion, accessibility, and notification copy.",
+          "The team used a driver starting a 24-stop shift as its working scenario and left the release date and completion control open for later evidence."
+        ]
+      },
+      {
+        "heading": "Key points",
+        "bullets": [
+          "Jonas Weber proposed a four-step first-run path that confirms the carrier before asking for location and then shows the first assigned stop.",
+          "Mei Tanaka said the stop list can work without background location and that the current app silently logs out the first phone when a driver switches devices.",
+          "The stop list will expose the appointment window, address, proof requirement, and status for a 24-stop route without making drivers open every card.",
+          "Mei said the amber queued badge failed the team's contrast check, and a screen reader announced the completion control only as 'button.'",
+          "Jonas favored swipe-to-complete to reduce accidental taps, while Mei favored an explicit confirmation path for drivers using gloves or assistive technology.",
+          "Hannah Cole argued that lock-screen notifications should not expose customer addresses or delivery exceptions."
+        ]
+      },
+      {
+        "heading": "Decisions",
+        "bullets": [
+          "Priya and Mei agreed that denying background location will not block a driver from viewing assigned stops.",
+          "The team agreed that an offline completion remains visibly queued until the server accepts it, and that a route reassignment conflict must preserve the driver's note and show a reason.",
+          "The stop list will not silently reorder while a driver scrolls; it will surface dispatch changes for review instead.",
+          "Priya deferred the swipe-versus-button choice until both controls can be observed with drivers, including low-signal, glove, large-text, and screen reader use.",
+          "Hannah and Mei agreed that queued completions use an in-app message, while lock-screen alerts for route changes or rejections reveal no customer address."
+        ]
+      },
+      {
+        "heading": "Open questions",
+        "bullets": [
+          "The team has not chosen between swipe-to-complete and an explicit confirmation button because neither has been tested with drivers in the same scenario.",
+          "Mei still needs to specify which server receipt permits the app to say a completion was accepted and how a reassigned stop is rejected.",
+          "The team has not validated whether a full day of offline photos and notes can survive a restart, so it did not promise that every attachment works offline."
+        ]
+      }
+    ]
+  },
+  "sales": {
+    "sections": [
+      {
+        "heading": "Pain points",
+        "bullets": [
+          "Priya said a driver with 24 stops needs the next address, required proof, and a real exception at a glance.",
+          "Mei warned that calling a locally queued completion 'completed' could cause a driver to call support when dispatch still sees the stop as open.",
+          "Hannah said broad offline claims would lead drivers to expect route edits, navigation, and every photo to work without coverage."
+        ]
+      },
+      {
+        "heading": "Current solution",
+        "bullets": [
+          "Jonas's first prototype moved an offline stop into a completed group with a cloud icon, while dispatch still saw it as open until sync.",
+          "Mei said the current app silently logs out the first phone when a driver activates a second device."
+        ]
+      },
+      {
+        "heading": "Objections",
+        "bullets": [
+          "Mei objected to swipe-to-complete because gloves, tremor, and screen reader use can make the gesture difficult or undiscoverable.",
+          "Jonas objected to a modal after every stop because drivers may complete several stops at one depot or as many as 50 in a day.",
+          "Hannah objected to saying 'ready to drive' during first run because the app has not checked the driver's vehicle, documents, or safety."
+        ]
+      },
+      {
+        "heading": "Next steps",
+        "bullets": [
+          "Jonas will revise first-run screens by Thursday and list, conflict, contrast, and completion-control prototypes by next week.",
+          "Mei will document invitation and device-switch failures and define queued, accepted, and rejected receipt states by Friday.",
+          "Hannah will revise in-app and lock-screen copy by next week, and Priya will ask Amara to recruit drivers from different route types."
+        ]
+      }
+    ]
+  },
+  "standup": {
+    "sections": [
+      {
+        "heading": "Today",
+        "bullets": [
+          "Jonas Weber will revise the carrier confirmation, permission timing, expired invitation, and borrowed-phone first-run screens by Thursday.",
+          "Jonas Weber will revise the stop list and offline conflict cards by end of week, then bring high-contrast states and both completion controls by next week.",
+          "Mei Tanaka will document invitation revocation and second-device behavior and define queued, accepted, and rejected receipt states by Friday.",
+          "Hannah Cole will revise permission, queued, route-change, and needs-review copy by next week with separate lock-screen and opened-app wording.",
+          "Priya Raman will ask Amara Nwosu by next week for drivers from different route types, including drivers who regularly lose signal."
+        ]
+      },
+      {
+        "heading": "Blockers",
+        "bullets": [
+          "Jonas Weber cannot finalize the conflict wording until Mei Tanaka defines which rejection details the server can identify and expose.",
+          "Hannah Cole cannot finalize 'accepted by dispatch' wording until Mei Tanaka confirms what the server receipt guarantees.",
+          "Priya Raman will not choose a completion control until the team observes both alternatives with drivers using poor coverage and accessibility settings."
+        ]
+      }
+    ]
+  },
+  "project_review": {
+    "sections": [
+      {
+        "heading": "Goals",
+        "bullets": [
+          "Priya Raman wants a driver on a 24-stop shift to see the next address, proof requirement, and exception without searching through the route.",
+          "Mei Tanaka wants offline completions to show whether they are queued, accepted, or rejected rather than implying dispatch has a result it has not received."
+        ]
+      },
+      {
+        "heading": "Progress",
+        "bullets": [
+          "Jonas Weber showed a four-step first-run prototype and a compact stop list with address, time window, proof requirement, and status.",
+          "Mei Tanaka ran a contrast check and screen reader pass, finding a low-contrast amber queued badge and a completion control announced only as 'button.'",
+          "Hannah Cole drafted distinct messages for dispatch route changes, locally queued actions, and server-accepted completions."
+        ]
+      },
+      {
+        "heading": "Risks",
+        "bullets": [
+          "A route reassignment while the driver is offline can cause the server to reject a completion, so the app must preserve the driver's note and show a reason.",
+          "Mei Tanaka said the local queue has not been tested with a full day of photos and notes after an app restart.",
+          "The current swipe control may be difficult with gloves, tremor, or a screen reader, while a repeated button modal may slow drivers with many stops.",
+          "Hannah Cole warned that lock-screen alerts could expose customer addresses or delivery exceptions if they carry stop details."
+        ]
+      },
+      {
+        "heading": "Decisions",
+        "bullets": [
+          "Background location will not block the stop list, and first run will identify the carrier before asking for permissions.",
+          "Offline completion will remain visibly queued until a server result arrives, and route changes will appear for review instead of silently reordering the stop list.",
+          "The team deferred swipe versus explicit confirmation until both can be observed with drivers under the same stop scenario.",
+          "Accepted completions will not trigger a push by default; route changes and rejected actions may notify the driver without customer detail on the lock screen."
+        ]
+      },
+      {
+        "heading": "Next steps",
+        "bullets": [
+          "Jonas Weber will revise first run by Thursday, stop-list and offline cards by end of week, and accessible control variants by next week.",
+          "Mei Tanaka will document invite and device-switch failures and the queued, accepted, and rejected state contract by Friday.",
+          "Hannah Cole will update push and in-app copy by next week, and Priya Raman will ask Amara Nwosu for driver recruits by next week."
+        ]
+      }
+    ]
+  }
+}

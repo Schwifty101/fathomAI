@@ -1,0 +1,786 @@
+{
+  "lines": [
+    {
+      "speaker": "Priya Raman",
+      "text": "Thanks for joining. I want to review the driver app v2 as one shift, not as four attractive screens. Imagine a driver opening Kestrel Dispatch for the first time before a twenty-four-stop route.",
+      "idx": 0,
+      "start_ms": 1000,
+      "end_ms": 13989
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "That is the path in this prototype. The dispatcher invites the driver, the driver confirms the carrier and phone number, and only then do we ask for location. The first stop is visible before any tutorial.",
+      "idx": 1,
+      "start_ms": 14772,
+      "end_ms": 26496
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "Can we slow down on the invite? The mock says welcome to your new route, but some drivers use the same number for two carriers. I do not want them accepting work under the wrong company name.",
+      "idx": 2,
+      "start_ms": 26705,
+      "end_ms": 39584
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "Fair point. The carrier name sits on the confirmation screen, but it is below the fold on the smaller phone. I can bring it above the button, with a clear way to say this is not my carrier.",
+      "idx": 3,
+      "start_ms": 40175,
+      "end_ms": 54486
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "And the dispatcher has to be able to revoke the invitation. A driver may open an old link after being reassigned. What does the screen say when the token is expired or the route was already taken away?",
+      "idx": 4,
+      "start_ms": 54719,
+      "end_ms": 70431
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "Right now it falls into a generic error, which is not good enough. I would say that the invitation is no longer active and ask them to contact dispatch, while keeping the carrier name visible for context.",
+      "idx": 5,
+      "start_ms": 70935,
+      "end_ms": 83593
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That is a better recovery path. Let us make the four steps explicit: accept the invite, confirm the carrier, explain why location matters, then show the first stop. A tutorial can wait until the work is in view.",
+      "idx": 6,
+      "start_ms": 83906,
+      "end_ms": 97801
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "I like showing actual work early. I would still replace the line ready to drive, because that sounds like we checked safety, documents, and the vehicle. We only know the app is connected to the right route.",
+      "idx": 7,
+      "start_ms": 97566,
+      "end_ms": 109393
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "There is a technical wrinkle before that screen. On Android, background location is a separate decision from foreground location, and asking for both immediately is likely to get a denial. We should request only what the next action needs.",
+      "idx": 8,
+      "start_ms": 110207,
+      "end_ms": 126760
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "The sequence can explain foreground location when the driver opens navigation, then explain background location only when they opt into live tracking during a shift. That is less alarming than two system sheets back to back.",
+      "idx": 9,
+      "start_ms": 127530,
+      "end_ms": 141943
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Would refusing background location prevent the stop list from working? If it does, the copy needs to say so; if it does not, we need to stop presenting permission as a condition for seeing the route.",
+      "idx": 10,
+      "start_ms": 142280,
+      "end_ms": 157205
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "The list can load without it. Live location on the dispatch map becomes less reliable, but the driver can still view assigned stops and record proof. We should never block the entire shift on that permission.",
+      "idx": 11,
+      "start_ms": 157667,
+      "end_ms": 169609
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "Then I would write view your stops now for the main button, and put the tracking explanation where the driver actually enables it. That says exactly what will happen instead of trying to reassure them with a vague success message.",
+      "idx": 12,
+      "start_ms": 170101,
+      "end_ms": 183284
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "There is another first-run issue. My sample stop contains a fake customer name, which could look like real work if someone taps through quickly. I can use their actual first assigned stop and a small help tip beside it.",
+      "idx": 13,
+      "start_ms": 183534,
+      "end_ms": 196424
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Yes, no sample stop in the production path. Let the first assigned stop carry the teaching, and make help dismissible. A driver starting at five in the morning does not have time for a tour.",
+      "idx": 14,
+      "start_ms": 196690,
+      "end_ms": 211555
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "The route may not have synced yet when the invite opens. Give that state its own sentence: connecting to dispatch, then retry if it takes too long. An empty list will be read as no work today.",
+      "idx": 15,
+      "start_ms": 211320,
+      "end_ms": 226873
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "I can design a connecting state and a retry that does not make the driver repeat verification. The account should survive a dropped connection once the invitation has been accepted.",
+      "idx": 16,
+      "start_ms": 227325,
+      "end_ms": 237784
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "Please avoid saying your route is ready until we have a route response. I can write three separate states: connecting, no stops assigned, and unable to load. Those are different situations to a driver.",
+      "idx": 17,
+      "start_ms": 238606,
+      "end_ms": 252026
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That separation matters. If there truly are zero stops, the driver can check with dispatch, but the screen should not sound like an error. If loading fails, it should say their assigned work may still exist.",
+      "idx": 18,
+      "start_ms": 252197,
+      "end_ms": 264615
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "We also need to test an invite opened on a second device. The current app silently logs out the first phone, which can strand someone mid-route. I want a warning before switching the active device.",
+      "idx": 19,
+      "start_ms": 265156,
+      "end_ms": 280168
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "I had not included that state. It belongs in this path because a driver may borrow a phone after a battery dies. We can say which device will stop syncing and ask for confirmation.",
+      "idx": 20,
+      "start_ms": 279933,
+      "end_ms": 293521
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "Can the wording avoid calling it an account transfer? That sounds permanent. Say use this phone for today's shift, and explain that the other phone will stop receiving updates.",
+      "idx": 21,
+      "start_ms": 294022,
+      "end_ms": 304046
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Good. Jonas, please revise the first-run screens by Thursday with the carrier name, permission timing, and the three loading states. Mei, I want the invite and second-device failure cases documented before we treat this as ready for a pilot.",
+      "idx": 22,
+      "start_ms": 304566,
+      "end_ms": 317325
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "I will have that first-run revision ready by Thursday. I will include the expired invitation, wrong carrier, and borrowed phone paths, so we review the failures alongside the happy route.",
+      "idx": 23,
+      "start_ms": 318055,
+      "end_ms": 329512
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "I will document the invite revocation and device switch behavior by Friday. It will include what the server knows versus what the phone can safely show when it starts without a connection.",
+      "idx": 24,
+      "start_ms": 329691,
+      "end_ms": 340753
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That gives us an onboarding path to review, not a decision to launch. Let us move to the stop list, because the driver has to understand the next action after getting through these screens.",
+      "idx": 25,
+      "start_ms": 341504,
+      "end_ms": 352545
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "The new list shows the time window, address, proof requirement, and current status without opening each stop. The first card is expanded because it is the most likely next job; the remaining cards stay compact.",
+      "idx": 26,
+      "start_ms": 352952,
+      "end_ms": 364576
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "I see a late tag in red next to a delivery window, but the map pin is also red. Does late mean this driver missed the appointment, or only that dispatch predicts a late arrival?",
+      "idx": 27,
+      "start_ms": 365237,
+      "end_ms": 378430
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "Today it means the planned arrival is later than the customer's requested window. You are right that it does not say who caused it. I can label it predicted late and keep the reason in the detail view.",
+      "idx": 28,
+      "start_ms": 378195,
+      "end_ms": 392442
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "Predicted late feels like internal language. A driver may hear blame in it. Could we say arrival may miss window, then make the detail explain what dispatch calculated and what the driver can actually do?",
+      "idx": 29,
+      "start_ms": 393024,
+      "end_ms": 404475
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "That also makes room for uncertainty. The ETA may be stale when coverage is poor. I would show the last update time beside any predicted arrival, not present a fifteen-minute-old value as live.",
+      "idx": 30,
+      "start_ms": 404787,
+      "end_ms": 416299
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "I can put updated eight minutes ago directly below the ETA when the connection drops. If it is current, we keep the list clean. The driver still sees the appointment window either way.",
+      "idx": 31,
+      "start_ms": 416681,
+      "end_ms": 429565
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "What is the scan priority for twenty-four stops? We cannot ask drivers to read every badge. I would want the next stop, any required proof, and a real exception visible in one glance.",
+      "idx": 32,
+      "start_ms": 430212,
+      "end_ms": 442595
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "The number and address have the strongest weight, proof is a labeled icon, and exceptions get one text line. The list does not reorder itself while the driver scrolls; dispatch changes appear as a separate banner.",
+      "idx": 33,
+      "start_ms": 443389,
+      "end_ms": 456812
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Please keep that stable. If the list jumps when a dispatcher moves stop fourteen to stop three, someone could mark the wrong card. A banner with review route changes is safer than reshuffling under their finger.",
+      "idx": 34,
+      "start_ms": 457358,
+      "end_ms": 471735
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "I would avoid new route available for that banner. The driver still has a route; a particular stop changed. Something like dispatch changed your stop order tells them what to inspect.",
+      "idx": 35,
+      "start_ms": 472410,
+      "end_ms": 482830
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "Agreed. The review screen can show the old and new position for changed stops. I will retain the note about proof, because losing a signature requirement during a reorder would create a second problem.",
+      "idx": 36,
+      "start_ms": 483001,
+      "end_ms": 494899
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Now the offline case. You tap complete on a stop with no signal. What does the list show immediately, and what does dispatch see before the phone reconnects? I want those two views distinguished.",
+      "idx": 37,
+      "start_ms": 495590,
+      "end_ms": 508669
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "The phone moves the card to completed with a little cloud icon. Dispatch still sees it open until sync, which is why I added the cloud. I thought that was enough to say it was only local.",
+      "idx": 38,
+      "start_ms": 509283,
+      "end_ms": 525270
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "It is not enough. Completed is a final business state, and the cloud icon will disappear into the card for many people. The phone should say queued on this device, with a separate accepted state only after a server receipt.",
+      "idx": 39,
+      "start_ms": 525643,
+      "end_ms": 542848
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "That costs more space, but I agree the current label overstates it. We can keep the card in the active group with a queued badge, then move it after the server accepts the action.",
+      "idx": 40,
+      "start_ms": 542613,
+      "end_ms": 555131
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Do that. I would rather have an honest pending row than a tidy list that makes a driver call support when dispatch says the stop is still open. How long can a queue survive?",
+      "idx": 41,
+      "start_ms": 555523,
+      "end_ms": 568008
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "The local queue survives an app restart, but that has not been tested with a full day of photos and notes. We should limit the design promise to completion and text notes until we validate larger attachments.",
+      "idx": 42,
+      "start_ms": 568533,
+      "end_ms": 582490
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "Then the helper sentence must name those actions. We should not say the app works offline, because people will assume route edits, navigation, and every photo are covered. Say completions and notes wait to sync.",
+      "idx": 43,
+      "start_ms": 582821,
+      "end_ms": 595385
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "I can make that sentence visible the first time coverage drops, with a way to reopen it from the queued badge. Otherwise it is another one-time tooltip nobody remembers in the middle of a shift.",
+      "idx": 44,
+      "start_ms": 596016,
+      "end_ms": 608784
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "There is a harder case. Dispatch reassigns a stop while the driver is offline, and the driver marks it complete against the old route. The server cannot accept both histories as if nothing happened.",
+      "idx": 45,
+      "start_ms": 609412,
+      "end_ms": 623439
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "What information can we preserve without pretending the completion is valid? The driver may have actually delivered the load, and asking them to recreate a note from memory an hour later is unacceptable.",
+      "idx": 46,
+      "start_ms": 624013,
+      "end_ms": 634829
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "We can preserve the note and the local time, reject the completion with a reason, and tell the driver that dispatch changed this stop. A dispatcher can then resolve the route assignment with the evidence intact.",
+      "idx": 47,
+      "start_ms": 635409,
+      "end_ms": 647070
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "I will draw a conflict card with that exact distinction: your note is saved on this phone, completion was not accepted, and dispatch changed the stop. The card should not simply say sync failed.",
+      "idx": 48,
+      "start_ms": 647828,
+      "end_ms": 659560
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "Please do not make call dispatch the only button on that card. If there is a retryable network failure, the app can retry; if it is a real reassignment, tell the driver why and give them the number.",
+      "idx": 49,
+      "start_ms": 660167,
+      "end_ms": 676511
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Yes, queued, accepted, and rejected are separate states. A network retry stays queued; a business-rule rejection becomes a conflict. I will write the state contract so the interface is not guessing from an HTTP timeout.",
+      "idx": 50,
+      "start_ms": 676815,
+      "end_ms": 689375
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That is the decision for this pass: no silent completion, no lost note, and no surprise reshuffle. We will review exact conflict wording after Mei's state contract, because it depends on what we can truthfully identify.",
+      "idx": 51,
+      "start_ms": 689954,
+      "end_ms": 704504
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "I will revise the list and offline cards by end of week, including a stale ETA timestamp and proof requirement after a route change. The mock should show the ugly states, not only an uninterrupted shift.",
+      "idx": 52,
+      "start_ms": 705037,
+      "end_ms": 719930
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "I will send the queued, accepted, and rejected state contract by Friday. It needs to say what receipt ends a queue, what happens after restart, and which conflict details can be shown to the driver.",
+      "idx": 53,
+      "start_ms": 719695,
+      "end_ms": 733370
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Good. The list is now grounded in a real failure path. We have a separate accessibility question, especially because queued and accepted will be distinguished by more than color.",
+      "idx": 54,
+      "start_ms": 733563,
+      "end_ms": 745756
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "I ran the screens through our contrast check this morning. The amber queued badge on white is below our target, and the small grey updated time is hard to read outdoors. Neither can be the only status signal.",
+      "idx": 55,
+      "start_ms": 746579,
+      "end_ms": 760650
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "I expected the amber to fail on white, but I had not checked it inside the compact card. I can use a dark text label and keep the color as a secondary cue, with a stronger border.",
+      "idx": 56,
+      "start_ms": 761029,
+      "end_ms": 774433
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "Please make the status word consistent across the screen and notification. If the card says queued while the push says saved, drivers will wonder whether those are different states. The wording needs one shared meaning.",
+      "idx": 57,
+      "start_ms": 774816,
+      "end_ms": 789939
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Agreed. And the stop card must be readable in bright light, not only at a desk. The people using it may be standing by a loading bay with one hand occupied and the phone on low brightness.",
+      "idx": 58,
+      "start_ms": 790475,
+      "end_ms": 803734
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "The screen reader pass found something worse: the complete control announces only button. It does not say the stop address or what happens after activation. A driver using spoken feedback cannot safely distinguish two adjacent stops.",
+      "idx": 59,
+      "start_ms": 804146,
+      "end_ms": 819194
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "That is my miss. I can label it complete stop three at Oak Street, followed by the proof requirement. It should announce queued for sync after activation and accepted only when we have the receipt.",
+      "idx": 60,
+      "start_ms": 819581,
+      "end_ms": 830913
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Also move focus to the status message after an action. If the card moves down the list without an announcement, the person may repeat the completion and create two local events. Focus behavior matters here.",
+      "idx": 61,
+      "start_ms": 831153,
+      "end_ms": 843834
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "I can keep the card in place until acknowledgment and announce the state change. If it later moves to completed, the announcement should precede the move. That reduces the chance of the control vanishing during use.",
+      "idx": 62,
+      "start_ms": 844639,
+      "end_ms": 859757
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Now the obvious disagreement: Jonas, you put a swipe on completion. What problem does that solve better than a button? I want the operational reason, not a preference for one animation.",
+      "idx": 63,
+      "start_ms": 860436,
+      "end_ms": 873677
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "Drivers mount phones where a bump or a passing hand can hit a large button. A deliberate swipe lowers accidental completion, and it can be quick when someone has fifty stops. A second modal after every stop feels punishing.",
+      "idx": 64,
+      "start_ms": 874329,
+      "end_ms": 890372
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "I see that risk, but a swipe can be difficult with gloves, tremor, or a screen reader. It is also hidden until someone discovers the gesture. An explicit button with a confirmation state is slower but understandable.",
+      "idx": 65,
+      "start_ms": 890137,
+      "end_ms": 903356
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "The swipe has a text hint, so it is not completely hidden. I am hesitant to add a modal because we have drivers who complete several stops at one depot, and repeating confirmation would become muscle memory.",
+      "idx": 66,
+      "start_ms": 904063,
+      "end_ms": 918494
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "From the copy side, slide to complete is clear only if the control is actually usable. The button alternative could say review completion, then show the stop address and proof before the final confirmation. That is more informative.",
+      "idx": 67,
+      "start_ms": 918764,
+      "end_ms": 932275
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "What would we measure with drivers? Asking which control they like will favor the familiar one. I care about wrong-stop completions, missed proof, time per stop, and whether either control can be used with gloves.",
+      "idx": 68,
+      "start_ms": 932620,
+      "end_ms": 945286
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "We can put both controls in the same stop scenario and observe errors rather than just preference. I want a rural low-signal task as well, because a queued completion changes how confident either gesture feels.",
+      "idx": 69,
+      "start_ms": 945929,
+      "end_ms": 958830
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Include a screen reader session and a large-text setting. If the swipe cannot announce and perform equivalently, we should not call it accessible simply because a fallback button exists in settings nobody can find.",
+      "idx": 70,
+      "start_ms": 959389,
+      "end_ms": 973953
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "That is fair. I can prototype an explicit control alongside the swipe with the same proof step, then test both without changing the rest of the card. I do not want the comparison contaminated by different screens.",
+      "idx": 71,
+      "start_ms": 974098,
+      "end_ms": 986783
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "We are not picking a winner in this room. Jonas, make the two controls and the high-contrast states testable. I will line up driver observation with Amara after the prototype is usable, including people with poor coverage.",
+      "idx": 72,
+      "start_ms": 987296,
+      "end_ms": 1003247
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "I want the invitation to those drivers to say we are comparing ways to complete a stop, not that we are previewing a finished redesign. It will make the feedback more honest and keep launch expectations sensible.",
+      "idx": 73,
+      "start_ms": 1004053,
+      "end_ms": 1019913
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "One more technical condition: a repeated gesture must not create repeated server completions. We need one action identifier for the local event, and the receipt should refer to that identifier even after an app restart.",
+      "idx": 74,
+      "start_ms": 1020629,
+      "end_ms": 1031949
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "Then the prototype can show a disabled completion control while that event is queued, with a details path for the driver to see what is pending. The status, rather than a spinning animation, can carry the wait.",
+      "idx": 75,
+      "start_ms": 1032729,
+      "end_ms": 1045841
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "That fits the list decision. We should never ask a driver to perform the same completion twice because our interface looks uncertain. We need to make queued visible and wait for accepted or rejected.",
+      "idx": 76,
+      "start_ms": 1046536,
+      "end_ms": 1059631
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "For the status label, I suggest waiting to send instead of pending, then sent to dispatch after a receipt. But sent might still imply accepted, so I want to hear precisely which server event Mei can guarantee.",
+      "idx": 77,
+      "start_ms": 1060170,
+      "end_ms": 1073069
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "A receipt only proves the server accepted the action for processing; it may still reject a reassigned stop. I would use queued, received, and needs review internally, then decide which two or three words drivers actually need.",
+      "idx": 78,
+      "start_ms": 1073309,
+      "end_ms": 1087008
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "I will bring revised labels and focus order by next week. That gives us time to check contrast on both the small phone and the high-brightness device, rather than signing off from a static mock.",
+      "idx": 79,
+      "start_ms": 1087474,
+      "end_ms": 1102487
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Please capture the contrast values and the screen reader recording with the prototype. A review based on memory will not tell us whether the amber badge, action label, and focus behavior were genuinely fixed.",
+      "idx": 80,
+      "start_ms": 1103047,
+      "end_ms": 1115809
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "I will review the interaction contract when Jonas has both variants. Until we have observations, the only firm decision is that completion status cannot rely on color or a gesture alone.",
+      "idx": 81,
+      "start_ms": 1116645,
+      "end_ms": 1127231
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "I have three notification moments in the copy sheet: dispatch changed the route, an action is still waiting on the phone, and the server accepted a completion. Right now all three say update, which hides what happened.",
+      "idx": 82,
+      "start_ms": 1127477,
+      "end_ms": 1143118
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Let us make each one actionable. A route change needs the stop number and a prompt to review. A queued action needs reassurance without claiming success. An accepted completion probably needs no push if the app is open.",
+      "idx": 83,
+      "start_ms": 1143373,
+      "end_ms": 1155725
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "My first draft for a route change is dispatch changed stop three; review your list before continuing. I would not put a customer address in a lock-screen alert because someone else may see the phone in the cab.",
+      "idx": 84,
+      "start_ms": 1155490,
+      "end_ms": 1169582
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "That privacy limit is right. The payload can contain a generic event type and let the app fetch current details after unlock. Otherwise a stale push could show a stop that has already been reassigned again.",
+      "idx": 85,
+      "start_ms": 1170062,
+      "end_ms": 1184215
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "Could the notification open a change history rather than jump directly to stop three? A route may change twice while the driver is offline, and the newest list alone does not explain what moved.",
+      "idx": 86,
+      "start_ms": 1184466,
+      "end_ms": 1197667
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Yes, but keep the history compact: what changed, when, and whether the driver has reviewed it. We should not turn a quick stop list into an audit tool for every dispatch edit.",
+      "idx": 87,
+      "start_ms": 1198393,
+      "end_ms": 1209469
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "For a queued completion, I would use completion saved on this phone; we will try again when you reconnect. It says where the data is and what happens next, without pretending dispatch has already accepted it.",
+      "idx": 88,
+      "start_ms": 1209653,
+      "end_ms": 1224503
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "That should be an in-app message, not repeated push notifications while the device is offline. The queue needs a durable local state; a push cannot tell the phone something it has not sent yet.",
+      "idx": 89,
+      "start_ms": 1224902,
+      "end_ms": 1237090
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "Agreed. Then a later rejection can trigger a notification after the server responds, but the lock screen should say a stop needs review, not disclose a delivery exception or a customer's name.",
+      "idx": 90,
+      "start_ms": 1237689,
+      "end_ms": 1251234
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "When they open it, the app can land on the conflict card with the original note intact. I will give that card a visible timestamp and the reason it was not accepted, so the notification leads somewhere useful.",
+      "idx": 91,
+      "start_ms": 1251582,
+      "end_ms": 1266570
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "What if the notification arrives after the driver has already resolved the conflict in the app? We cannot send them back into a stale warning. That would make our own status history look unreliable.",
+      "idx": 92,
+      "start_ms": 1267402,
+      "end_ms": 1281756
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "The app should load the current event state when opened and dismiss the old warning if it is resolved. On the server side, each action identifier needs one final outcome, even if the phone retries delivery.",
+      "idx": 93,
+      "start_ms": 1282155,
+      "end_ms": 1297167
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "For accepted completion, I suggest no push by default. The in-app row can say accepted by dispatch, while a push is reserved for changes that require the driver to respond. Otherwise a twenty-four-stop shift becomes a notification storm.",
+      "idx": 94,
+      "start_ms": 1297805,
+      "end_ms": 1311287
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "I agree. The status history can still show each receipt for anyone who wants assurance. We can collapse it to a simple accepted label in the list and keep the timestamp one tap away.",
+      "idx": 95,
+      "start_ms": 1311463,
+      "end_ms": 1323541
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Does that leave a driver wondering if dispatch saw it? Accepted by dispatch is clearer than sent, provided Mei's state contract supports the phrase. Hannah, hold that exact wording until we confirm the receipt semantics.",
+      "idx": 96,
+      "start_ms": 1323683,
+      "end_ms": 1338411
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "I can confirm the receipt event by Friday. It is not the same as proof of delivery review, so we must not write delivery approved. I will also specify which rejection reasons can be safely shown on the phone.",
+      "idx": 97,
+      "start_ms": 1338926,
+      "end_ms": 1355778
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "Then I will revise the push and in-app copy by next week using queued, accepted, and needs review as working states. I will include the lock-screen version and the opened-app version for each route change.",
+      "idx": 98,
+      "start_ms": 1356331,
+      "end_ms": 1367858
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "I will wire that copy into the list and conflict prototype by next week. I also want to show a route change arriving while a completion is queued, since that is the case most likely to confuse everyone.",
+      "idx": 99,
+      "start_ms": 1368041,
+      "end_ms": 1381120
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "I will ask Amara for drivers from different route types by next week, including people who regularly lose signal. We will schedule observation only after the two completion controls and accessibility states are usable.",
+      "idx": 100,
+      "start_ms": 1381324,
+      "end_ms": 1393743
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Please include an older phone and a device with larger text. We need to know whether the stop cards stay readable when the font grows, not merely whether the prototype looks balanced on Jonas's screen.",
+      "idx": 101,
+      "start_ms": 1394192,
+      "end_ms": 1406646
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "I can prepare those variants. The large-text layout may turn one card into several rows, but the address, window, and proof requirement will stay in the same reading order. That is more valuable than preserving density.",
+      "idx": 102,
+      "start_ms": 1406411,
+      "end_ms": 1418705
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "And I will read the short messages aloud. Push copy that looks concise on a desktop can sound ambiguous when spoken by a phone, especially if a stop number and status are buried at the end.",
+      "idx": 103,
+      "start_ms": 1419457,
+      "end_ms": 1431598
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Let me recap what we actually decided today. First run will not block the stop list on background location, the list will distinguish queued from accepted, and a route conflict will preserve the driver's note.",
+      "idx": 104,
+      "start_ms": 1431822,
+      "end_ms": 1445984
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "That matches my notes. We have not chosen swipe or button, and we have not committed to every photo working offline. I would rather keep those as test questions than carry a false promise into planning.",
+      "idx": 105,
+      "start_ms": 1446709,
+      "end_ms": 1460338
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "I will bring revised first-run screens by Thursday and the list, contrast states, and both completion controls by next week. The comparison will include the conflict card, not just a polished straight-through route.",
+      "idx": 106,
+      "start_ms": 1460521,
+      "end_ms": 1473952
+    },
+    {
+      "speaker": "Hannah Cole",
+      "text": "I will bring copy for the permission, queued, route-change, and needs-review states by next week. Once Mei confirms the receipt wording, I can replace any phrase that accidentally sounds like final delivery approval.",
+      "idx": 107,
+      "start_ms": 1474421,
+      "end_ms": 1486897
+    },
+    {
+      "speaker": "Priya Raman",
+      "text": "Good. This gives us a direction and a way to test it, not a release date. Thanks, everyone. I will send the decisions and open questions to Amara before we recruit drivers.",
+      "idx": 108,
+      "start_ms": 1487248,
+      "end_ms": 1500997
+    }
+  ],
+  "chapters": [
+    {
+      "title": "First Run and Driver Onboarding",
+      "start_idx": 0
+    },
+    {
+      "title": "Stop List and Offline Completion",
+      "start_idx": 26
+    },
+    {
+      "title": "Accessible Completion Control",
+      "start_idx": 55
+    },
+    {
+      "title": "Notification Copy, Owners, and Close",
+      "start_idx": 82
+    }
+  ],
+  "duration_ms": 1500997
+}

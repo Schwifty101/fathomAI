@@ -1,0 +1,70 @@
+[
+  {
+    "prompt": "Next steps on projects?",
+    "scope": "my_calls",
+    "text": "Priya will post the Q4 decision log with owners and release gates on October 1. Mei's mobile release checklist and Lucas's ETA evaluation plan are due October 2. Jonas will deliver the narrow guided setup flow with error states and human review by October 5. The mobile team still needs to observe both completion controls with real drivers before choosing one.",
+    "citations": [
+      { "meeting_slug": "q4-planning", "segment_idx": 197, "label": "Priya's Q4 decision log" },
+      { "meeting_slug": "q4-planning", "segment_idx": 176, "label": "Mobile release checklist" },
+      { "meeting_slug": "q4-planning", "segment_idx": 94, "label": "ETA evaluation plan" },
+      { "meeting_slug": "q4-planning", "segment_idx": 120, "label": "Guided setup flow" },
+      { "meeting_slug": "mobile-design-review", "segment_idx": 72, "label": "Driver test of completion controls" }
+    ]
+  },
+  {
+    "prompt": "Summarize my recent meetings",
+    "scope": "my_calls",
+    "text": "Priya's Q4 planning meeting selected mobile v2, an ETA model, and a capped guided setup pilot, with mobile reliability taking priority. In her one-on-one, Mei reported eleven after-hours pages in two weeks for three platform engineers and argued for protected recovery time. The mobile design review kept offline completions visibly queued until the server accepts them and left swipe versus confirmation open for driver testing. The weekly sync found eleven import or report-speed tickets from six carriers and gathered evidence before the Q4 decision.",
+    "citations": [
+      { "meeting_slug": "q4-planning", "segment_idx": 114, "label": "Q4 pilot scope decision" },
+      { "meeting_slug": "priya-mei-1on1", "segment_idx": 7, "label": "Platform on-call workload" },
+      { "meeting_slug": "mobile-design-review", "segment_idx": 39, "label": "Queued completion state" },
+      { "meeting_slug": "weekly-product-sync", "segment_idx": 3, "label": "Support ticket pattern" }
+    ]
+  },
+  {
+    "prompt": "Surprise me with an insight",
+    "scope": "my_calls",
+    "text": "Amara's weekly sync counted eleven import or report-speed tickets from six carriers and described import errors that hide which rows failed. In Priya's mobile review, Mei found that a locally queued completion could look final while dispatch still saw the stop as open. Both problems leave someone guessing whether work actually finished. The Q4 guided setup pilot's review handoff and mobile v2's visible queue address that shared uncertainty; that connection is an inference from the meetings.",
+    "citations": [
+      { "meeting_slug": "weekly-product-sync", "segment_idx": 11, "label": "Hidden import failures" },
+      { "meeting_slug": "mobile-design-review", "segment_idx": 39, "label": "Misleading completion state" },
+      { "meeting_slug": "q4-planning", "segment_idx": 114, "label": "Gated setup pilot" }
+    ]
+  },
+  {
+    "prompt": "Next steps across the team?",
+    "scope": "team_calls",
+    "text": "Tom will send Acme's scrubbed 50-row sample by October 2 so Priya can review field mapping before a live pilot. Mei will publish a database deploy checklist after the optimizer outage by September 25. Amara will return a finding on Harbor's possible duplicate report count by September 28. For the Q4 bets, Lucas's ETA evaluation plan and Mei's mobile release checklist are due October 2.",
+    "citations": [
+      { "meeting_slug": "acme-discovery", "segment_idx": 76, "label": "Acme's sample export" },
+      { "meeting_slug": "optimizer-outage-postmortem", "segment_idx": 80, "label": "Database deploy checklist" },
+      { "meeting_slug": "harbor-interview", "segment_idx": 42, "label": "Harbor report investigation" },
+      { "meeting_slug": "q4-planning", "segment_idx": 94, "label": "ETA evaluation plan" },
+      { "meeting_slug": "q4-planning", "segment_idx": 176, "label": "Mobile release checklist" }
+    ]
+  },
+  {
+    "prompt": "Summarize recent team meetings",
+    "scope": "team_calls",
+    "text": "Q4 planning chose mobile v2, an ETA model, and a limited guided setup pilot after weighing 4.1 percent churn, 82 percent ETA accuracy, and 19-day onboarding. Acme Freight has roughly $60,000 in annual budget but still needs mapping and security approval before its proposed two-week pilot. The optimizer postmortem found a delayed alert and empty route displays during a 52-minute outage affecting requests from 31 accounts. Engineering is working through an Android 14 crash, while Harbor described bulk import errors that conceal the failing rows.",
+    "citations": [
+      { "meeting_slug": "q4-planning", "segment_idx": 114, "label": "Three Q4 bets" },
+      { "meeting_slug": "acme-discovery", "segment_idx": 99, "label": "Acme budget and decision window" },
+      { "meeting_slug": "optimizer-outage-postmortem", "segment_idx": 52, "label": "Outage customer impact" },
+      { "meeting_slug": "eng-standup", "segment_idx": 31, "label": "Android 14 hotfix" },
+      { "meeting_slug": "harbor-interview", "segment_idx": 22, "label": "Bulk import row errors" }
+    ]
+  },
+  {
+    "prompt": "Surprise me with a team insight",
+    "scope": "team_calls",
+    "text": "Import reliability appears in both customer retention and new sales. Harbor could not identify 17 rejected rows in a 420-row file, while Acme's Tom worried that inconsistent customer codes would make migration painful. The weekly sync counted eleven import or report-speed tickets across six carriers, so these are wider signals than one customer's complaint. The Q4 guided setup pilot's error states and review handoff may test a shared solution before a broad self-serve launch; that is an inference from the meetings.",
+    "citations": [
+      { "meeting_slug": "harbor-interview", "segment_idx": 22, "label": "Harbor import failures" },
+      { "meeting_slug": "acme-discovery", "segment_idx": 81, "label": "Acme active-record migration" },
+      { "meeting_slug": "weekly-product-sync", "segment_idx": 3, "label": "Import and report ticket count" },
+      { "meeting_slug": "q4-planning", "segment_idx": 114, "label": "Guided setup pilot" }
+    ]
+  }
+]

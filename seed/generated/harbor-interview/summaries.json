@@ -1,0 +1,34 @@
+{
+  "general": {
+    "sections": [
+      {"heading":"Overview","bullets":["Amara Nwosu interviewed Rafael Mendes about Harbor Logistics' daily use of Kestrel Dispatch across 68 trucks and roughly 110 stops."]},
+      {"heading":"Key points","bullets":["Rafael said the live map replaced many morning location calls, while auto-assign produces a usable first plan for about four in five assignments.","A 420-row Monday order file rejected 17 rows without showing the offending cells beside their customer references, leaving Nadia to repair and upload the file repeatedly.","Rafael said a seven-day operations report took almost nine minutes, and a reassigned stop appeared to count twice, so Nadia's faster spreadsheet currently earns more trust.","Rafael said a useful delay alert should warn when a promised window is likely to be missed with at least twenty minutes to respond, rather than flag every ten-minute dock wait.","Harbor would consider roughly $300 a month for reliable proactive alerts, while $1,000 would require evidence from several weeks; a read-only status API could save roughly forty minutes of manual copying each day."]},
+      {"heading":"Decisions","bullets":["Rafael ranked import preview and counts first for immediate workflow relief, then trustworthy reports, delay alerts, and API access.","Amara will investigate the possible duplicate report count and ask whether a two-week alert pilot across Harbor's 30 busiest routes is feasible, without promising a launch or price."]},
+      {"heading":"Open questions","bullets":["Lucas has not yet determined whether reassigned stops are counted twice or whether Harbor misunderstood a reporting rule.","The product team has not established whether an early alert pilot is feasible or whether its ETA signal can give dispatchers a reliable twenty-minute response window."]}
+    ]
+  },
+  "sales": {
+    "sections": [
+      {"heading":"Pain points","bullets":["Harbor's 420-row Monday import rejected 17 rows without identifying the offending cells beside customer references, forcing Nadia to search and re-upload the file.","Rafael said the seven-day report took almost nine minutes and may count a reassigned stop twice, weakening trust in the number used at operations review.","Nadia missed a developing delay after a truck waited 38 minutes at a dock, and the customer called before Harbor could reassign the next delivery.","Harbor's customer-service team copies Kestrel ETAs into its portal twice a day, taking roughly forty minutes daily because it lacks read-only status access."]},
+      {"heading":"Current solution","bullets":["Rafael uses Kestrel Dispatch's live map throughout the day and said auto-assign gives dispatchers a usable first pass for about four in five assignments.","Nadia keeps a separate spreadsheet of missed windows because she can filter it immediately and currently trusts it more than the Kestrel report."]},
+      {"heading":"Budget and timeline","bullets":["Rafael said approximately $300 per month for reliable proactive delay alerts would be easy to discuss for Harbor's 68 trucks, while $1,000 would need evidence over several weeks.","Rafael proposed a two-week pilot across Harbor's busiest 30 routes, and Amara said she would check feasibility and come back next week.","Rafael agreed to send a redacted import and reporting example by Friday, and Amara will send a recap tomorrow."]},
+      {"heading":"Objections","bullets":["Rafael said a clean export of rejected rows would save some time but would not solve the uncertainty about which of the 420 stops survived an import.","Rafael warned that a fixed ten-minute delay threshold would produce noise at loading docks and wanted alerts tied to the promised arrival window.","Rafael said a competitor advertises an API, but Harbor has not tested that documentation and is not running a formal replacement process."]},
+      {"heading":"Next steps","bullets":["Rafael will send a redacted Monday file with fake customer references, filter settings, and a reassignment sequence by Friday.","Amara will bring the possible duplicate count to the analytics team today and send Rafael a finding next week.","Amara will check whether a two-week delay-alert pilot on 30 routes is feasible, prepare three sample alert messages by next week, and share the read-only status API use case with Priya this week."]}
+    ]
+  },
+  "standup": {
+    "sections": [
+      {"heading":"Today","bullets":["Amara Nwosu will take Harbor's duplicate-count example to the analytics team today and share the API use case with Priya Raman this week.","Rafael Mendes will prepare a redacted import and reporting example with fake customer references and send it by Friday."]},
+      {"heading":"Blockers","bullets":["Amara Nwosu cannot give Rafael Mendes a report-fix date until the analytics team determines whether reassigned stops are double-counted.","Amara Nwosu cannot offer an alert-pilot date until the product team checks whether a two-week trial across 30 routes is feasible."]}
+    ]
+  },
+  "project_review": {
+    "sections": [
+      {"heading":"Goals","bullets":["Rafael Mendes wants Nadia to see accepted and rejected counts with customer references during Monday imports, so she can verify all 420 stops before routes leave.","Rafael wants proactive alerts to give a dispatcher at least twenty minutes to respond before a promised arrival window is missed."]},
+      {"heading":"Progress","bullets":["Rafael said Kestrel's live map replaces many morning phone calls and auto-assign supplies a usable initial assignment for about four in five stops.","Rafael identified a concrete 420-row import with 17 rejected rows and a seven-day operations report that took almost nine minutes."]},
+      {"heading":"Risks","bullets":["A possible duplicate count for reassigned stops has reduced Rafael's trust in Kestrel reports, even though the rule has not yet been verified.","A fixed ten-minute dock-delay alert would create noise, and an alert that arrives after a customer calls would not help Harbor act."]},
+      {"heading":"Decisions","bullets":["Rafael prioritized import preview above reporting fixes for immediate relief and said API access is an efficiency project rather than an urgent migration requirement.","Amara agreed to investigate reporting and alert-pilot feasibility without promising a fix or release date."]},
+      {"heading":"Next steps","bullets":["Rafael will send a redacted import and reassignment example by Friday, while Amara will ask analytics to investigate the report count and return a finding next week.","Amara will check feasibility for a two-week alert pilot on 30 routes, share Harbor's read-only status API use case with Priya this week, and prepare three alert messages for Nadia next week."]}
+    ]
+  }
+}

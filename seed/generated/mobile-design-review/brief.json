@@ -1,0 +1,46 @@
+{
+  "agenda": [
+    "Review the first-run journey for drivers joining Kestrel Dispatch on a carrier-managed phone.",
+    "Walk the new stop list and resolve what completion means when coverage disappears.",
+    "Check contrast, screen reader behavior, and the swipe-versus-button disagreement.",
+    "Agree notification wording, prototype revisions, and evidence needed before a release decision."
+  ],
+  "chapters": [
+    {
+      "title": "First Run and Driver Onboarding",
+      "beats": [
+        "Priya frames the review around a driver starting a 24-stop shift, not a public launch decision.",
+        "Jonas shows a four-step first-run path: invite, carrier confirmation, permissions in context, and a sample stop; Mei challenges the permission order and recovery path.",
+        "Hannah flags that 'ready to drive' overpromises if location is denied, and the team chooses plain language and a saveable retry state."
+      ],
+      "minutes": 6
+    },
+    {
+      "title": "Stop List and Offline Completion",
+      "beats": [
+        "Jonas presents a stop list showing time window, address, proof requirement, and status without opening each card.",
+        "Mei distinguishes queued, accepted, and rejected actions and challenges any design that silently treats a queued completion as final.",
+        "Priya and Mei agree to keep offline completion visible as pending and preserve the driver's note during a dispatch reassignment conflict."
+      ],
+      "minutes": 7
+    },
+    {
+      "title": "Accessible Completion Control",
+      "beats": [
+        "Mei identifies contrast failures in the amber queued badge and a screen reader label that reads only 'button'.",
+        "Jonas argues swipe-to-complete reduces accidental taps on mounted phones; Mei argues an explicit confirm button works with gloves and assistive technology.",
+        "Priya leaves the control choice open for observed driver testing and requires a high-contrast, screen-reader-usable version of both alternatives."
+      ],
+      "minutes": 6
+    },
+    {
+      "title": "Notification Copy, Owners, and Close",
+      "beats": [
+        "Hannah proposes separate push messages for a route change, a queued action, and an accepted completion, without implying success before server confirmation.",
+        "Mei limits notification detail on the lock screen and requires idempotent server receipts; Jonas adds an in-app status history for uncertain connections.",
+        "The team assigns Jonas, Mei, Hannah, and Priya concrete follow-ups while keeping release scope and the swipe decision open for later planning."
+      ],
+      "minutes": 6
+    }
+  ]
+}

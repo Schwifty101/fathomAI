@@ -1,0 +1,141 @@
+{
+  "general": {
+    "sections": [
+      {
+        "heading": "Overview",
+        "bullets": [
+          "Priya Raman led a 15-minute weekly product sync on customer requests, sales pipeline feedback, support trends, and evidence needed for the next planning cycle."
+        ]
+      },
+      {
+        "heading": "Key points",
+        "bullets": [
+          "Amara Nwosu found 27 product-related support requests in two weeks, including 11 import or report-speed tickets from six carriers; seven concerned bulk import and four concerned reports.",
+          "Amara said Harbor Logistics values the live map and auto-assign, but its bulk import gives unhelpful errors when some rows fail, and Rafael estimated around 40 minutes searching for bad cells on a difficult Monday.",
+          "Daniel Ortiz said Acme Freight operates 140 trucks, has roughly $60,000 in approved annual budget, needs a security review, and expects to decide by the end of the next month.",
+          "Lucas Ferreira said aggregate ETA accuracy is about 82 percent, while some lanes and pickup windows perform worse and require analysis before any improvement is promised."
+        ]
+      },
+      {
+        "heading": "Decisions",
+        "bullets": [
+          "Priya, Daniel, Amara, and Lucas agreed to gather customer files, prospect examples, support counts, and lane-level ETA data before deciding product scope.",
+          "Priya said driver mobile app v2, ETA accuracy, and self-serve onboarding are candidates for the upcoming Q4 planning discussion, not approved bets.",
+          "Priya will prepare a one-page evidence sheet by Friday that separates existing customer impact, prospective revenue, sample sizes, timing, and unresolved questions."
+        ]
+      },
+      {
+        "heading": "Open questions",
+        "bullets": [
+          "Lucas still needs to determine whether the slow reports share one expensive query and whether the three redacted import files reveal one common validation failure.",
+          "The group has not established whether prospects need a reusable migration feature, an assisted setup, or a narrower import reliability fix.",
+          "Amara will research whether requests for automated exports represent an API need before any API work is prioritized."
+        ]
+      }
+    ]
+  },
+  "sales": {
+    "sections": [
+      {
+        "heading": "Pain points",
+        "bullets": [
+          "Daniel said Acme Freight's spreadsheet-and-phone dispatch process leaves customers without live arrival times and makes idle drivers hard to identify.",
+          "Amara said Harbor Logistics loses an estimated 40 minutes on a difficult Monday when bulk import fails without identifying the problematic rows."
+        ]
+      },
+      {
+        "heading": "Current solution",
+        "bullets": [
+          "Daniel said Acme Freight currently coordinates much of its 140-truck operation with spreadsheets and phone calls.",
+          "Amara said Harbor Logistics already uses Kestrel Dispatch's live map and auto-assign and uploads route sheets with several hundred stops."
+        ]
+      },
+      {
+        "heading": "Budget and timeline",
+        "bullets": [
+          "Daniel said Acme Freight has approximately $60,000 in approved annual budget, requires a security review, and expects to choose a vendor by the end of next month."
+        ]
+      },
+      {
+        "heading": "Objections",
+        "bullets": [
+          "Daniel said Acme's Tom worries that cleaning years of records for migration will take too much of his dispatch team's time.",
+          "Lucas warned that the team does not yet know Acme's data schemas and cannot promise migration of historical records or an ETA improvement."
+        ]
+      },
+      {
+        "heading": "Next steps",
+        "bullets": [
+          "Daniel will bring three more prospect migration examples by Friday and arrange an Acme discussion about file shapes and security this week.",
+          "Amara will compare prospect needs with existing customer import failures, while Priya will keep unapproved product features out of the sales promise."
+        ]
+      }
+    ]
+  },
+  "standup": {
+    "sections": [
+      {
+        "heading": "Yesterday",
+        "bullets": [
+          "Daniel Ortiz held the Acme Freight discovery call yesterday and heard that migration effort, live ETAs, and security review matter to its buying decision."
+        ]
+      },
+      {
+        "heading": "Today",
+        "bullets": [
+          "Amara Nwosu will attach three redacted import examples to the issue today and identify what each customer expected versus what Dispatch accepted.",
+          "Priya Raman will collect the mobile app, import, and ETA evidence for a one-page planning input due Friday.",
+          "Lucas Ferreira will examine the import files tomorrow and prepare slow report and lane-level ETA samples by Friday."
+        ]
+      },
+      {
+        "heading": "Blockers",
+        "bullets": [
+          "Lucas Ferreira cannot size a row-level import error fix until he has examined the three redacted customer files.",
+          "Daniel Ortiz cannot responsibly promise Acme a general migration feature because its data schemas and reusable demand are still unknown.",
+          "Amara Nwosu has five ETA accuracy complaints to deduplicate before treating them as five distinct customer reports."
+        ]
+      }
+    ]
+  },
+  "project_review": {
+    "sections": [
+      {
+        "heading": "Goals",
+        "bullets": [
+          "Priya Raman wanted the group to identify the strongest customer problems and gather evidence for the next planning cycle without settling the Q4 roadmap."
+        ]
+      },
+      {
+        "heading": "Progress",
+        "bullets": [
+          "Amara Nwosu separated 11 import and report-speed tickets from six carriers into seven bulk-import tickets and four slow-report tickets.",
+          "Daniel Ortiz brought feedback from Acme Freight's 140-truck operation and its roughly $60,000 annual budget."
+        ]
+      },
+      {
+        "heading": "Risks",
+        "bullets": [
+          "Priya said one promising sales deal should not by itself determine a reusable migration feature, while Daniel warned that Acme has a real decision window.",
+          "Lucas said the 82 percent ETA accuracy figure masks weak lanes and may make a product proposal look more certain than the data supports.",
+          "Amara warned that self-serve onboarding could shift import failures onto new customers if row-level errors remain unclear."
+        ]
+      },
+      {
+        "heading": "Decisions",
+        "bullets": [
+          "The group agreed to investigate a narrow import fix and an assisted Acme setup before committing to broader product work.",
+          "Priya said mobile v2, ETA accuracy, and self-serve onboarding remain options for the later Q4 planning meeting."
+        ]
+      },
+      {
+        "heading": "Next steps",
+        "bullets": [
+          "Amara will provide redacted import examples today and deduplicated support counts and Harbor notes tomorrow.",
+          "Lucas will review the import files tomorrow and share slow-report jobs and four weeks of lane-level ETA analysis by Friday.",
+          "Daniel will collect three prospect migration examples, while Priya will circulate the planning evidence sheet by Friday."
+        ]
+      }
+    ]
+  }
+}

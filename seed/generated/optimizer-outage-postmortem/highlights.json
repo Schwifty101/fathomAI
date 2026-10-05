@@ -1,0 +1,44 @@
+[
+  {
+    "segment_idx": 11,
+    "type": "insight",
+    "title": "First alert trailed failed routes by 18 minutes",
+    "start_ms": 178036,
+    "end_ms": 196050
+  },
+  {
+    "segment_idx": 16,
+    "type": "positive",
+    "title": "Rollback restored route generation",
+    "start_ms": 260181,
+    "end_ms": 274442
+  },
+  {
+    "segment_idx": 36,
+    "type": "objection",
+    "title": "Lock waits should not be primary page",
+    "start_ms": 571450,
+    "end_ms": 585044
+  },
+  {
+    "segment_idx": 38,
+    "type": "tech_question",
+    "title": "Can timeout failures differ from empty routes?",
+    "start_ms": 602138,
+    "end_ms": 619042
+  },
+  {
+    "segment_idx": 52,
+    "type": "feedback",
+    "title": "Thirty-one accounts had affected requests",
+    "start_ms": 810599,
+    "end_ms": 841770
+  },
+  {
+    "segment_idx": 65,
+    "type": "action_item",
+    "title": "Post status within ten minutes of impact",
+    "start_ms": 1032143,
+    "end_ms": 1046390
+  }
+]
