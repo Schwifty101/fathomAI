@@ -1,0 +1,60 @@
+{
+  "agenda": [
+    "Quick round-the-room format reminder and sprint status from Mei Tanaka.",
+    "ETA model retraining pipeline update from Lucas Ferreira.",
+    "Driver-app crash on Android 14 and the hotfix decision.",
+    "Design handoff waiting on engineering review from Jonas Weber.",
+    "Customer escalation from support, presented by Amara Nwosu.",
+    "Wrap-up with owners and deadlines for every blocker."
+  ],
+  "chapters": [
+    {
+      "title": "ETA Model Retraining Pipeline",
+      "beats": [
+        "Lucas reports that the nightly retraining job failed twice this week because the GPU quota was capped at 4 nodes, and that he has requested 8 nodes from infrastructure.",
+        "Lucas shares that the latest candidate model cut mean absolute error on the holdout set from 11.8 minutes to 9.6 minutes, but the improvement is weakest on weekend freight lanes.",
+        "Mei pushes to run a full backtest on the last 6 weekends before promoting the model, while Lucas argues that a 3-day shadow deployment would give better evidence and finish sooner.",
+        "They agree that Lucas will start the shadow deployment today and that Mei will chase the quota approval before noon."
+      ],
+      "minutes": 4
+    },
+    {
+      "title": "Android 14 Driver-App Crash",
+      "beats": [
+        "Mei explains that crash-free sessions on Android 14 dropped from 99.2 percent to 97.1 percent after release 5.18, and that the stack trace points to a foreground location service permission change.",
+        "Amara adds that 3 carriers have already mentioned the crash in support tickets, which raises the urgency.",
+        "Mei wants to ship a hotfix build today, while Lucas worries about skipping the regression suite and suggests waiting for Friday's scheduled release.",
+        "The group settles on a hotfix limited to the location service fix, with a staged rollout to 10 percent of Android 14 devices first."
+      ],
+      "minutes": 3
+    },
+    {
+      "title": "Design Handoff Waiting on Review",
+      "beats": [
+        "Jonas says the dispatch board redesign handoff has been waiting on engineering review for 3 days, and that he needs sign-off by Thursday so the work fits in this sprint.",
+        "Mei admits that review slipped because of the Android incident and offers a 45-minute walkthrough tomorrow at 10 a.m.",
+        "Jonas and Mei disagree about the dense table layout, because Jonas prefers cards for readability while Mei is concerned that cards would show only 8 loads per screen instead of 20.",
+        "Jonas agrees to prepare a side-by-side comparison of both layouts for tomorrow's walkthrough."
+      ],
+      "minutes": 3
+    },
+    {
+      "title": "Customer Escalation from Support",
+      "beats": [
+        "Amara reports that Harlan Freight, a 42-truck carrier, says ETAs were off by more than 40 minutes on 18 percent of stops last week, and that their operations lead has warned that the contract renewal on October 31 is at risk.",
+        "Amara asks for a clear date she can give the customer, and Lucas cautions that the retrained model will not be in production until Thursday at the earliest.",
+        "Mei and Amara disagree about whether to promise Thursday, with Mei preferring to promise a status update on Thursday and Amara arguing that the customer needs a firm commitment.",
+        "They agree that Lucas will pull Harlan's worst 50 stops by end of day, and that Amara will schedule a call with the customer for Wednesday afternoon."
+      ],
+      "minutes": 4
+    },
+    {
+      "title": "Wrap-Up and Action Items",
+      "beats": [
+        "Mei recaps the owners: Lucas for the shadow deployment, Mei for the GPU quota and the hotfix, Jonas for the layout comparison, and Amara for the Harlan call.",
+        "Mei reminds everyone to post any new blockers in the team channel before 3 p.m. so they can be handled the same day."
+      ],
+      "minutes": 1
+    }
+  ]
+}

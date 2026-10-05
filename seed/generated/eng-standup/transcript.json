@@ -1,0 +1,727 @@
+{
+  "lines": [
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Good morning, everyone, and welcome to the engineering standup. We have four topics today, so let's keep each update tight, and Lucas, would you like to start with the retraining pipeline?",
+      "idx": 0,
+      "start_ms": 1000,
+      "end_ms": 13471
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Good morning, Mei, and hi, everybody. Yesterday I spent most of my time figuring out why the nightly retraining job failed twice this week, and the cause is the GPU quota.",
+      "idx": 1,
+      "start_ms": 13982,
+      "end_ms": 23944
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Wait, the quota? I thought we had enough headroom for the nightly run after we resized the cluster last month.",
+      "idx": 2,
+      "start_ms": 24398,
+      "end_ms": 31520
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "We did, but the quota is capped at four nodes, and the job needs more than that when the feature backfill runs alongside training. So it times out and gets killed.",
+      "idx": 3,
+      "start_ms": 31847,
+      "end_ms": 43057
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Sorry to jump in, Lucas, but does that failure affect the ETAs customers see today? Support has been fielding a few questions about accuracy.",
+      "idx": 4,
+      "start_ms": 43679,
+      "end_ms": 52331
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "No, the production model is unchanged, so customers are still seeing the last good version. We just lost two nights of fresh retraining.",
+      "idx": 5,
+      "start_ms": 53034,
+      "end_ms": 62288
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "I've already requested eight nodes from infrastructure, and the request is sitting in their queue. Until it's approved, I can only run the job reliably every other night.",
+      "idx": 6,
+      "start_ms": 62615,
+      "end_ms": 71095
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Okay, send me the ticket link after this, because I want to chase that personally. What else did you get done yesterday?",
+      "idx": 7,
+      "start_ms": 71793,
+      "end_ms": 80486
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "The good news is that the latest candidate model cut mean absolute error on the holdout set from 11.8 minutes to 9.6 minutes. That's a pretty meaningful drop.",
+      "idx": 8,
+      "start_ms": 80727,
+      "end_ms": 91635
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "That's huge. On the design side, a two-minute improvement in ETA accuracy means we could finally tighten the arrival windows we show in the driver app.",
+      "idx": 9,
+      "start_ms": 92109,
+      "end_ms": 100044
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Let's not get ahead of ourselves, Jonas, because the improvement is weakest on weekend freight lanes. The gain there is much smaller than the overall average.",
+      "idx": 10,
+      "start_ms": 100712,
+      "end_ms": 108876
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "How much smaller are we talking about? And do we have enough weekend data in the holdout set to trust that number?",
+      "idx": 11,
+      "start_ms": 109474,
+      "end_ms": 117156
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Weekend error only dropped by about a minute, and the holdout has roughly eight weekends, so it's thin. Weekend lanes also have fewer loads and more irregular schedules.",
+      "idx": 12,
+      "start_ms": 117593,
+      "end_ms": 128758
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "That makes me nervous about promoting it. I'd like us to run a full backtest on the last six weekends before we promote anything.",
+      "idx": 13,
+      "start_ms": 128893,
+      "end_ms": 137409
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "I understand the instinct, but I'd argue for a three-day shadow deployment instead. It scores real live traffic, which gives us better evidence than replaying history.",
+      "idx": 14,
+      "start_ms": 137847,
+      "end_ms": 146899
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "A backtest is controlled and repeatable, though. A shadow run only covers whatever traffic shows up, and I want to be sure it actually includes weekend lanes.",
+      "idx": 15,
+      "start_ms": 147630,
+      "end_ms": 157991
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "If we start today, the three days cover the weekend, so we capture live weekend lanes. The backtest needs a feature rebuild for six weekends, which takes over a week on four nodes.",
+      "idx": 16,
+      "start_ms": 158547,
+      "end_ms": 170766
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Okay, that's a fair point about the timeline. But if the shadow run shows weekend error still lagging, are we prepared to hold the promotion?",
+      "idx": 17,
+      "start_ms": 171172,
+      "end_ms": 179315
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Absolutely, and I'd set the promotion criteria before we start. Overall error has to hold at 9.6 minutes or better, and weekend lanes can't get worse than the current model.",
+      "idx": 18,
+      "start_ms": 179651,
+      "end_ms": 191480
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "From the customer side, I'd rather wait a few extra days than see weekend ETAs get worse. Our regional carriers are the most sensitive to those lanes.",
+      "idx": 19,
+      "start_ms": 191260,
+      "end_ms": 201362
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "All right, you've convinced me. Let's do the shadow deployment, and Lucas, please write those promotion criteria in the ticket so we're all aligned.",
+      "idx": 20,
+      "start_ms": 201707,
+      "end_ms": 211079
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Will do. I'll start the shadow deployment today, and I'll post the criteria in the ticket within the hour.",
+      "idx": 21,
+      "start_ms": 211598,
+      "end_ms": 217729
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "And I'll chase the quota approval with infrastructure before noon. If it slips, I'll escalate to their director so you aren't blocked again.",
+      "idx": 22,
+      "start_ms": 217509,
+      "end_ms": 226492
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Thanks, that would help a lot. With eight nodes the nightly job should finish comfortably, and I can stop babysitting it every morning.",
+      "idx": 23,
+      "start_ms": 226860,
+      "end_ms": 233776
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Great, that settles the retraining pipeline. Let's move on to the driver app next.",
+      "idx": 24,
+      "start_ms": 233915,
+      "end_ms": 238623
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Next is the driver app. Crash-free sessions on Android 14 dropped from 99.2 percent to 97.1 percent after release 5.18 went out, and that's a much bigger drop than I'm comfortable with.",
+      "idx": 25,
+      "start_ms": 238862,
+      "end_ms": 251353
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Do we know what's causing it yet? Or is it spread across several different device models?",
+      "idx": 26,
+      "start_ms": 251723,
+      "end_ms": 257210
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Yesterday I pulled the stack traces, and they all point to a foreground location service permission change in Android 14. Our service starts without declaring the right foreground service type.",
+      "idx": 27,
+      "start_ms": 257645,
+      "end_ms": 267384
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "Does that mean drivers see the app close in the middle of a route? That sounds like a terrible experience for them.",
+      "idx": 28,
+      "start_ms": 267725,
+      "end_ms": 275563
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Yes, it closes when the app tries to resume location tracking in the background. Drivers have to reopen it, and sometimes they lose their active stop.",
+      "idx": 29,
+      "start_ms": 276241,
+      "end_ms": 284636
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "That matches what I'm hearing. Three carriers have already mentioned the crash in support tickets, and one dispatcher told me his drivers are losing navigation mid-route.",
+      "idx": 30,
+      "start_ms": 285152,
+      "end_ms": 294216
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Three tickets this quickly raises the urgency for me. I want to ship a hotfix build today rather than wait.",
+      "idx": 31,
+      "start_ms": 294420,
+      "end_ms": 301984
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "I understand the urgency, but I'm worried about skipping the regression suite. Friday's scheduled release is only three days away, and it would be fully tested.",
+      "idx": 32,
+      "start_ms": 302539,
+      "end_ms": 312235
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Three days is a long time for drivers who are on the road right now. Every day we wait, more of them hit this crash.",
+      "idx": 33,
+      "start_ms": 312663,
+      "end_ms": 320994
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Fair point, but a rushed fix could introduce a new crash that's worse than this one. Location services touch routing, check-ins, and proof of delivery.",
+      "idx": 34,
+      "start_ms": 321341,
+      "end_ms": 329984
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Can we at least limit the risk? Carriers would forgive a quick fix, but they won't forgive a second problem on top of the first.",
+      "idx": 35,
+      "start_ms": 330277,
+      "end_ms": 339634
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "What if the hotfix contains only the location service change, with nothing else from the Friday branch? That keeps the diff small enough to review carefully.",
+      "idx": 36,
+      "start_ms": 340406,
+      "end_ms": 349105
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "A small diff helps a lot. I'd also want a staged rollout instead of releasing to everyone at once.",
+      "idx": 37,
+      "start_ms": 348885,
+      "end_ms": 355500
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Agreed. We release to 10 percent of Android 14 devices first and watch crash-free sessions for a day before expanding.",
+      "idx": 38,
+      "start_ms": 356036,
+      "end_ms": 362261
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "That works for me, as long as I can run the location tests and the critical path smoke tests before we submit. They only take about forty minutes.",
+      "idx": 39,
+      "start_ms": 362975,
+      "end_ms": 374291
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Once the rollout starts, can I tell those three carriers a fix is coming? I'd like to give them a realistic date.",
+      "idx": 40,
+      "start_ms": 374071,
+      "end_ms": 380757
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Yes, tell them a fix is rolling out to a small group today, with wider availability tomorrow if the numbers hold.",
+      "idx": 41,
+      "start_ms": 380537,
+      "end_ms": 389003
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Let's set the threshold now. If crash-free sessions in the 10 percent group stay above 99 percent, we expand, and if not, we halt.",
+      "idx": 42,
+      "start_ms": 389752,
+      "end_ms": 398330
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Good. I'll cut the hotfix branch this morning and ask the release engineer to submit it by mid-afternoon. Nothing is blocking me on this.",
+      "idx": 43,
+      "start_ms": 398688,
+      "end_ms": 407345
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I'll update the three tickets now and send the carriers a note as soon as the build is live.",
+      "idx": 44,
+      "start_ms": 407958,
+      "end_ms": 414918
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Great, that settles the driver app. Jonas, let's move on to your design handoff next.",
+      "idx": 45,
+      "start_ms": 415263,
+      "end_ms": 419790
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "Thanks, Mei. Yesterday I finished polishing the dispatch board redesign handoff, including specs, states, and redlines, but it has now been waiting on engineering review for three days.",
+      "idx": 46,
+      "start_ms": 420412,
+      "end_ms": 429973
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Three days is too long, and I know that's on me. Is there a hard deadline on your side, or has it just been sitting?",
+      "idx": 47,
+      "start_ms": 430200,
+      "end_ms": 440323
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "There is a deadline. I need sign-off by Thursday so engineers can pick it up and the work fits in this sprint, otherwise it slides two weeks.",
+      "idx": 48,
+      "start_ms": 440577,
+      "end_ms": 450667
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "The review slipped because the Android incident pulled me and most of the senior engineers away from everything else. I should have told you sooner.",
+      "idx": 49,
+      "start_ms": 451037,
+      "end_ms": 459652
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Can I offer a 45-minute walkthrough tomorrow at 10 a.m.? You present, I'll bring the engineers who would build it, and we can aim for sign-off in one sitting.",
+      "idx": 50,
+      "start_ms": 460192,
+      "end_ms": 470264
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "That works for me, and I appreciate it. Before then, is there anything in the handoff that you already know will be a problem?",
+      "idx": 51,
+      "start_ms": 470887,
+      "end_ms": 479467
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Honestly, yes, the layout. I skimmed it, and the move from the dense table to cards worries me.",
+      "idx": 52,
+      "start_ms": 479852,
+      "end_ms": 486645
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "I expected that. Cards are much easier to read at a glance, and dispatchers told us in interviews that the table feels overwhelming during busy mornings.",
+      "idx": 53,
+      "start_ms": 487041,
+      "end_ms": 495842
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "I hear that, but cards would show only 8 loads per screen instead of 20. Dispatchers with big fleets will scroll constantly, and that costs them time.",
+      "idx": 54,
+      "start_ms": 496463,
+      "end_ms": 506430
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "Scrolling is a fair cost, but misreading a load status costs more. With cards, status and exceptions stand out, while the table buries them in a wall of text.",
+      "idx": 55,
+      "start_ms": 506863,
+      "end_ms": 515669
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Can I jump in from the data side? I can pull the median and the 90th percentile for active loads per dispatcher, so we know how many rows people actually use.",
+      "idx": 56,
+      "start_ms": 516006,
+      "end_ms": 525977
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "That would help me too. Customers have complained both ways: some say the board is cluttered, but our largest carriers say they need to see everything at once.",
+      "idx": 57,
+      "start_ms": 526320,
+      "end_ms": 536798
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Right, that's my worry. If the largest carriers lose their overview, we trade a readability complaint for a productivity complaint.",
+      "idx": 58,
+      "start_ms": 537025,
+      "end_ms": 544973
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "Okay, then rather than debating this in the abstract, let me prepare a side-by-side comparison of both layouts for tomorrow's walkthrough, using realistic load data.",
+      "idx": 59,
+      "start_ms": 545530,
+      "end_ms": 553524
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "I'd love that. Please put the 20-row table next to the card view, so we can see exactly what we gain and what we lose.",
+      "idx": 60,
+      "start_ms": 554233,
+      "end_ms": 563645
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "Will do. I'll also mark which card fields could be compressed, in case there's a middle ground that fits more cards on screen.",
+      "idx": 61,
+      "start_ms": 563878,
+      "end_ms": 572227
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "I'll send you the load count numbers by end of day, so the comparison is built on real distributions instead of guesses.",
+      "idx": 62,
+      "start_ms": 572544,
+      "end_ms": 580553
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "Perfect, thank you. Today I'll build the comparison, and the only thing blocking me is the review itself.",
+      "idx": 63,
+      "start_ms": 580876,
+      "end_ms": 586763
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Then we're set for 10 a.m. tomorrow. Amara, let's move to your customer escalation next.",
+      "idx": 64,
+      "start_ms": 586947,
+      "end_ms": 591945
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Thanks, Mei. Yesterday I spent most of my time on a escalation from Harlan Freight, a 42-truck carrier, and it's the most serious one I've handled this quarter.",
+      "idx": 65,
+      "start_ms": 591725,
+      "end_ms": 602785
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Okay, walk us through it. What exactly are they telling you, and how did it reach you?",
+      "idx": 66,
+      "start_ms": 603142,
+      "end_ms": 609474
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Their operations lead called our support line on Friday. He says ETAs were off by more than 40 minutes on 18 percent of their stops last week.",
+      "idx": 67,
+      "start_ms": 609806,
+      "end_ms": 620490
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Eighteen percent is much higher than what we see in our overall accuracy numbers. Did they say which routes or regions were the worst?",
+      "idx": 68,
+      "start_ms": 620879,
+      "end_ms": 629124
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Not specifically, and that's part of the problem. He also warned me that their contract renewal on October 31 is at risk if this doesn't improve.",
+      "idx": 69,
+      "start_ms": 629437,
+      "end_ms": 637710
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "That's less than four weeks away, so I understand why you're worried. What do you need from this team today?",
+      "idx": 70,
+      "start_ms": 637901,
+      "end_ms": 644982
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I need a clear date I can give the customer. He asked me directly when the ETAs will be fixed, and I didn't have an answer.",
+      "idx": 71,
+      "start_ms": 645514,
+      "end_ms": 654399
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "I have to be careful here. The retrained model will not be in production until Thursday at the earliest, and that assumes validation goes smoothly.",
+      "idx": 72,
+      "start_ms": 654179,
+      "end_ms": 662423
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Thursday is workable. So can I tell him the fix will be live on Thursday?",
+      "idx": 73,
+      "start_ms": 663090,
+      "end_ms": 667821
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "I'd rather not promise that. I think we should promise a status update on Thursday, because Lucas just said Thursday is the earliest, not a guarantee.",
+      "idx": 74,
+      "start_ms": 668210,
+      "end_ms": 678621
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I understand the risk, Mei, but a status update won't reassure someone who is deciding whether to renew. He needs a firm commitment, or he'll assume we have no plan.",
+      "idx": 75,
+      "start_ms": 679132,
+      "end_ms": 690428
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "If we promise a deployment and miss it, we lose more trust than if we had never named a date. A missed promise is worse than an honest update.",
+      "idx": 76,
+      "start_ms": 690208,
+      "end_ms": 701047
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "That's fair, but an update with no commitment sounds like a delay tactic to a customer who is already frustrated. Can we at least commit to a specific outcome?",
+      "idx": 77,
+      "start_ms": 701551,
+      "end_ms": 711260
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Can I add something? I can't say yet whether the retrained model fixes Harlan's problem specifically, because I haven't looked at their stops in detail.",
+      "idx": 78,
+      "start_ms": 712023,
+      "end_ms": 721453
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "That's a good point, Amara. We might promise a fix on Thursday and then discover that Harlan's errors have a different cause.",
+      "idx": 79,
+      "start_ms": 721754,
+      "end_ms": 729716
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Okay, that changes things a little. What if I promise a firm update on Thursday that includes what we found and a concrete deployment date?",
+      "idx": 80,
+      "start_ms": 730338,
+      "end_ms": 738386
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "I can support that. It's still a date you can give him, and it only commits us to something we control.",
+      "idx": 81,
+      "start_ms": 738609,
+      "end_ms": 746181
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "That works for me as well. I can pull Harlan's worst 50 stops by end of day, so we can see where the errors actually come from.",
+      "idx": 82,
+      "start_ms": 746353,
+      "end_ms": 756858
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "That would be very helpful. Please include the predicted ETA, the actual arrival time, and the driver, because the customer will ask about specific examples.",
+      "idx": 83,
+      "start_ms": 757626,
+      "end_ms": 765681
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Understood. I'll also flag whether each stop had a traffic delay or a late departure, since those usually explain the largest misses.",
+      "idx": 84,
+      "start_ms": 765916,
+      "end_ms": 773548
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Amara, when do you want to speak with the customer? I'd like you to have Lucas's findings in hand before you talk to him.",
+      "idx": 85,
+      "start_ms": 774264,
+      "end_ms": 782041
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "I'll schedule a call with Harlan for Wednesday afternoon. That gives me Tuesday to review the stops and prepare what I'm going to say.",
+      "idx": 86,
+      "start_ms": 782556,
+      "end_ms": 792095
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Good. Please invite Lucas to that call, too, in case the operations lead wants to ask technical questions.",
+      "idx": 87,
+      "start_ms": 792460,
+      "end_ms": 799280
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "I'm happy to join. Just send me the invite once it's confirmed, and I'll block the time.",
+      "idx": 88,
+      "start_ms": 799060,
+      "end_ms": 805633
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Will do. So today, I'll send the invite and write up the customer history, and my only blocker is waiting for Lucas's data.",
+      "idx": 89,
+      "start_ms": 806265,
+      "end_ms": 814822
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Then I'll make that my first priority this afternoon, so you'll have the data before the end of the day.",
+      "idx": 90,
+      "start_ms": 815568,
+      "end_ms": 823448
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Great, we have a plan. Lucas, since you're already on the model, let's go through your update on the retraining pipeline next.",
+      "idx": 91,
+      "start_ms": 824113,
+      "end_ms": 830948
+    },
+    {
+      "speaker": "Lucas Ferreira",
+      "text": "Sure. The short version is that the retraining run is ready, and the next step is a shadow deployment so we can compare the new model against production.",
+      "idx": 92,
+      "start_ms": 831421,
+      "end_ms": 840654
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Thanks, Lucas. Let me recap the owners so nobody leaves unsure. Lucas has the shadow deployment, and I have the GPU quota request and the Android 14 hotfix.",
+      "idx": 93,
+      "start_ms": 841407,
+      "end_ms": 852653
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Jonas has the layout comparison, and Amara has the Harlan call on Wednesday. Did I miss anything, or get anyone's item wrong?",
+      "idx": 94,
+      "start_ms": 853130,
+      "end_ms": 861280
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "That's right for me. I'll send the layout comparison today, so the review isn't waiting on me any longer.",
+      "idx": 95,
+      "start_ms": 861633,
+      "end_ms": 868543
+    },
+    {
+      "speaker": "Amara Nwosu",
+      "text": "Mine is correct too. The Harlan call is Wednesday afternoon, and I'll send Lucas the invite today.",
+      "idx": 96,
+      "start_ms": 869144,
+      "end_ms": 875413
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Perfect. One reminder: if any new blockers come up, please post them in the team channel before 3 p.m. so we can handle them the same day.",
+      "idx": 97,
+      "start_ms": 875799,
+      "end_ms": 884307
+    },
+    {
+      "speaker": "Jonas Weber",
+      "text": "Sounds good. Having a clear cutoff makes it much easier to get a quick answer without losing a whole day.",
+      "idx": 98,
+      "start_ms": 885087,
+      "end_ms": 892351
+    },
+    {
+      "speaker": "Mei Tanaka",
+      "text": "Exactly. Thank you, everyone, for the clear updates today. Let's have a productive day, and I'll see you all tomorrow.",
+      "idx": 99,
+      "start_ms": 893042,
+      "end_ms": 901001
+    }
+  ],
+  "chapters": [
+    {
+      "title": "ETA Model Retraining Pipeline",
+      "start_idx": 0
+    },
+    {
+      "title": "Android 14 Driver-App Crash",
+      "start_idx": 25
+    },
+    {
+      "title": "Design Handoff Waiting on Review",
+      "start_idx": 46
+    },
+    {
+      "title": "Customer Escalation from Support",
+      "start_idx": 65
+    },
+    {
+      "title": "Wrap-Up and Action Items",
+      "start_idx": 92
+    }
+  ],
+  "duration_ms": 901001
+}

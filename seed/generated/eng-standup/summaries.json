@@ -1,0 +1,173 @@
+{
+  "general": {
+    "sections": [
+      {
+        "heading": "Overview",
+        "bullets": [
+          "Mei Tanaka led the engineering standup, which covered the retraining pipeline, the Android 14 driver app crashes, the dispatch board design handoff, and the Harlan Freight escalation.",
+          "Mei closed by recapping owners and asking that any new blockers be posted in the team channel before 3 p.m. so they can be handled the same day."
+        ]
+      },
+      {
+        "heading": "Key points",
+        "bullets": [
+          "Lucas Ferreira said the nightly retraining job failed twice this week because the GPU quota is capped at four nodes and the job needs more when the feature backfill runs alongside training, so two nights of retraining were lost but customers still see the last good production model.",
+          "Lucas requested eight nodes from infrastructure, and until they are approved he can only run the job reliably every other night.",
+          "The latest candidate model cut mean absolute error on the holdout set from 11.8 minutes to 9.6 minutes, but the weekend freight lane error dropped by only about a minute, and the holdout contains roughly eight weekends, so that figure is thin.",
+          "Crash-free sessions on Android 14 fell from 99.2 percent to 97.1 percent after release 5.18, and Mei traced the stack traces to a foreground location service that starts without declaring the right foreground service type; Amara Nwosu said three carriers have already reported the crash in support tickets.",
+          "Jonas Weber's dispatch board redesign handoff has waited three days for engineering review and needs sign-off by Thursday or it slips two weeks, and Mei is concerned that the card layout shows 8 loads per screen instead of the table's 20.",
+          "Harlan Freight, a 42-truck carrier, reported ETAs off by more than 40 minutes on 18 percent of stops last week, and its operations lead said the October 31 contract renewal is at risk."
+        ]
+      },
+      {
+        "heading": "Decisions",
+        "bullets": [
+          "Mei agreed to Lucas's proposal for a three-day shadow deployment instead of a six-weekend backtest, with Lucas starting it today and posting promotion criteria in the ticket within the hour: overall error must hold at 9.6 minutes or better, and weekend lanes cannot get worse than the current model.",
+          "Mei will chase the GPU quota approval with infrastructure before noon and will escalate to their director if it slips.",
+          "The team will ship an Android 14 hotfix containing only the location service change, released first to 10 percent of Android 14 devices; Lucas will run the location and critical path smoke tests, which take about forty minutes, before submission.",
+          "The hotfix rollout expands if crash-free sessions in the 10 percent group stay above 99 percent and halts if they do not, and Mei will cut the hotfix branch this morning and ask the release engineer to submit it by mid-afternoon.",
+          "Mei offered Jonas a 45-minute walkthrough tomorrow at 10 a.m. with the engineers who would build it, and Jonas will bring a side-by-side comparison of the 20-row table and the card view, while Lucas will send load count numbers by end of day.",
+          "Instead of promising a fix on Thursday, Amara will promise Harlan Freight a firm Thursday update with findings and a concrete deployment date, and she will hold a call with the customer Wednesday afternoon that Lucas will join.",
+          "Lucas will pull Harlan's worst 50 stops by end of day, including predicted ETA, actual arrival time, driver, and whether each stop had a traffic delay or a late departure."
+        ]
+      },
+      {
+        "heading": "Open questions",
+        "bullets": [
+          "It is not yet known whether the retrained model fixes Harlan Freight's problem, because Lucas has not examined their stops in detail.",
+          "It is unresolved whether the shadow deployment will show weekend error still lagging, in which case Lucas and Mei agreed the promotion would be held.",
+          "The card versus table layout for the dispatch board is undecided, because the largest carriers say they need to see everything at once while others call the board cluttered.",
+          "The eight-node GPU quota request is still waiting in the infrastructure queue."
+        ]
+      }
+    ]
+  },
+  "sales": {
+    "sections": [
+      {
+        "heading": "Pain points",
+        "bullets": [
+          "Harlan Freight, a 42-truck carrier, told Amara Nwosu that ETAs were off by more than 40 minutes on 18 percent of their stops last week.",
+          "Three carriers have mentioned the Android 14 crash in support tickets, and one dispatcher told Amara his drivers are losing navigation mid-route.",
+          "Amara said customers complain both ways about the dispatch board: some call it cluttered, while the largest carriers say they need to see everything at once.",
+          "Amara said regional carriers are the most sensitive to weekend freight lane ETAs, where the new model's improvement is weakest."
+        ]
+      },
+      {
+        "heading": "Budget and timeline",
+        "bullets": [
+          "Harlan Freight's contract renewal date is October 31, which Mei Tanaka noted is less than four weeks away.",
+          "Lucas Ferreira said the retrained model will not be in production until Thursday at the earliest, and only if validation goes smoothly.",
+          "Amara will hold a call with Harlan on Wednesday afternoon and will use Tuesday to review the stops and prepare.",
+          "Amara plans to tell the three carriers affected by the crash that a fix rolls out to a small group today, with wider availability tomorrow if the numbers hold."
+        ]
+      },
+      {
+        "heading": "Objections",
+        "bullets": [
+          "Harlan's operations lead warned Amara that the October 31 renewal is at risk if ETA accuracy does not improve.",
+          "He asked Amara directly when the ETAs will be fixed, and she did not have an answer for him.",
+          "Amara argued that a status update alone would not reassure a customer deciding whether to renew, and that he needs a firm commitment.",
+          "Mei and Lucas cautioned against promising a Thursday fix, because Lucas has not yet checked whether the retrained model addresses Harlan's specific errors."
+        ]
+      },
+      {
+        "heading": "Next steps",
+        "bullets": [
+          "Amara will promise Harlan a firm update on Thursday that includes what was found and a concrete deployment date, and Mei supported this because it only commits the team to something it controls.",
+          "Lucas will pull Harlan's worst 50 stops by end of day, including predicted ETA, actual arrival time, and driver, and will flag whether each had a traffic delay or a late departure.",
+          "Amara will send Lucas the invite to the Wednesday afternoon Harlan call and write up the customer history today, and Lucas agreed to join.",
+          "Amara will update the three carrier tickets now and send those carriers a note once the Android 14 hotfix build is live.",
+          "Mei will chase the GPU quota approval for eight nodes with infrastructure before noon and will escalate to their director if it slips, while Lucas starts the shadow deployment today."
+        ]
+      }
+    ]
+  },
+  "standup": {
+    "sections": [
+      {
+        "heading": "Yesterday",
+        "bullets": [
+          "Lucas Ferreira investigated why the nightly retraining job failed twice this week and found the cause was the GPU quota, which is capped at four nodes.",
+          "Lucas Ferreira reported that the latest candidate model cut mean absolute error on the holdout set from 11.8 minutes to 9.6 minutes, though the gain on weekend freight lanes was only about a minute.",
+          "Mei Tanaka pulled the stack traces for the Android 14 crash, and they all point to a foreground location service permission change, because the service starts without declaring the right foreground service type.",
+          "Jonas Weber finished polishing the dispatch board redesign handoff, including specs, states, and redlines, but it has been waiting on engineering review for three days.",
+          "Amara Nwosu spent most of her time on an escalation from Harlan Freight, a 42-truck carrier that says ETAs were off by more than 40 minutes on 18 percent of its stops last week."
+        ]
+      },
+      {
+        "heading": "Today",
+        "bullets": [
+          "Lucas Ferreira will start the three-day shadow deployment of the new model today and post the promotion criteria in the ticket within the hour.",
+          "Lucas Ferreira will pull Harlan Freight's worst 50 stops and send Jonas Weber the load count numbers by end of day.",
+          "Mei Tanaka will cut the Android 14 hotfix branch this morning, ask the release engineer to submit it by mid-afternoon, and chase the GPU quota approval with infrastructure before noon.",
+          "Jonas Weber will build a side-by-side comparison of the 20-row table and the card layout for tomorrow's 10 a.m. walkthrough.",
+          "Amara Nwosu will update the three carrier tickets, send Lucas the invite for the Wednesday afternoon Harlan call, write up the customer history, and notify the carriers once the hotfix build is live."
+        ]
+      },
+      {
+        "heading": "Blockers",
+        "bullets": [
+          "Lucas Ferreira is blocked by the four-node GPU quota; his request for eight nodes is in the infrastructure queue, and until it is approved he can only run the nightly job reliably every other night.",
+          "Mei Tanaka will escalate to the infrastructure director if the quota approval slips past noon, and she said nothing is blocking her on the Android 14 hotfix.",
+          "Jonas Weber is blocked only by the engineering review of his handoff, and he needs sign-off by Thursday or the work slides two weeks.",
+          "Amara Nwosu is blocked only on waiting for Lucas Ferreira's data on Harlan Freight's stops."
+        ]
+      }
+    ]
+  },
+  "project_review": {
+    "sections": [
+      {
+        "heading": "Goals",
+        "bullets": [
+          "Lucas Ferreira wants to promote the new ETA model only if overall error holds at 9.6 minutes or better and weekend lanes do not get worse than the current model.",
+          "Mei Tanaka wants the Android 14 hotfix expanded beyond the initial 10 percent of devices only if crash-free sessions in that group stay above 99 percent.",
+          "Jonas Weber needs engineering sign-off on the dispatch board redesign by Thursday so the work fits in this sprint."
+        ]
+      },
+      {
+        "heading": "Progress",
+        "bullets": [
+          "Lucas reported that the latest candidate model cut mean absolute error on the holdout set from 11.8 minutes to 9.6 minutes.",
+          "The improvement is weakest on weekend freight lanes, where error dropped by only about a minute, and the holdout contains roughly eight weekends.",
+          "The nightly retraining job failed twice this week because the GPU quota is capped at four nodes, but the production model is unchanged and customers still see the last good version.",
+          "Crash-free sessions on Android 14 dropped from 99.2 percent to 97.1 percent after release 5.18, and Mei traced the crashes to a foreground location service that starts without declaring the right foreground service type.",
+          "Jonas finished the dispatch board redesign handoff, but it has been waiting on engineering review for three days.",
+          "Harlan Freight, a 42-truck carrier, reports that ETAs were off by more than 40 minutes on 18 percent of its stops last week."
+        ]
+      },
+      {
+        "heading": "Risks",
+        "bullets": [
+          "Until infrastructure approves Lucas's request for eight nodes, he can only run the retraining job reliably every other night.",
+          "The weekend evidence for the new model is thin, which is why Mei was nervous about promoting it.",
+          "Lucas warned that a rushed Android hotfix could introduce a worse crash, since location services touch routing, check-ins, and proof of delivery.",
+          "Three carriers have already reported the Android crash in support tickets, and one dispatcher said his drivers are losing navigation mid-route.",
+          "Harlan Freight's contract renewal on October 31 is at risk, and Lucas cannot yet say whether the retrained model fixes Harlan's specific problem.",
+          "If dispatch board sign-off slips past Thursday, the work slides two weeks, and Mei worries the card layout shows only 8 loads per screen instead of 20, which could hurt dispatchers with large fleets."
+        ]
+      },
+      {
+        "heading": "Decisions",
+        "bullets": [
+          "Mei agreed to Lucas's proposal for a three-day shadow deployment instead of a six-weekend backtest, because the backtest needs a feature rebuild that takes over a week on four nodes.",
+          "The Android hotfix will contain only the location service change, will roll out first to 10 percent of Android 14 devices, and will be halted if crash-free sessions in that group do not stay above 99 percent.",
+          "Mei will hold a 45-minute dispatch board walkthrough tomorrow at 10 a.m., aiming for sign-off in one sitting.",
+          "The team agreed that Amara Nwosu will promise Harlan Freight a firm update on Thursday with findings and a concrete deployment date, rather than promising a fix on Thursday."
+        ]
+      },
+      {
+        "heading": "Next steps",
+        "bullets": [
+          "Lucas will start the shadow deployment today and post the promotion criteria in the ticket within the hour.",
+          "Mei will chase the GPU quota approval before noon and escalate to infrastructure's director if it slips.",
+          "Mei will cut the hotfix branch this morning and ask the release engineer to submit it by mid-afternoon, and Amara will update the three carrier tickets and notify the carriers once the build is live.",
+          "Lucas will pull Harlan's worst 50 stops by end of day, including predicted ETA, actual arrival time, driver, and whether each had a traffic delay or late departure, and will also send Jonas the load count numbers by end of day.",
+          "Jonas will build a side-by-side comparison of the 20-row table and the card view, marking which card fields could be compressed.",
+          "Amara will send Lucas the invite for the Harlan call on Wednesday afternoon, and anyone with a new blocker should post it in the team channel before 3 p.m."
+        ]
+      }
+    ]
+  }
+}

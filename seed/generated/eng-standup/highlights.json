@@ -1,0 +1,44 @@
+[
+  {
+    "segment_idx": 8,
+    "type": "positive",
+    "title": "New model cuts ETA error to 9.6 minutes",
+    "start_ms": 80727,
+    "end_ms": 91635
+  },
+  {
+    "segment_idx": 20,
+    "type": "action_item",
+    "title": "Shadow deployment chosen with promotion criteria",
+    "start_ms": 201707,
+    "end_ms": 211079
+  },
+  {
+    "segment_idx": 31,
+    "type": "insight",
+    "title": "Android 14 crashes prompt same-day hotfix",
+    "start_ms": 294420,
+    "end_ms": 301984
+  },
+  {
+    "segment_idx": 54,
+    "type": "objection",
+    "title": "Cards show 8 loads versus 20",
+    "start_ms": 496463,
+    "end_ms": 506430
+  },
+  {
+    "segment_idx": 69,
+    "type": "objection",
+    "title": "Harlan Freight renewal at risk October 31",
+    "start_ms": 629437,
+    "end_ms": 637710
+  },
+  {
+    "segment_idx": 80,
+    "type": "action_item",
+    "title": "Firm Thursday update promised to Harlan",
+    "start_ms": 730338,
+    "end_ms": 738386
+  }
+]
