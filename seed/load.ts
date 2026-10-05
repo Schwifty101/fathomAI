@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import { deriveParticipantStats, unionSeconds } from '@/lib/stats'
 import type { SummaryContent, TranscriptFile } from '@/lib/schema'
 import { runAll } from './check'
-import { fileOf, readJson } from './io'
+import { fileOf, GEN_DIR, readJson } from './io'
 import { castOf, MEETINGS, startedAt } from './meetings'
 import { TEAM } from './team'
 import { seedId } from './uuid'
@@ -108,7 +108,7 @@ async function main() {
   const ask = readJson<{
     prompt: string; scope: string; text: string
     citations: { meeting_slug: string; segment_idx: number; label: string }[]
-  }[]>(`${process.cwd()}/seed/generated/ask.json`)
+  }[]>(`${GEN_DIR}/ask.json`)
   // ask_answers holds only seeded rows. Ids were once derived from the prompt alone, so clear first:
   // an old row would otherwise collide with the new row on UNIQUE (scope, prompt).
   const cleared = await db.from('ask_answers').delete().not('id', 'is', null)

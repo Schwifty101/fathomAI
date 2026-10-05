@@ -161,7 +161,7 @@ export const actionsFileSchema = z.array(z.object({
 export const highlightsFileSchema = z.array(z.object({
   segment_idx: segmentIdx,
   type: z.enum(HIGHLIGHT_TYPES),
-  title: z.string().min(1),
+  title: z.string().min(1).max(80), // matches the highlights_title_len DB check
   start_ms: z.number().int().min(0),
   end_ms: z.number().int().min(1),
 }))
