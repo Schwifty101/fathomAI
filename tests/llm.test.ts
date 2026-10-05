@@ -18,6 +18,10 @@ describe('extractJson', () => {
   it('parses plain JSON', () => expect(extractJson('{"a":1}')).toEqual({ a: 1 }))
   it('strips ```json fences', () => expect(extractJson('```json\n{"a":1}\n```')).toEqual({ a: 1 }))
   it('finds JSON inside prose', () => expect(extractJson('Here you go:\n[1,2]\nThanks')).toEqual([1, 2]))
+  it('skips [ or { in prose before the JSON', () => {
+    expect(extractJson('Note [1]: here is the {result}:\n{"a":[1,2]}')).toEqual({ a: [1, 2] })
+    expect(extractJson('Sure! [see below]\n[{"a":1}]')).toEqual([{ a: 1 }])
+  })
   it('throws when there is no JSON', () => expect(() => extractJson('nothing here')).toThrow())
 })
 
