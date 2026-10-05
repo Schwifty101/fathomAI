@@ -8,7 +8,7 @@ import { SignInDialog } from '@/components/SignInDialog'
 import { Button } from '@/components/ui/Button'
 import { buildHighlight } from '@/lib/highlight'
 import { PlaybackStore } from '@/lib/playback'
-import type { HighlightType } from '@/lib/schema'
+import type { HighlightType, SummaryContent, Template } from '@/lib/schema'
 import { expandToRun, findActiveIdx } from '@/lib/speaker-runs'
 import { toast } from '@/lib/toast'
 import type { HighlightRow, MeetingBundle, ShareRow } from '@/lib/types'
@@ -33,7 +33,7 @@ export type MeetingViewProps = {
   shares: ShareRow[]
 }
 
-export function MeetingView({ bundle, userId, initialMs, shares: initialShares }: MeetingViewProps) {
+export function MeetingView({ bundle, userId, liveAiEnabled, initialMs, shares: initialShares }: MeetingViewProps) {
   const { meeting, participants, segments, chapters } = bundle
   const [store] = useState(() => new PlaybackStore(meeting.duration_sec * 1000, initialMs))
   const [highlights, setHighlights] = useState<HighlightRow[]>(bundle.highlights)
@@ -128,6 +128,25 @@ export function MeetingView({ bundle, userId, initialMs, shares: initialShares }
     }
   }
 
+  // Throws an Error whose message is safe to toast (SummaryTab shows it).
+  const regenerateSummary = async (template: Template): Promise<SummaryContent> => {
+    let response: Response
+    try {
+      response = await fetch('/api/regenerate', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ meetingSlug: meeting.slug, template }),
+      })
+    } catch {
+      throw new Error('Could not reach the server. Try again.')
+    }
+    const json = await response.json().catch(() => null)
+    if (response.status === 401) setSignIn('Sign in with Google to regenerate summaries with AI.')
+    if (!response.ok) throw new Error(typeof json?.error === 'string' ? json.error : 'Could not regenerate the summary')
+    if (!Array.isArray(json?.content?.sections)) throw new Error('Could not regenerate the summary')
+    return json.content as SummaryContent
+  }
+
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null
@@ -140,7 +159,22 @@ export function MeetingView({ bundle, userId, initialMs, shares: initialShares }
   }, [addHighlight])
 
   const tabs: TabDef[] = [
-    { id: 'summary', label: 'Summary', content: <SummaryTab title={meeting.title} summaries={bundle.summaries} /> },
+    {
+      id: 'summary',
+      label: 'Summary',
+      content: (
+        <SummaryTab
+          title={meeting.title}
+          summaries={bundle.summaries}
+          regen={{
+            enabled: liveAiEnabled, // decided server-side from the key's presence; the key never reaches the client
+            signedIn: userId !== null,
+            onNeedSignIn: () => setSignIn('Sign in with Google to regenerate summaries with AI.'),
+            run: regenerateSummary,
+          }}
+        />
+      ),
+    },
     {
       id: 'actions',
       label: 'Action items',
