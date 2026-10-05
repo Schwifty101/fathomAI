@@ -8,6 +8,21 @@ Living record so nothing is lost between sessions. Each line is tagged:
 Last updated: 2026-10-05 (see section 9 for verification, Phase 0 and hosted state). Plan: `docs/superpowers/plans/2026-10-05-fathom-rebuild.md` (29 tasks, 5 phases).
 Spec: `docs/superpowers/specs/2026-10-05-fathom-rebuild-design.md` (header status: "approved in conversation, pending written-spec review").
 
+## How to read this file
+
+The live summary is `continuation-handoff.md`; this file is the history behind it, in the order things happened. Several early statements are superseded, so check this table before trusting a section.
+
+| Section | Status |
+| --- | --- |
+| 1 Concrete facts | Mostly current. Superseded: "`origin/main` holds only the first commit" and "local `main` is ahead and unpushed" (all work is now on `main`). |
+| 2 Rulings | Historical. The branch and worktree rulings are superseded (the cloud session finished on `claude/serene-galileo-yn8oce`, which was fast-forwarded into `main`). "Nothing is pushed until the user approves": the user has since asked for the merge to `main` (2026-10-05). |
+| 3 Unverified or guessed | Mostly resolved: the `claude -p` login, `supabase db push` and the hosted connection were all verified (section 7). |
+| 4 Conflicts to settle | The repository name and Vercel project name are still open. The spec status line was updated (10.8). |
+| 5 Security notes, 6 Deferred to the user | Current. |
+| 7 Tasks 1 to 9, 8 Graphify build and log location | Historical. Section 7's deferred minor findings were addressed in 9.2. Section 8's graph numbers are superseded by 9.9. |
+| 9 Verification, Phase 0, Tasks 27 and 28, Task 29 groundwork, graph repair | Current, except 9.5 "Open items": the loader, the signed-out highlight, and most App items there are fixed (10.5, 10.7). 9.3 hosted state was re-checked in 10.8. |
+| 10 Cloud continuation | Latest, in order. 10.1 to 10.4 are the break and blockers, 10.5 to 10.7 the merged workstreams and decisions, 10.8 the documentation pass. |
+
 ## 1. Concrete facts
 
 - [verified] Supabase project: name `FathomAI`, ref `ifnrsvuxzfdxtcclndjp`, region Seoul, URL `https://ifnrsvuxzfdxtcclndjp.supabase.co`. At 2026-10-05 it had 0 tables and 0 migrations (via MCP). The org id is a Vercel-integration org.
@@ -243,3 +258,11 @@ Two plain subagents on disjoint files; both branches were merged and re-verified
 - [verified, uncommitted] The shell agent also drove headless Chromium 141 against the real compiled CSS and layout markup, a before and after `MeetingCard` and the bundled `AskPanel`, with a stubbed header, stubbed `next/link` and a canned fetch: 27 checks passed (skip link 1x1 until Tab then visible and fixed, focus after collapse and expand, a three-participant card from an empty quadrant to none). This is not the real app and was not committed.
 - [unverified] Screen reader behaviour, the pages and `AuthButton` against real data and sign-in, how the new `h1` looks with real data, the sign-out toast in a browser, and the 30 s step.
 - The manual checklist was updated to match: SA-12 and AX-01 rewritten, open question 9 marked resolved, eight items added (MC-13, MC-14, TC-19, PP-19, AF-28, AU-13, AX-37, AX-38). It now has 304 items and the tally matches.
+
+### 10.8 Documentation pass and merge to main (2026-10-05)
+
+- [user] Asked for everything to be documented concisely, stale and redundant material mitigated or noted, and the work merged to `main`, so a Claude Code session can continue locally.
+- [verified] Hosted state re-checked through the Supabase connector (read-only `get_project_url`, `list_tables`, `list_migrations`): URL `https://ifnrsvuxzfdxtcclndjp.supabase.co`, 12 public tables, RLS on every one, 0 rows, migrations `20261005000000 init` and `20261006000000 hardening`. The connector appeared mid-session; the network policy still blocks the host for scripts.
+- Rewritten: `continuation-handoff.md` (old text described `feat/phase-1-foundation` and "nothing pushed"). Added: `/CLAUDE.md` (Claude Code reads it at session start) and the "How to read this file" table above. Banner added to the top of the plan. Spec status line updated. README test notes and the checklist's pinned commit corrected.
+- Removed: `.vscode/settings.json` (an empty `{}` committed by accident; `.vscode/` is now gitignored) and the seven merged agent worktrees and `worktree-agent-*` branches (all clean and fully merged, local only).
+- Not done, because it is large: reconciling the 7,000-line plan text with what was built (the plan banner lists the known deviations), and replacing the source-reading markup tests with real renders now that JSX works in vitest.

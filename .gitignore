@@ -12,3 +12,4 @@ supabase/.temp
 docs/design/refs/
 playwright-report
 test-results
+.vscode/

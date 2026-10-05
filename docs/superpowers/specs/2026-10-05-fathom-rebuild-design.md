@@ -1,7 +1,7 @@
 # Fathom Rebuild: Design Spec
 
 Date: 2026-10-05
-Status: approved in conversation, pending written-spec review
+Status: approved in conversation (2026-10-05) and implemented; no separate written review is recorded. Deviations from the spec are in the ledger (`docs/superpowers/ledger/`).
 
 ## 1. Goal
 

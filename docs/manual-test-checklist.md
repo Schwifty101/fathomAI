@@ -2,7 +2,7 @@
 
 This checklist is for ticking off by hand in a browser. It was written from the plan, the spec, the design system document and the code in `app/`, `components/` and `lib/`. It was not written from a running app: the hosted database is unreachable from the environment that wrote it, so nothing here has been observed against data. Where a source gives no expected behaviour, the item is not written as fact; see "Open questions for the user" at the end.
 
-Tree under test: commit `7862a70` or later, which contains Tasks 1 to 28.
+Tree under test: the current `main`, which contains Tasks 1 to 28 (plus the accessibility fixes described in ledger 10.7).
 
 ## 1. Prerequisites
 
@@ -22,11 +22,11 @@ Tick these before starting. They are not counted in the tally.
 - [ ] `npm run seed:check` finishes with no errors (Task 12).
 - [ ] `npm run seed:load`, run twice. Both runs print the same counts (Task 13 Steps 2 and 3): `team_members: 8`, `meetings: 8`, `summaries: 32`, `calendar_events: 5`, and `chapters`, `action_items` and `highlights` above 0. The plan says `ask_answers: 3`; ledger 9.2 says 3 prompts per scope, so expect 6 (see open question 2).
 - [ ] `npm run seed:clips` prints `clip /clip/demo-q4-clip` and `clip /clip/demo-q4-clip-2` (Task 24 Step 6).
-- [ ] `ls seed/generated` shows eight meeting folders plus `ask.json`. At commit `7862a70` only `eng-standup` exists (ledger 10.1), so every item tagged `D` that needs a missing meeting is Blocked until the rest are generated and loaded. Nothing is loaded in the hosted database until `seed:load` has run.
+- [ ] `ls seed/generated` shows eight meeting folders plus `ask.json`. When this checklist was written only `eng-standup` existed (check with `npm run seed:check`), so every item tagged `D` that needs a missing meeting is Blocked until the rest are generated and loaded. Nothing is loaded in the hosted database until `seed:load` has run.
 
 ### 1.3 Sign-in and key
 
-- [ ] Google OAuth is configured as in plan Task 15 Step 8: a Google Cloud OAuth client (Web application) with redirect URI `https://<project-ref>.supabase.co/auth/v1/callback` (the ref is in ledger section 1); Google enabled under Supabase Authentication, Sign In / Providers; Site URL `http://localhost:3000` and redirect URL `http://localhost:3000/**` under URL Configuration. Items tagged `G` are Blocked until this is done (it was not configured at `7862a70`, handoff "Gates").
+- [ ] Google OAuth is configured as in plan Task 15 Step 8: a Google Cloud OAuth client (Web application) with redirect URI `https://<project-ref>.supabase.co/auth/v1/callback` (the ref is in ledger section 1); Google enabled under Supabase Authentication, Sign In / Providers; Site URL `http://localhost:3000` and redirect URL `http://localhost:3000/**` under URL Configuration. Items tagged `G` are Blocked until this is done (it was not configured when this was written; see the handoff gates).
 - [ ] Optional: a server-side `ANTHROPIC_API_KEY` in `.env.local` only. Never paste it into chat or commit it, and restart the server after changing it. Run the `NK` items first with no key, then add the key and run the `K` items.
 
 ### 1.4 Browser set-up

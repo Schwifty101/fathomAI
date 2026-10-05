@@ -80,7 +80,7 @@ Models make mistakes in structured output, so the generated files are code-stamp
 | `supabase/tests/hardening.sql` | A scratch local Postgres, never a hosted project | SQL probes for the hardening migration, including privileges PostgREST cannot reach (such as TRUNCATE). The header of the file has the `psql` commands. |
 | `npm run e2e` | Seeded data in the target database, and `npx playwright install chromium` once | Playwright smoke spec in `e2e/smoke.spec.ts`, signed out, in a fresh browser context. With `BASE_URL` unset it builds and serves the production app on port 3000 (reusing a server already running there). With `BASE_URL=<LIVE_URL>` it tests a deployment instead. |
 
-Not covered by any automated test: Google sign-in, highlight, share and regenerate when signed in, a real model call, rendering of the social preview image, and component behaviour in a browser beyond the smoke spec. There are no component tests.
+Not covered by any automated test: Google sign-in, highlight, share and regenerate when signed in, a real model call, rendering of the social preview image, and component behaviour in a browser beyond the smoke spec. Components are covered only through unit tests of the logic extracted into `lib/`, a few markup checks (`tests/a11y-*`, `tests/jsx-render.test.ts`), and static checks that every query matches the migrations (`tests/schema-conformance.test.ts`). There are no browser-level component tests.
 
 ## Deploying
 
@@ -135,4 +135,4 @@ These are scope decisions for a short rebuild judged on the core loop.
 | `scripts/` | `rls-test.ts`, `seed-clips.ts`, `guard-target.ts`, and a developer-only knowledge-graph helper that the app does not use |
 | `supabase/` | Migrations and local SQL probes |
 | `e2e/`, `tests/` | Playwright smoke spec and Vitest unit tests |
-| `docs/` | Design system notes, the demo script, plan, spec and ledger |
+| `docs/` | Design system notes, the demo script, the manual test checklist, plan, spec and ledger (`docs/superpowers/ledger/continuation-handoff.md` is the current state). `CLAUDE.md` at the root has the working rules for Claude Code |
