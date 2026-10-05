@@ -104,7 +104,7 @@ Agent-log location finding:
 
 ## 9. Independent verification, Phase 0 hardening, and Tasks 27-28 (2026-10-05)
 
-Status: [verified] `main` and `feat/phase-1-foundation` point at the same commit and nothing is pushed. `npm test` passes (27 files, 223 tests, up from 139), `npm run typecheck` is clean and `npm run build` succeeds. Section 7's "33/33 hosted `rls:test`" claim was not independently verifiable at the time (hosted DNS was unreachable from the verifying tools); it is superseded by the hardened run below.
+Status: [verified] `main` and `feat/phase-1-foundation` point at the same commit and nothing is pushed. `npm test` passes (28 files, 234 tests, up from 139), `npm run typecheck` is clean and `npm run build` succeeds. Section 7's "33/33 hosted `rls:test`" claim was not independently verifiable at the time (hosted DNS was unreachable from the verifying tools); it is superseded by the hardened run below.
 
 ### 9.1 Independent verification of the Codex work
 
@@ -147,4 +147,15 @@ Not fixed, by design or for lack of data:
 ### 9.6 Process lessons
 
 - The harness's isolated worktrees started from `origin/main` (`bc7bd74`, README only), not local `main`. Two agents ran `npm ci` before noticing and it partly deleted the main checkout's `node_modules` (8 entries left; gitignored, safe to remove or rebuild with `npm ci`). Every agent prompt now begins with a mandatory base-commit check before any npm command.
-- Tasks 27 and 28 (live summary regeneration and the calendar stub) were started in parallel isolated worktrees. This file is updated again when they merge.
+- Tasks 27 and 28 ran in parallel isolated worktrees, each prompted to verify its base commit first; both agents found the stale `bc7bd74` base and reset it before running npm. One agent stopped its test server with `pkill -f next-server`, which can also kill unrelated `next` processes; prefer killing by the PID or port you started.
+
+### 9.7 Tasks 27 and 28 (merged)
+
+- [verified] Task 28, `/calendar`: `components/CalendarConnect.tsx` and `app/calendar/page.tsx`. A demo "Connect Google Calendar" card that says plainly no real connection is made; once connected it lists `listUpcoming` events with a per-event `role="switch"` notetaker toggle (local state only). The connected flag is stored in `localStorage` key `calendar-connected`, read in an effect so the first render matches the server render. Times are UTC and labelled as such. The empty state is intentional (the hosted DB has 0 events). A data-layer failure returns a 500 that `app/error.tsx` renders (same as `/meetings`). Not checked in a browser.
+- [verified] Task 27, live summary regeneration: `lib/regenerate.ts`, `lib/regenerate-db.ts`, `app/api/regenerate/route.ts`, `tests/regenerate.test.ts` (11 new tests) and the Regenerate control in `components/meeting/MeetingView.tsx`. Adaptations to the hardened schema:
+  - The save is an upsert with `onConflict: 'meeting_id,template,user_id'` through the lazy service-role admin client, with the user id taken from `getUser` on the server (never from the request body). `summaries.id` has no default, so the adapter supplies `randomUUID()`. Values written (`source: 'live'`, `kind: 'regenerate'`) were checked against the table CHECK constraints.
+  - Usage is reserved first (insert into `ai_usage`) then counted including that row; the model is called only if the count is at most 5 per hour. A failed model call or a failed save still counts. Not-found meetings and missing key or session cost nothing. Any usage or DB error fails closed (`unavailable`, 503); there is no extractive fallback and never an unmetered model call. Tests cover 25 concurrent requests.
+  - `maxDuration = 60` (two 20 s attempts for one JSON retry plus DB time); `lib/llm.ts` is unchanged. Output is validated with `summaryFor(template)` (template-allowed headings, no duplicates); a bad reply retries once then returns `llm_failed`.
+  - With no `ANTHROPIC_API_KEY` the button is disabled with an explanation (a server-side boolean, `liveAiEnabled`, never the key); a 401 opens the sign-in dialog and also toasts; other errors toast. The usage check runs after the transcript read (the plan did it before).
+  - A production-build `POST /api/regenerate` with no key returns `{"error":"Live regeneration is not configured on this server"}`; a malformed body returns 400.
+- Not verifiable without a key, hosted data or a browser: a real model call, the upsert against hosted Supabase, the sixth-attempt rate-limit message, the "Generated live" chip, own-summary-over-seed after reload, and the dialog and toasts.
