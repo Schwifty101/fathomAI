@@ -6,6 +6,7 @@ import { createHighlight, createShare, deleteHighlight, deleteShare } from '@/ap
 import { AskPanel } from '@/components/AskPanel'
 import { SignInDialog } from '@/components/SignInDialog'
 import { Button } from '@/components/ui/Button'
+import { byoRequestHeaders, useByoKey } from '@/lib/byo-key-store'
 import { planHighlight } from '@/lib/highlight'
 import { PlaybackStore } from '@/lib/playback'
 import type { HighlightType, SummaryContent, Template } from '@/lib/schema'
@@ -35,6 +36,7 @@ export type MeetingViewProps = {
 
 export function MeetingView({ bundle, userId, liveAiEnabled, initialMs, shares: initialShares }: MeetingViewProps) {
   const { meeting, participants, segments, chapters } = bundle
+  const hasOwnKey = useByoKey() !== null
   const [store] = useState(() => new PlaybackStore(meeting.duration_sec * 1000, initialMs))
   const [highlights, setHighlights] = useState<HighlightRow[]>(bundle.highlights)
   const [shares, setShares] = useState<ShareRow[]>(initialShares)
@@ -135,7 +137,7 @@ export function MeetingView({ bundle, userId, liveAiEnabled, initialMs, shares: 
     try {
       response = await fetch('/api/regenerate', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', ...byoRequestHeaders() },
         body: JSON.stringify({ meetingSlug: meeting.slug, template }),
       })
     } catch {
@@ -168,7 +170,7 @@ export function MeetingView({ bundle, userId, liveAiEnabled, initialMs, shares: 
           title={meeting.title}
           summaries={bundle.summaries}
           regen={{
-            enabled: liveAiEnabled, // decided server-side from the key's presence; the key never reaches the client
+            enabled: liveAiEnabled || hasOwnKey, // server key presence is decided server-side and never reaches the client; a visitor's own key is theirs
             signedIn: userId !== null,
             onNeedSignIn: () => setSignIn('Sign in with Google to regenerate summaries with AI.'),
             run: regenerateSummary,

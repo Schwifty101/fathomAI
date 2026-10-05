@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { LlmClient } from '@/lib/llm'
+import { LlmAuthError, type LlmClient } from '@/lib/llm'
 import { regenerate, REGEN_LIMIT_PER_HOUR, RegenError, type RegenDb } from '@/lib/regenerate'
 
 const good = JSON.stringify({ sections: [{ heading: 'Overview', bullets: ['They met.'] }] })
@@ -23,6 +23,19 @@ const input = { meetingSlug: 'q4', template: 'general' as const }
 const code = async (p: Promise<unknown>) => p.then(() => 'ok', (e) => (e instanceof RegenError ? e.code : 'other'))
 
 describe('regenerate', () => {
+  it('reports bad_key, not llm_failed, when the provider rejects the key, and does not retry', async () => {
+    const { db, log } = makeDb()
+    let calls = 0
+    const llm: LlmClient = { async complete() { calls++; throw new LlmAuthError('OpenAI') } }
+    expect(await code(regenerate({ llm, userId: 'u1', db }, input))).toBe('bad_key')
+    expect(calls).toBe(1)
+    expect(log.saved).toHaveLength(0)
+  })
+  it('records the visitor model on the saved row', async () => {
+    const { db, log } = makeDb()
+    await regenerate({ llm: seq(good), userId: 'u1', db, model: 'their-model' }, input)
+    expect(log.saved).toMatchObject([{ model: 'their-model' }])
+  })
   it('saves a user-scoped summary and records usage', async () => {
     const { db, log } = makeDb()
     const out = await regenerate({ llm: seq(good), userId: 'u1', db }, input)

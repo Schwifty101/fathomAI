@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { ask } from '@/lib/ask'
 import { makeAskDb } from '@/lib/ask-db'
 import { getUser } from '@/lib/auth'
-import { anthropicClient } from '@/lib/llm'
+import { llmFromRequest } from '@/lib/llm'
 import { createClient } from '@/lib/supabase/server'
 
 export const maxDuration = 30
@@ -20,12 +20,13 @@ const body = z.object({
 export async function POST(request: Request) {
   const parsed = body.safeParse(await request.json().catch(() => null))
   if (!parsed.success) return NextResponse.json({ error: 'invalid' }, { status: 400 })
+  const picked = llmFromRequest(request.headers, process.env.ANTHROPIC_API_KEY)
+  if (picked === 'invalid') return NextResponse.json({ error: 'Your AI key settings are invalid' }, { status: 400 })
   try {
     const db = await createClient()
     const user = await getUser(db)
-    const key = process.env.ANTHROPIC_API_KEY
     const result = await ask(
-      { llm: key ? anthropicClient(key) : null, userId: user?.id ?? null, db: makeAskDb(db) },
+      { llm: picked.llm, userId: user?.id ?? null, db: makeAskDb(db) },
       parsed.data,
     )
     return NextResponse.json(result)

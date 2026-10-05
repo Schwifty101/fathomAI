@@ -1,8 +1,8 @@
-import { completeJson, type LlmClient } from './llm'
+import { completeJson, LlmAuthError, type LlmClient } from './llm'
 import { formatTranscript, SYSTEM_ANALYST, summaryPrompt, type TLine } from './prompts'
 import { summaryFor, type SummaryContent, type Template } from './schema'
 
-export type RegenErrorCode = 'no_key' | 'no_session' | 'rate_limited' | 'not_found' | 'llm_failed' | 'unavailable'
+export type RegenErrorCode = 'no_key' | 'no_session' | 'rate_limited' | 'not_found' | 'llm_failed' | 'bad_key' | 'unavailable'
 export class RegenError extends Error {
   constructor(readonly code: RegenErrorCode) {
     super(code)
@@ -57,8 +57,8 @@ export async function regenerate(
       },
       summaryFor(input.template), // template-allowed headings only, same as seeded summaries
     )
-  } catch {
-    throw new RegenError('llm_failed')
+  } catch (error) {
+    throw new RegenError(error instanceof LlmAuthError ? 'bad_key' : 'llm_failed')
   }
   try {
     await deps.db.saveSummary({

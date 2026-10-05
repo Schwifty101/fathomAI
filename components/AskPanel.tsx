@@ -2,8 +2,10 @@
 
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
+import { LlmKeyForm } from '@/components/LlmKeyForm'
 import { Button } from '@/components/ui/Button'
 import type { AskResult } from '@/lib/ask'
+import { byoRequestHeaders } from '@/lib/byo-key-store'
 import { focusAfterToggle } from '@/lib/ask-focus'
 import { formatMs } from '@/lib/format'
 
@@ -46,7 +48,7 @@ export function AskPanel({ scopes, defaultScope, prompts, embedded = false }: Pr
     try {
       const response = await fetch('/api/ask', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', ...byoRequestHeaders() },
         body: JSON.stringify({ question: text, scope: parseScope(scope) }),
       })
       if (!response.ok) throw new Error(String(response.status))
@@ -118,6 +120,7 @@ export function AskPanel({ scopes, defaultScope, prompts, embedded = false }: Pr
           <Button type="submit" size="sm" variant="primary" disabled={busy || !question.trim()}>Ask</Button>
         </div>
       </form>
+      <LlmKeyForm />
     </aside>
   )
 }

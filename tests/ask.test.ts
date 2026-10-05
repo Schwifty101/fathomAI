@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { ask, ASK_LIMIT_PER_HOUR, type AskDb, type AskScope } from '@/lib/ask'
-import type { LlmClient } from '@/lib/llm'
+import { LlmAuthError, type LlmClient } from '@/lib/llm'
 import type { SearchHit } from '@/lib/types'
 
 const hit = (index: number): SearchHit => ({
@@ -35,6 +35,13 @@ const throwing: LlmClient = { async complete() { throw new Error('boom') } }
 const scope: AskScope = { kind: 'my_calls' }
 
 describe('ask', () => {
+  it('tells the visitor their key was rejected and falls back to extractive', async () => {
+    const { db } = makeDb()
+    const llm: LlmClient = { async complete() { throw new LlmAuthError('Gemini') } }
+    const result = await ask({ llm, userId: 'u', db }, { question: 'anything new', scope })
+    expect(result.mode).toBe('extractive')
+    expect(result.notice).toMatch(/API key was rejected/)
+  })
   it('answers a suggested prompt without a model call', async () => {
     const { db } = makeDb()
     const result = await ask({ llm: throwing, userId: 'u', db }, { question: 'Summarize my recent meetings', scope })

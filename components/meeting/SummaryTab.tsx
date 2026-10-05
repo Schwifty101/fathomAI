@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { LlmKeyForm } from '@/components/LlmKeyForm'
 import { Button } from '@/components/ui/Button'
 import { Chip } from '@/components/ui/Chip'
 import { summaryToMarkdown } from '@/lib/markdown'
@@ -89,7 +90,8 @@ export function SummaryTab({
           </Button>
         )}
       </div>
-      {regen && !regen.enabled && <p className="text-xs text-muted">Live regeneration is unavailable. You can still read the pre-generated summary.</p>}
+      {regen && !regen.enabled && <p className="text-xs text-muted">Live regeneration is unavailable. You can still read the pre-generated summary, or add your own AI key below.</p>}
+      {regen && <LlmKeyForm />}
       {entry.content.sections.map((section) => (
         <section key={section.heading}>
           <h3 className="mb-1 text-sm font-semibold">{section.heading}</h3>

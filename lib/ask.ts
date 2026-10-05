@@ -1,5 +1,5 @@
 import { formatMs } from './format'
-import { completeJson, type LlmClient } from './llm'
+import { completeJson, LlmAuthError, type LlmClient } from './llm'
 import { liveAskPrompt, SYSTEM_ANALYST } from './prompts'
 import { liveAskSchema } from './schema'
 import { stripMarks, toOrQuery } from './snippet'
@@ -81,7 +81,10 @@ export async function ask(deps: AskDeps, input: { question: string; scope: AskSc
       return hit ? [{ meeting_slug: hit.meeting_slug, start_ms: hit.start_ms, label: `${hit.speaker} at ${formatMs(hit.start_ms)}` }] : []
     })
     return { mode: 'live', text: output.text, citations }
-  } catch {
-    return extractive(question, hits, 'The live answer failed. Showing the closest moments instead.')
+  } catch (error) {
+    const notice = error instanceof LlmAuthError
+      ? 'Your API key was rejected by the provider. Check it in Your AI key. Showing the closest moments instead.'
+      : 'The live answer failed. Showing the closest moments instead.'
+    return extractive(question, hits, notice)
   }
 }
