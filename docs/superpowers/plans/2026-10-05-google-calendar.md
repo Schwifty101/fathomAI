@@ -12,7 +12,7 @@ Spec (none separate; this is the contract): a signed-in visitor can press "Conne
 - Do not change `middleware.ts` or `lib/auth.ts`. In `lib/supabase/**` only the one addition named in Task 3. Do not touch the database or Supabase settings; there is no migration.
 - Scope string, exactly: `https://www.googleapis.com/auth/calendar.events`. It covers both `events.list` and `events.insert` (verified against Google's reference pages).
 - Meet link creation, exactly as Google documents it: `POST https://www.googleapis.com/calendar/v3/calendars/primary/events?conferenceDataVersion=1` with `conferenceData.createRequest = { requestId, conferenceSolutionKey: { type: "hangoutsMeet" } }`. The conference is created asynchronously: `createRequest.status` starts as `pending`.
-- Google returns a refresh token only when the authorisation request carries `access_type=offline` and `prompt=consent`. Supabase exposes `provider_token` and `provider_refresh_token` only on the session returned by `exchangeCodeForSession`, once, and does not store or refresh them.
+- Google returns a refresh token only when the authorisation request carries `access_type=offline` and `prompt=consent`. Supabase exposes `provider_token` and `provider_refresh_token` only on the session returned by `exchangeCodeForSession`, once. It does store them in the JS-readable `sb-*-auth-token` session cookie, which is why the callback refreshes the session once after sealing (the refresh grant response carries no provider tokens). It never refreshes the Google token itself.
 - All displayed times are UTC (project rule). Prose and comments: British English, no em dashes.
 - Cookie name: `fathom_gcal`. The cookie must be bound to the Supabase user id so a different user in the same browser cannot use it.
 

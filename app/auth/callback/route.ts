@@ -18,6 +18,12 @@ export async function GET(request: Request) {
       try {
         const sealed = sealConnection(data.user?.id ?? '', data.session?.provider_refresh_token, process.env.CALENDAR_COOKIE_SECRET)
         if (sealed && data.user?.id) response.cookies.set(GCAL_COOKIE, sealed, GCAL_COOKIE_OPTIONS)
+        if (sealed && data.session?.provider_refresh_token) {
+          // Supabase stored the Google tokens in its JS-readable session cookie. Rewrite the session now that the
+          // refresh token is sealed: a refresh-token grant carries no provider tokens.
+          await supabase.auth.refreshSession()
+          Object.entries(cacheHeaders).forEach(([key, value]) => response.headers.set(key, value))
+        }
       } catch {
         // Never let the calendar cookie break sign-in.
       }
