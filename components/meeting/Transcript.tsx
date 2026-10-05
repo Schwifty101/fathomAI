@@ -66,7 +66,7 @@ export function Transcript({ store, segments, participants, highlights, toolbar,
   const scrollToActive = useCallback(() => {
     const row = box.current?.querySelector<HTMLElement>(`[data-idx="${active}"]`)
     if (row && box.current) {
-      box.current.scrollTo({ top: row.offsetTop - box.current.clientHeight / 3, behavior: 'smooth' })
+      box.current.scrollTo({ top: row.offsetTop - box.current.clientHeight / 3, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
     }
   }, [active])
 
