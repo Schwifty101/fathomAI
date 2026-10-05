@@ -11,12 +11,21 @@ export function extractJson(text: string): unknown {
   const t = text.trim()
   const fenced = t.match(/```(?:json)?\s*([\s\S]*?)```/i)
   const body = fenced ? fenced[1].trim() : t
-  const start = body.search(/[[{]/)
-  if (start === -1) throw new Error('no JSON found in model output')
-  const close = body[start] === '{' ? '}' : ']'
-  const end = body.lastIndexOf(close)
-  if (end <= start) throw new Error('unterminated JSON in model output')
-  return JSON.parse(body.slice(start, end + 1))
+  // Prose before the JSON may itself contain [ or {, so try each opener until one parses.
+  let found = false
+  let lastError: unknown
+  for (const { index: start } of body.matchAll(/[[{]/g)) {
+    found = true
+    const end = body.lastIndexOf(body[start] === '{' ? '}' : ']')
+    if (end <= start) continue
+    try {
+      return JSON.parse(body.slice(start, end + 1))
+    } catch (e) {
+      lastError = e
+    }
+  }
+  if (!found) throw new Error('no JSON found in model output')
+  throw lastError instanceof Error ? lastError : new Error('unterminated JSON in model output')
 }
 
 export async function completeJson<T>(

@@ -109,8 +109,12 @@ async function main() {
     prompt: string; scope: string; text: string
     citations: { meeting_slug: string; segment_idx: number; label: string }[]
   }[]>(`${process.cwd()}/seed/generated/ask.json`)
+  // ask_answers holds only seeded rows. Ids were once derived from the prompt alone, so clear first:
+  // an old row would otherwise collide with the new row on UNIQUE (scope, prompt).
+  const cleared = await db.from('ask_answers').delete().not('id', 'is', null)
+  if (cleared.error) throw new Error(`clear ask_answers: ${cleared.error.message}`)
   await upsert('ask_answers', ask.map((answer) => ({
-    id: seedId('ask', answer.prompt), prompt: answer.prompt, scope: answer.scope,
+    id: seedId('ask', `${answer.scope}\n${answer.prompt}`), prompt: answer.prompt, scope: answer.scope,
     answer: {
       text: answer.text,
       citations: answer.citations.map((citation) => ({

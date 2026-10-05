@@ -1,21 +1,25 @@
 import { pathToFileURL } from 'node:url'
 import { join } from 'node:path'
-import { ASK_PROMPTS } from '@/lib/prompts'
+import { ASK_PROMPTS_BY_SCOPE } from '@/lib/prompts'
 import {
-  actionsFileSchema, askFileSchema, briefSchema, highlightsFileSchema, MAX_CLIP_MS,
+  actionsFileSchema, ASK_SCOPES, askFileSchema, briefFor, highlightsFileSchema, MAX_CLIP_MS,
   summariesFileSchema, transcriptFileSchema,
 } from '@/lib/schema'
+import { resolveDue } from './due'
 import { exists, fileOf, GEN_DIR, readJson } from './io'
-import { castOf, MEETINGS, validateDefs, type MeetingDef } from './meetings'
+import { castOf, MEETINGS, startedAt, validateDefs, type MeetingDef } from './meetings'
+import { citableIdx } from './gen/ask'
+import { TEAM } from './team'
 
 export type MeetingFiles = Record<'brief' | 'transcript' | 'summaries' | 'actions' | 'highlights', unknown>
 const FILE_NAMES = ['brief', 'transcript', 'summaries', 'actions', 'highlights'] as const
+const MIN_SHOWCASE_SHARE = 0.03
 
 export function checkMeeting(def: MeetingDef, files: MeetingFiles): string[] {
   const errors: string[] = []
   const fail = (message: string) => errors.push(`${def.slug}: ${message}`)
   const results = {
-    brief: briefSchema.safeParse(files.brief),
+    brief: briefFor(def.targetMin).safeParse(files.brief),
     transcript: transcriptFileSchema.safeParse(files.transcript),
     summaries: summariesFileSchema.safeParse(files.summaries),
     actions: actionsFileSchema.safeParse(files.actions),
@@ -51,6 +55,13 @@ export function checkMeeting(def: MeetingDef, files: MeetingFiles): string[] {
     }
   })
   if (transcript.chapters[0].start_idx !== 0) fail('first chapter must start at line 0')
+  if (results.brief.success) {
+    const planned = results.brief.data.chapters.map((chapter) => chapter.title)
+    const actual = transcript.chapters.map((chapter) => chapter.title)
+    if (planned.length !== actual.length || planned.some((title, i) => title !== actual[i])) {
+      fail(`transcript chapters do not match the brief (${actual.length} vs ${planned.length} planned)`)
+    }
+  }
 
   const words = lines.reduce((sum, line) => sum + line.text.trim().split(/\s+/).length, 0)
   if (words / lines.length < 7) {
@@ -63,7 +74,7 @@ export function checkMeeting(def: MeetingDef, files: MeetingFiles): string[] {
     const total = [...talk.values()].reduce((sum, ms) => sum + ms, 0)
     for (const name of cast) {
       const share = (talk.get(name) ?? 0) / total
-      if (share < 0.02) fail(`${name} talk share is ${(share * 100).toFixed(1)}% (<2%)`)
+      if (share < MIN_SHOWCASE_SHARE) fail(`${name} talk share is ${(share * 100).toFixed(1)}% (<${MIN_SHOWCASE_SHARE * 100}%)`)
     }
   }
 
@@ -74,34 +85,69 @@ export function checkMeeting(def: MeetingDef, files: MeetingFiles): string[] {
         fail(`action "${action.task}": start_ms does not match its line`)
       }
       if (!cast.includes(action.owner)) fail(`action "${action.task}": owner "${action.owner}" is not in the cast`)
+      if (action.due_phrase) {
+        const expected = resolveDue(action.due_phrase, startedAt(def))
+        if (expected === null) {
+          fail(`action "${action.task}": unresolved due phrase "${action.due_phrase}" (fix due_phrase or set it to null)`)
+        } else if (expected !== action.due) {
+          fail(`action "${action.task}": due ${action.due} does not match "${action.due_phrase}" (${expected})`)
+        }
+      }
     }
   }
   if (results.highlights.success) {
     const highlights = results.highlights.data
     if (highlights.length < 3 || highlights.length > 6) fail(`expected 3 to 6 highlights, found ${highlights.length}`)
+    const windows = new Set<string>()
     for (const highlight of highlights) {
-      if (highlight.segment_idx >= lines.length) fail(`highlight "${highlight.title}": segment_idx out of range`)
+      const line = lines[highlight.segment_idx]
+      if (!line) fail(`highlight "${highlight.title}": segment_idx out of range`)
+      else if (highlight.start_ms > line.start_ms || highlight.end_ms <= line.start_ms) {
+        fail(`highlight "${highlight.title}": window does not contain its segment_idx line`)
+      }
       if (highlight.end_ms <= highlight.start_ms || highlight.end_ms - highlight.start_ms > MAX_CLIP_MS) {
         fail(`highlight window for "${highlight.title}" must be positive and at most 5 minutes`)
       }
+      if (highlight.end_ms > transcript.duration_ms) fail(`highlight "${highlight.title}": window ends after the meeting`)
+      const key = `${highlight.start_ms}-${highlight.end_ms}`
+      if (windows.has(key)) fail(`highlight "${highlight.title}": duplicates another highlight's window`)
+      windows.add(key)
     }
   }
   return errors
 }
 
-export function checkAsk(ask: unknown, lineCounts: Map<string, number>): string[] {
+export type AskInfo = Map<string, { lines: number; citable: ReadonlySet<number>; host: string }>
+
+export function checkAsk(ask: unknown, info: AskInfo): string[] {
   const parsed = askFileSchema.safeParse(ask)
-  if (!parsed.success) return [`ask.json invalid: ${parsed.error.issues[0]?.message}`]
-  const errors: string[] = []
-  for (const prompt of ASK_PROMPTS) {
-    if (!parsed.data.some((answer) => answer.prompt === prompt)) errors.push(`ask.json: missing answer for "${prompt}"`)
+  if (!parsed.success) {
+    const issue = parsed.error.issues[0]
+    return [`ask.json invalid: ${issue?.message} at ${issue?.path.join('.')}`]
   }
+  const errors: string[] = []
+  const demo = TEAM.find((member) => member.demo)!.slug
+  const seen = new Set<string>()
   for (const answer of parsed.data) {
+    const key = `${answer.scope}\n${answer.prompt}`
+    if (seen.has(key)) errors.push(`ask.json: duplicate answer for ${answer.scope} "${answer.prompt}"`)
+    seen.add(key)
     for (const citation of answer.citations) {
-      const count = lineCounts.get(citation.meeting_slug)
-      if (count === undefined || citation.segment_idx >= count) {
-        errors.push(`ask "${answer.prompt}": citation ${citation.meeting_slug}#${citation.segment_idx} does not resolve`)
+      const meeting = info.get(citation.meeting_slug)
+      const at = `${citation.meeting_slug}#${citation.segment_idx}`
+      if (!meeting || citation.segment_idx >= meeting.lines) {
+        errors.push(`ask ${answer.scope} "${answer.prompt}": citation ${at} does not resolve`)
+      } else if (!meeting.citable.has(citation.segment_idx)) {
+        errors.push(`ask ${answer.scope} "${answer.prompt}": citation ${at} is not an index the generator listed`)
       }
+      if (answer.scope === 'my_calls' && meeting && meeting.host !== demo) {
+        errors.push(`ask my_calls "${answer.prompt}": cites ${citation.meeting_slug}, which is not hosted by the demo persona`)
+      }
+    }
+  }
+  for (const scope of ASK_SCOPES) {
+    for (const prompt of ASK_PROMPTS_BY_SCOPE[scope]) {
+      if (!seen.has(`${scope}\n${prompt}`)) errors.push(`ask.json: missing ${scope} answer for "${prompt}"`)
     }
   }
   return errors
@@ -110,7 +156,7 @@ export function checkAsk(ask: unknown, lineCounts: Map<string, number>): string[
 export function runAll(dir: string = GEN_DIR): { errors: string[]; info: string[] } {
   const errors = [...validateDefs()]
   const info: string[] = []
-  const counts = new Map<string, number>()
+  const askInfo: AskInfo = new Map()
   for (const def of MEETINGS) {
     const missing = FILE_NAMES.filter((name) => !exists(fileOf(def.slug, name, dir)))
     if (missing.length) {
@@ -121,14 +167,19 @@ export function runAll(dir: string = GEN_DIR): { errors: string[]; info: string[
     errors.push(...checkMeeting(def, files))
     const transcript = transcriptFileSchema.safeParse(files.transcript)
     if (transcript.success) {
-      counts.set(def.slug, transcript.data.lines.length)
       const highlights = highlightsFileSchema.safeParse(files.highlights)
+      const actions = actionsFileSchema.safeParse(files.actions)
+      askInfo.set(def.slug, {
+        lines: transcript.data.lines.length,
+        citable: citableIdx(actions.success ? actions.data : [], highlights.success ? highlights.data : []),
+        host: def.host,
+      })
       info.push(`${def.slug}: ${transcript.data.lines.length} lines, ${Math.round(transcript.data.duration_ms / 60_000)} min, ${highlights.success ? highlights.data.length : 0} highlights`)
     }
   }
   const askPath = join(dir, 'ask.json')
   if (!exists(askPath)) errors.push('ask.json is missing')
-  else errors.push(...checkAsk(readJson(askPath), counts))
+  else errors.push(...checkAsk(readJson(askPath), askInfo))
   return { errors, info }
 }
 
