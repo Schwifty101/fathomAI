@@ -115,10 +115,9 @@ These are scope decisions for a short rebuild judged on the core loop.
 ## Known limitations
 
 - **Every transcript is publicly readable by design.** Treat a clip link as a shortcut, not as access control. Do not load real meeting data into this.
-- If the demo persona row is missing, My Calls shows every call instead of none.
 - The seed loader is not transactional and never removes stale calls, participants or calendar rows. The 20 a day share cap is checked and then inserted in two steps, so a burst of concurrent requests can exceed it.
 - Signing in or out resets the playhead on a meeting page, because the page remounts for the new user.
-- Each transcript line is a separate button, so a long call has many tab stops, and the meeting tabs do not support arrow-key navigation.
+- The transcript is a single tab stop with arrow-key movement between lines, and the meeting tabs respond to the arrow, Home and End keys. The key handling is covered by unit tests but has not been checked in a browser.
 - `npm audit --omit=dev` reports two findings (one high, one moderate) in the PostCSS 8.4.31 bundled with Next 15.5.27. The fix is a move to Next 16, which was not taken. The advisories concern attacker-supplied CSS, and this app only builds its own checked-in CSS. Reassess before any untrusted CSS reaches the build.
 
 ## Agent logs
