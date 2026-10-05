@@ -2,11 +2,17 @@
 
 import { Button } from '@/components/ui/Button'
 import { Chip } from '@/components/ui/Chip'
-import { formatMs } from '@/lib/format'
+import { formatDue, formatMs } from '@/lib/format'
 import { actionItemsToMarkdown } from '@/lib/markdown'
 import type { PlaybackStore } from '@/lib/playback'
 import { toast } from '@/lib/toast'
 import type { ActionItemRow, HighlightRow } from '@/lib/types'
+
+// The due date reads as "Oct 2, 2026" (UTC); the ISO value stays in dateTime. Text that is not a date is shown as it came.
+function Due({ value }: { value: string }) {
+  const label = formatDue(value)
+  return <Chip>Due {label ? <time dateTime={value}>{label}</time> : value}</Chip>
+}
 
 export function ActionItemsTab({
   store,
@@ -42,7 +48,7 @@ export function ActionItemsTab({
             <p>{item.task}</p>
             <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted">
               <span className="font-medium text-fg">{item.owner}</span>
-              {item.due && <Chip>Due {item.due}</Chip>}
+              {item.due && <Due value={item.due} />}
               <button className="underline hover:text-fg" onClick={() => store.seek(item.start_ms)}>
                 Jump to {formatMs(item.start_ms)}
               </button>
