@@ -81,7 +81,8 @@ async function main() {
       { id: partId, meeting_id: meetingId, member_id: memberId, name: 'RLS Tester', role: 'qa', is_internal: true, talk_time_sec: 60 },
       { id: partPhoneId, meeting_id: meetingId, member_id: memberId, name: 'RLS Tester phone', role: 'qa', is_internal: true, talk_time_sec: 40 },
       { id: partOtherId, meeting_id: meetingId, member_id: null, name: 'RLS Other', role: 'x', is_internal: false, talk_time_sec: 100 },
-      { id: part2Id, meeting_id: meeting2Id, member_id: null, name: 'RLS Two', role: 'x', is_internal: false },
+      // talk_time_sec explicit: a bulk insert sends missing keys as null, which defeats the column default
+      { id: part2Id, meeting_id: meeting2Id, member_id: null, name: 'RLS Two', role: 'x', is_internal: false, talk_time_sec: 0 },
     ]))
     const seg = (m: string, p: string, idx: number, start_ms: number, end_ms: number, text: string) =>
       ({ id: randomUUID(), meeting_id: m, participant_id: p, idx, start_ms, end_ms, text })
