@@ -2,8 +2,8 @@
 
 A rebuild of the core loop of Fathom, the AI meeting notetaker. You get a library of calls. Each call has a transcript that plays back in sync, an AI summary with switchable templates, action items, highlights and chapters. You can search across every call, ask questions in a side panel, and share a clip that opens without signing in.
 
-- Live demo: `<LIVE_URL>`
-- Repository: `<REPO_URL>`
+- Live demo: `https://fathom-rebuild-eight.vercel.app`
+- Repository: `https://github.com/Schwifty101/fathomAI`
 - Demo script for the recording: [`docs/walkthrough.md`](docs/walkthrough.md)
 
 It is a Next.js 15 App Router app on Supabase (Postgres, Auth, row-level security), built to deploy to Vercel. Read the next section before judging it: the recording bot, the media and the calendar link are not real, and all the data is synthetic.

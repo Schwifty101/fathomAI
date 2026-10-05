@@ -2,11 +2,11 @@
 
 A timed outline for the demo recording: five minutes at most, camera on. The project owner records it. This file is the script and the pre-flight list. Control names below are the exact labels in the UI, so you can find each one on screen.
 
-Links to have ready: live app `<LIVE_URL>`, repository `<REPO_URL>`.
+Links to have ready: live app `https://fathom-rebuild-eight.vercel.app`, repository `https://github.com/Schwifty101/fathomAI`.
 
 ## Before you press record
 
-1. **Data is loaded.** Open `<LIVE_URL>/meetings`. You should see an Upcoming strip and call cards, and Q4 Product Planning should be among them. Open Team Calls: all eight seeded calls should be listed. If My Calls shows "No calls yet." or the "Calls" card on Team Calls reads 0, the seed data is not loaded. Stop and follow the seed steps in the README.
+1. **Data is loaded.** Open `https://fathom-rebuild-eight.vercel.app/meetings`. You should see an Upcoming strip and call cards, and Q4 Product Planning should be among them. Open Team Calls: all eight seeded calls should be listed. If My Calls shows "No calls yet." or the "Calls" card on Team Calls reads 0, the seed data is not loaded. Stop and follow the seed steps in the README.
 2. **Start signed out.** The header should show "Sign in with Google". You sign in on camera at 2:50. If you are signed in, click "Sign out" and reload.
 3. **Open a private window now**, empty, for the share step at 3:30.
 4. **Choose your search word.** Pick a word the Q4 Product Planning transcript contains, search for it, and check that Q4 Product Planning is among the result groups. The call's brief is about Q4 priorities, budget and hiring, so "budget" is the first word to try, but confirm it. Search is whole-word full text with English stemming, so a word and its plain variants match; a half-typed word does not.
@@ -95,16 +95,16 @@ You are on Q4 Product Planning: eight people, about an hour.
 ### 4:30 Team Calls and close (30 s)
 
 - **Click:** "Team Calls" in the header. Show the three cards ("Calls", "Avg talk share", "Team members"), the "Team members" table (calls, talk share, questions, longest monologue) and the "Host" and "Role" menus with the "Filter" button.
-- **Say, as the close:** "Left out: the recording bot, real calendar sign-in, CRM and Slack, because they need other vendors' accounts; multi-tenant teams, Alerts, Deals and Playlists, which sit outside finding and sharing a moment; and semantic search, which full-text covers at this size. The code is at `<REPO_URL>`, with the agent logs in `.agent-logs/`."
+- **Say, as the close:** "Left out: the recording bot, real calendar sign-in, CRM and Slack, because they need other vendors' accounts; multi-tenant teams, Alerts, Deals and Playlists, which sit outside finding and sharing a moment; and semantic search, which full-text covers at this size. The code is at `https://github.com/Schwifty101/fathomAI`, with the agent logs in `.agent-logs/`."
 
 ## If something goes wrong on camera
 
 | What you see | Cause | Do this |
 | --- | --- | --- |
 | Highlight button does nothing | Playhead is before the first line (0:00) | Click "Play", wait two seconds, press it again |
-| Toast "Couldn't sign you in. Please try again." | The sign-in code exchange failed on return | Click "Sign in with Google" again; if it repeats, check that Supabase Site URL and redirect URLs include `<LIVE_URL>/**` |
+| Toast "Couldn't sign you in. Please try again." | The sign-in code exchange failed on return | Click "Sign in with Google" again; if it repeats, check that Supabase Site URL and redirect URLs include `https://fathom-rebuild-eight.vercel.app/**` |
 | Toast "Couldn't start Google sign-in. Please try again." | The browser could not start the OAuth request | Retry; if it repeats, check that the Google provider is enabled in Supabase |
-| Toast "Daily clip limit reached (20)" | Share cap reached | Reuse `<LIVE_URL>/clip/demo-q4-clip`, made by `npm run seed:clips` |
+| Toast "Daily clip limit reached (20)" | Share cap reached | Reuse `https://fathom-rebuild-eight.vercel.app/clip/demo-q4-clip`, made by `npm run seed:clips` |
 | Ask answers "Something went wrong. Try again." | The request to `/api/ask` failed | Click the chip or "Ask" again |
 | A page says "Something went wrong" with "Try again" | A data query failed | Click "Try again"; if it persists, stop and check the database |
 
