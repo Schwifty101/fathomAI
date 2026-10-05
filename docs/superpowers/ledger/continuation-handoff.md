@@ -1,25 +1,28 @@
 # Fathom rebuild: continuation handoff
 
-Last updated: 2026-10-05, end of the cloud session. This is the current-state file; if it disagrees with anything older, this file wins. Working rules are in `/CLAUDE.md`. The detailed history is `decisions-and-open-items.md` (read its "How to read this file" table first), and the plan and spec sit beside it.
+Last updated: 2026-10-05, evening, after the deploy and data load. The "Environment and repository state" section below still describes the earlier cloud session. This is the current-state file; if it disagrees with anything older, this file wins. Working rules are in `/CLAUDE.md`. The detailed history is `decisions-and-open-items.md` (read its "How to read this file" table first), and the plan and spec sit beside it.
 
 ## Where things stand
 
-- Tasks 1 to 28 are implemented and merged to `main`. Task 29 (ship) is started: README, `docs/walkthrough.md` and the Playwright smoke spec exist; nothing is deployed, there is no live URL, and the public repository is undecided.
-- Last run in the cloud container (Node 22) on the merged tree: `npm test` 44 files, 449 passed plus 1 expected failure; `npm run typecheck` clean; `npm run build` compiled 12 of 12 pages. The expected failure is a deliberate `it.fails` that marks a known gap (`ask_answers.scope` has no CHECK). Numbers drift, so re-run before relying on them.
-- Nothing has been checked in a browser, against loaded data, or with Google sign-in. Treat all runtime behaviour as unverified.
-- Hosted Supabase (`FathomAI`, ref `ifnrsvuxzfdxtcclndjp`, Seoul), re-checked read-only on 2026-10-05 through the Supabase connector: 12 public tables, RLS on every one, 0 rows, migrations `init` and `hardening` applied. No data has ever been loaded.
+Last verified 2026-10-05, evening, from the user's machine.
 
-## Gates, in the order to clear them
+- Tasks 1 to 28 are implemented. Task 29 (ship) is mostly done: the app is deployed on Vercel (project `fathom-rebuild`, connected to `Schwifty101/fathomAI`, production `https://fathom-rebuild-eight.vercel.app`), and every push to `main` redeploys it.
+- [verified] `npm test` 48 files, 487 passed plus 1 expected failure (a deliberate `it.fails` marking that `ask_answers.scope` has no CHECK); `npm run typecheck` clean; `npm run build` compiles.
+- [verified] All 8 meetings are generated and pass `seed:check` (eng-standup from `seed:gen`; the other seven written by hand through `seed:assemble`, with shorter targets of 15 to 25 minutes; the showcase `q4-planning` is 62 minutes with 8 speakers).
+- [verified] Hosted Supabase (ref `ifnrsvuxzfdxtcclndjp`) is loaded: 8 team members, 8 meetings, 33 participants, 863 segments, 36 chapters, 32 summaries, 56 action items, 47 highlights, 6 ask answers, 5 calendar events. `seed:load` run twice gave identical counts. `seed:clips` made `/clip/demo-q4-clip` and `/clip/demo-q4-clip-2`. `npm run rls:test` passed in full and cleaned up after itself.
+- [verified] `BASE_URL=https://fathom-rebuild-eight.vercel.app npm run e2e`: 9 of 9 passed.
+- New: a signed-in visitor can use their own Anthropic, OpenAI or Gemini key for Ask and Regenerate (`lib/byo-key.ts`, `lib/byo-key-store.ts`, `components/LlmKeyForm.tsx`, `lib/llm.ts`). The key stays in the browser and travels in `x-llm-*` headers per request; hourly limits still apply. OpenAI and Gemini are called with plain `fetch`. [unverified] Neither provider was called with a real key. The model name is a required field for OpenAI and Gemini because no default could be verified.
+- Not checked in a browser: Google sign-in on the live site, the manual checklist, the visual drift items.
 
-| # | Gate | Status | Next action |
-| --- | --- | --- | --- |
-| 1 | Seed generation (Task 11) | 1 of 8 meetings. `eng-standup` (100 lines, 15 min, 6 highlights) passes `seed:check`. Missing: `q4-planning` (showcase, 62 min, 8 speakers), `acme-discovery`, `priya-mei-1on1`, `harbor-interview`, `optimizer-outage-postmortem`, `mobile-design-review`, `weekly-product-sync`, and `ask.json`. The user said "not yet". | On a machine with a working `claude` login (it spends that account's quota, plan estimate 40 to 90 minutes): `npm run seed:gen` (resumable, re-run if one fails). Review the showcase per plan Task 11 Step 4, run `npm run seed:check`, commit `seed/generated`. |
-| 2 | Load (Tasks 12, 13) | Not run. The hosted host is blocked from the cloud container; the loader has only run against a fake client. | Set `EXPECT_SUPABASE_REF=ifnrsvuxzfdxtcclndjp` (or `supabase link`), then `npm run seed:check`, `npm run seed:load -- --dry-run`, `npm run seed:load` twice (the second run must print the same counts and delete nothing; expect `ask_answers: 6`), then `npm run seed:clips` and the anonymous search check from plan Task 13. |
-| 3 | Browser acceptance | Not started. | Work through `docs/manual-test-checklist.md` (304 items, tally table). Items tagged `G` need Google sign-in, `K` a server `ANTHROPIC_API_KEY`, `D` loaded data. |
-| 4 | Google OAuth (Task 15) | Not configured. | The user creates a Google OAuth client and enables Google in Supabase (plan Task 15 Step 8). Site URL and redirect list are set after deploy. |
-| 5 | Smoke tests | `e2e/smoke.spec.ts` (9 tests) written. One app bug it exposed is fixed (signed-out Insight in the first second). Not run against data. | After gate 2: `npm run e2e` (builds and serves the app), later `BASE_URL=<live> npm run e2e`. Fix real app failures, not the tests. |
-| 6 | Visual review (Task 14) | Open. | Review 1280 px and 390 px captures (`docs/design/refs/` is gitignored and local only) and `/design`. Checklist items VR-11 and VR-12 record the 14px vs 16px text and 24px vs 30/36 title drift from `docs/design/design-system.md`; the user chose to decide after seeing it. |
-| 7 | Ship (Task 29 Steps 3 to 12) | Not started. | Deploy (ask first), set the three Supabase variables in Vercel, set Supabase Site URL and redirects, live e2e, replace `<LIVE_URL>` and `<REPO_URL>` in `README.md` and `docs/walkthrough.md`, secret scan, repository (ask first), re-run `rls:test`, then disable the Email provider and rotate the DB password. The user records the walkthrough. |
+## Gates still open
+
+| # | Gate | Next action |
+| --- | --- | --- |
+| 1 | Google sign-in on the live URL | The Supabase Site URL, redirect URLs and the Google client's JavaScript origin must name `https://fathom-rebuild-eight.vercel.app` (the domain `fathom-rebuild.vercel.app` was not available). Then try it in a browser. |
+| 2 | Browser acceptance | `docs/manual-test-checklist.md`: `G` items need Google sign-in, `K` a key (the server `ANTHROPIC_API_KEY` is not set on Vercel; a visitor key works instead), `D` loaded data (now available). |
+| 3 | Visual review (Task 14) | Open. VR-11 and VR-12 record the 14px vs 16px and title drift from `docs/design/design-system.md`. |
+| 4 | Close-out (Task 29 Steps 11 to 12) | Re-run `rls:test` after any schema change, disable the Email provider in Supabase, rotate the DB password. The user does these in the dashboard. |
+| 5 | History purge | `graphify-out/` is still in the history of `main`. The rewritten history is prepared in a temp clone; the force-push needs the user (see the session notes). Back up the local `graphify-out/` before resetting. |
 
 ## Decided by the user, do not re-ask
 
