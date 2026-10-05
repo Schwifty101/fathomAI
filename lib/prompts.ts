@@ -35,6 +35,13 @@ export const TEMPLATE_GUIDE: Record<Template, { headings: string[]; focus: strin
   },
 }
 
+// Showcase talk plan: each chapter names who must speak, rotating so every cast member
+// is featured in at least two chapters (a model alone tends to let 3-4 people dominate).
+export function spotlight(names: readonly string[], index: number, total: number): string[] {
+  const count = Math.min(names.length, Math.max(4, Math.ceil((2 * names.length) / total)))
+  return Array.from({ length: count }, (_, k) => names[(index * count + k) % names.length])
+}
+
 export function briefPrompt(def: PromptMeeting, cast: readonly PromptPerson[]): string {
   const long = def.targetMin >= 45
   return `TASK: brief
@@ -44,7 +51,8 @@ Topic: ${def.topic}
 Participants: ${people(cast)}
 
 Return ONLY JSON: {"agenda": string[], "chapters": [{"title": string, "beats": string[], "minutes": number}]}
-Rules: ${long ? '6 to 8' : '3 to 5'} chapters in meeting order; chapter minutes add up to ${def.targetMin}; each chapter has 2 to 4 concrete beats with specific numbers, names or disagreements.`
+Rules: ${long ? '6 to 8' : '3 to 5'} chapters in meeting order; chapter minutes add up to ${def.targetMin}; each chapter has 2 to 4 concrete beats with specific numbers, names or disagreements.${def.showcase ? `
+Talk plan: all ${cast.length} participants must be real voices. Make each person the lead voice of at least two beats across the meeting (say who leads each beat), and let nobody speak for more than a quarter of the meeting.` : ''}`
 }
 
 export function chapterPrompt(a: {
@@ -56,6 +64,7 @@ export function chapterPrompt(a: {
   prev: { speaker: string; text: string }[]
   words: number
 }): string {
+  const featured = a.def.showcase ? spotlight(a.cast.map((c) => c.name), a.index, a.total) : []
   const last = a.index === a.total - 1
   const prev = a.prev.length
     ? `Previous lines (continue naturally, do not repeat them):\n${a.prev.map((l) => `${l.speaker}: ${l.text}`).join('\n')}`
@@ -69,6 +78,7 @@ Chapter beats:
 ${a.chapter.beats.map((b) => `- ${b}`).join('\n')}
 ${prev}
 ${last ? 'This is the final chapter: end with a wrap-up and thanks.' : ''}
+${featured.length ? `Each of these people must speak at least twice in this chapter, with at least one substantive contribution of 2 to 3 sentences: ${featured.join(', ')}.` : ''}
 Length: about ${a.words} words in total.
 
 Return ONLY JSON: [{"speaker": string, "text": string}]
@@ -80,10 +90,11 @@ export function summaryPrompt(template: Template, ctx: { title: string; date: st
   return `TASK: summary
 Summarize this meeting using the "${template}" template. ${guide.focus}
 Meeting: "${ctx.title}" on ${ctx.date}.
-Use exactly these section headings, in this order: ${guide.headings.join(' | ')}.
+Allowed section headings, in this order (use the exact text): ${guide.headings.join(' | ')}.
+Omit any section the transcript gives no real support for; never invent or pad content to fill a section. Keep at least one section.
 
 Return ONLY JSON: {"sections": [{"heading": string, "bullets": string[]}]}
-Rules: 2 to 6 concise bullets per section, each a full sentence grounded in the transcript, naming people and numbers.
+Rules: 1 to 6 concise bullets per section, each a full sentence grounded in the transcript, naming people and numbers.
 
 Transcript:
 ${ctx.transcript}`
@@ -96,7 +107,7 @@ export function actionItemsPrompt(ctx: {
 Extract the action items from this meeting. Meeting: "${ctx.title}", held on ${ctx.date} (${ctx.weekday}).
 
 Return ONLY JSON: {"action_items": [{"owner": string, "task": string, "due_phrase": string | null, "segment_idx": number}]}
-Rules: owner must be exactly one of: ${ctx.speakers.join(', ')}; task is an imperative sentence; due_phrase is the deadline wording as spoken ("Thursday", "end of week", "next week", "tomorrow") or null, and you must never compute a calendar date; segment_idx is the [number] of the line where the commitment was made. 3 to 8 items.
+Rules: owner must be exactly one of: ${ctx.speakers.join(', ')}; task is an imperative sentence; due_phrase is the deadline wording as spoken ("Thursday", "end of week", "next week", "tomorrow") or null when no deadline was spoken, and you must never compute a calendar date; segment_idx is the [number] of the line where the commitment was made. 3 to 8 items.
 
 Transcript:
 ${ctx.transcript}`
@@ -113,19 +124,20 @@ Transcript:
 ${ctx.transcript}`
 }
 
-export const ASK_PROMPTS = [
-  'Next steps on projects?',
-  'Summarize my recent meetings',
-  'Surprise me with an insight',
-] as const
+// Chip wording per scope. Wording is distinct across scopes so a prompt alone still identifies its answer.
+export const ASK_PROMPTS_BY_SCOPE = {
+  my_calls: ['Next steps on projects?', 'Summarize my recent meetings', 'Surprise me with an insight'],
+  team_calls: ['Next steps across the team?', 'Summarize recent team meetings', 'Surprise me with a team insight'],
+} as const
+export const ASK_PROMPTS = ASK_PROMPTS_BY_SCOPE.my_calls
 
-export function askPrompt(question: string, corpus: string): string {
+export function askPrompt(question: string, corpus: string, whose = ''): string {
   return `TASK: ask
-You answer questions about a team's recent meetings using only the notes below.
+You answer questions about a team's recent meetings using only the notes below.${whose ? `\n${whose}` : ''}
 Question: ${question}
 
 Return ONLY JSON: {"text": string, "citations": [{"meeting_slug": string, "segment_idx": number, "label": string}]}
-Rules: text is 3 to 6 plain-text sentences or short dash bullets; give 2 to 5 citations; each citation uses a meeting_slug and a segment_idx that both appear in the notes; label is a short phrase describing the cited moment.
+Rules: text is 3 to 6 plain-text sentences or short dash bullets; give 2 to 5 citations; each citation uses a meeting_slug and a segment_idx that appear together in the notes (the [number] before an action item or highlight); never cite any other index; label is a short phrase describing the cited moment.
 
 Notes:
 ${corpus}`
