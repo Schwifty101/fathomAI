@@ -1,83 +1,122 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useFormStatus } from 'react-dom'
+import { disconnectCalendar } from '@/app/calendar/actions'
+import { ScheduleCallForm } from '@/components/ScheduleCallForm'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
+import type { CalEvent } from '@/lib/google-calendar'
+import { connectGoogleCalendar } from '@/lib/supabase/client'
 import type { UpcomingEvent } from '@/lib/types'
 
-const KEY = 'calendar-connected'
-const fmt = new Intl.DateTimeFormat('en-US', { weekday: 'long', hour: 'numeric', minute: '2-digit', timeZone: 'UTC' })
+export type CalendarConnectProps =
+  | { mode: 'google'; events: CalEvent[]; loadError?: string }
+  | { mode: 'demo'; demoEvents: UpcomingEvent[]; signedIn: boolean; revoked: boolean }
 
-export function CalendarConnect({ events }: { events: UpcomingEvent[] }) {
-  const [connected, setConnected] = useState(false)
-  const [off, setOff] = useState<Set<string>>(new Set())
+const demoFmt = new Intl.DateTimeFormat('en-US', { weekday: 'long', hour: 'numeric', minute: '2-digit', timeZone: 'UTC' })
+const timedFmt = new Intl.DateTimeFormat('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'UTC' })
+const dayFmt = new Intl.DateTimeFormat('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })
+const link = 'font-medium text-accent underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent'
 
-  // Read storage after mount so the first client render matches the server render.
-  useEffect(() => {
-    try {
-      setConnected(localStorage.getItem(KEY) === '1')
-    } catch {
-      // storage blocked: stay disconnected
-    }
-  }, [])
-  const set = (v: boolean) => {
-    setConnected(v)
-    try {
-      localStorage.setItem(KEY, v ? '1' : '0')
-    } catch {
-      // not persisted; fine for a demo
-    }
-  }
-
-  if (!connected) {
-    return (
-      <Card className="space-y-3 p-6">
-        <h2 className="text-lg font-semibold">Connect your calendar</h2>
-        <p className="text-sm text-muted">
-          The notetaker joins the meetings on your calendar automatically. This is a demo: no real Google Calendar
-          connection is made, and the events shown after connecting are sample data.
-        </p>
-        <Button variant="primary" onClick={() => set(true)}>Connect Google Calendar (demo)</Button>
-      </Card>
-    )
-  }
+function ConnectButton() {
+  const [busy, setBusy] = useState(false)
   return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between gap-3">
-        <p className="text-sm text-muted">Connected (demo, sample events). Switch the notetaker on or off per meeting.</p>
-        <Button size="sm" variant="ghost" onClick={() => set(false)}>Disconnect</Button>
-      </div>
+    <Button
+      variant="primary"
+      disabled={busy}
+      className="w-full sm:w-auto"
+      onClick={async () => {
+        setBusy(true)
+        // Read lazily so the component also renders outside a router. The page navigates away on success.
+        await connectGoogleCalendar(location.pathname)
+        setBusy(false)
+      }}
+    >
+      {busy ? 'Redirecting to Google…' : 'Connect Google Calendar'}
+    </Button>
+  )
+}
+
+function DisconnectButton() {
+  const { pending } = useFormStatus()
+  return <Button type="submit" size="sm" variant="ghost" disabled={pending}>{pending ? 'Disconnecting…' : 'Disconnect'}</Button>
+}
+
+function DemoList({ events }: { events: UpcomingEvent[] }) {
+  return (
+    <section aria-labelledby="demo-schedule" className="space-y-3">
+      <h2 id="demo-schedule" className="text-sm font-medium text-muted">Demo schedule</h2>
       {events.length === 0 && (
         <Card className="p-6 text-center">
           <p className="font-medium">No upcoming meetings</p>
           <p className="mt-1 text-sm text-muted">There are no sample events right now. Check back after the demo data is refreshed.</p>
         </Card>
       )}
-      {events.map((e) => {
-        const on = !off.has(e.id)
-        return (
-          <Card key={e.id} className="flex items-center justify-between gap-3 p-4">
-            <div className="min-w-0">
-              <p className="truncate font-medium">{e.title}</p>
-              <p className="text-sm text-muted">{fmt.format(new Date(e.starts_at))} UTC</p>
-            </div>
-            <div className="flex shrink-0 items-center gap-2 text-sm">
-              <span aria-hidden="true">Notetaker joins</span>
-              <button
-                type="button"
-                role="switch"
-                aria-checked={on}
-                aria-label={`Notetaker joins ${e.title}`}
-                onClick={() => setOff((s) => { const n = new Set(s); if (on) n.add(e.id); else n.delete(e.id); return n })}
-                className={`relative h-6 w-11 rounded-full border border-border transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${on ? 'bg-accent' : 'bg-surface-2'}`}
-              >
-                <span
-                  className={`absolute left-0.5 top-0.5 size-4 rounded-full transition-transform ${on ? 'translate-x-5 bg-accent-fg' : 'bg-muted'}`}
-                />
-              </button>
-            </div>
+      {events.map((e) => (
+        <Card key={e.id} className="p-4">
+          <p className="truncate font-medium">{e.title}</p>
+          <p className="text-sm text-muted">{demoFmt.format(new Date(e.starts_at))} UTC</p>
+        </Card>
+      ))}
+    </section>
+  )
+}
+
+function GoogleEvent({ e }: { e: CalEvent }) {
+  const when = e.allDay ? dayFmt.format(new Date(e.start)) : `${timedFmt.format(new Date(e.start))} UTC`
+  return (
+    <Card className="space-y-2 p-4">
+      <p className="break-words font-medium">{e.title}</p>
+      <p className="text-sm text-muted">
+        {when}
+        {e.allDay && <span className="ml-2 rounded bg-surface-2 px-2 py-0.5 text-xs">All day</span>}
+        {e.attendees > 0 && ` · ${e.attendees} ${e.attendees === 1 ? 'attendee' : 'attendees'}`}
+      </p>
+      {(e.meetUrl || e.htmlLink) && (
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+          {e.meetUrl && <a href={e.meetUrl} target="_blank" rel="noopener noreferrer" className={link}>Join Meet</a>}
+          {e.htmlLink && <a href={e.htmlLink} target="_blank" rel="noopener noreferrer" className={link}>Open in Google Calendar</a>}
+        </div>
+      )}
+    </Card>
+  )
+}
+
+export function CalendarConnect(props: CalendarConnectProps) {
+  if (props.mode === 'demo') {
+    return (
+      <div className="space-y-6">
+        <Card className="space-y-3 p-4 sm:p-6">
+          <h2 className="text-lg font-semibold">Connect your calendar</h2>
+          <p className="text-sm text-muted">
+            Sign in and connect Google Calendar to see your real events and schedule calls with a Google Meet link. Until then,
+            this is a demo schedule.
+          </p>
+          {props.revoked && <p role="status" className="text-sm text-danger">Google access was revoked or expired. Connect again.</p>}
+          <ConnectButton />
+        </Card>
+        <DemoList events={props.demoEvents} />
+      </div>
+    )
+  }
+  return (
+    <div className="space-y-6">
+      <section aria-labelledby="your-calendar" className="space-y-3">
+        <div className="flex items-center justify-between gap-3">
+          <h2 id="your-calendar" className="text-lg font-semibold">Your calendar</h2>
+          <form action={disconnectCalendar}><DisconnectButton /></form>
+        </div>
+        <p className="text-sm text-muted">The Fathom notetaker is simulated in this demo: it does not join the call.</p>
+        {props.loadError && <p role="alert" className="text-sm text-danger">{props.loadError}</p>}
+        {!props.loadError && props.events.length === 0 && (
+          <Card className="p-6 text-center">
+            <p className="font-medium">No upcoming events</p>
+            <p className="mt-1 text-sm text-muted">Nothing upcoming on your calendar. Schedule a call below.</p>
           </Card>
-        )
-      })}
+        )}
+        {props.events.map((e) => <GoogleEvent key={e.id} e={e} />)}
+      </section>
+      <ScheduleCallForm />
     </div>
   )
 }
