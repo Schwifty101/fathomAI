@@ -47,7 +47,7 @@ export const MEETINGS: MeetingDef[] = [
       { name: 'Elena Voss', role: 'VP Operations, Acme Freight' },
       { name: 'Tom Brandt', role: 'Dispatch Manager, Acme Freight' },
     ],
-    targetMin: 35,
+    targetMin: 20,
     topic: 'Discovery call with Acme Freight, a 140-truck regional carrier that dispatches with spreadsheets and phone calls. Pain: late deliveries, idle drivers, no live ETAs for their customers. They are evaluating two competitors. Budget of roughly $60k a year is approved, decision due by end of next month, a security review is required, and Tom objects that migrating their data will be painful.',
   },
   {
@@ -59,32 +59,32 @@ export const MEETINGS: MeetingDef[] = [
   {
     slug: 'priya-mei-1on1', title: 'Priya / Mei 1:1', kind: 'one_on_one', platform: 'meet',
     daysAgo: 5, hourUtc: 14, host: 'priya', internal: ['priya', 'mei'],
-    externals: [], targetMin: 30,
+    externals: [], targetMin: 15,
     topic: 'A 1:1 between Priya (Product Lead) and Mei (Engineering Manager): workload and burnout on the platform team, worry about Q4 scope, hiring two backend engineers, Mei growing toward a director role, and feedback on how product and engineering plan together.',
   },
   {
     slug: 'harbor-interview', title: 'Customer Interview // Harbor Logistics', kind: 'interview', platform: 'zoom',
     daysAgo: 10, hourUtc: 17, host: 'amara', internal: ['amara'],
     externals: [{ name: 'Rafael Mendes', role: 'Operations Manager, Harbor Logistics' }],
-    targetMin: 40,
+    targetMin: 20,
     topic: 'Customer interview with Harbor Logistics about how they use Kestrel Dispatch: their daily workflow, what they love (the live map, auto-assign), frustrations (clunky bulk import, slow reports), what they would pay more for (proactive delay alerts), competitor mentions, and a request for an API.',
   },
   {
     slug: 'optimizer-outage-postmortem', title: 'Route Optimizer Outage Postmortem', kind: 'postmortem', platform: 'teams',
     daysAgo: 11, hourUtc: 13, host: 'mei', internal: ['mei', 'lucas', 'jonas', 'amara', 'omar'],
-    externals: [], targetMin: 45,
+    externals: [], targetMin: 25,
     topic: 'Blameless postmortem of a 52-minute outage of the route optimizer last Tuesday: a deploy changed a database index, a nightly job locked tables, and dispatchers saw empty routes. Cover the timeline, the detection gap (alerts fired late), customer impact (31 customers), what went well, the root cause, and action items on alert thresholds, deploy checklists and status-page communication.',
   },
   {
     slug: 'mobile-design-review', title: 'Mobile App Design Review', kind: 'design_review', platform: 'meet',
     daysAgo: 14, hourUtc: 18, host: 'priya', internal: ['priya', 'jonas', 'mei', 'hannah'],
-    externals: [], targetMin: 50,
+    externals: [], targetMin: 25,
     topic: 'Design review of the Kestrel driver mobile app v2: the onboarding flow, the new stop-list screen, offline-mode behavior, accessibility contrast issues, push notification copy, and an argument about swipe-to-complete versus a confirm button.',
   },
   {
     slug: 'weekly-product-sync', title: 'Weekly Product Sync', kind: 'planning', platform: 'zoom',
     daysAgo: 6, hourUtc: 10, host: 'priya', internal: ['priya', 'daniel', 'amara', 'lucas'],
-    externals: [], targetMin: 25,
+    externals: [], targetMin: 15,
     topic: 'Weekly product sync: top feature requests from customers, pipeline feedback from sales, support ticket trends, and what to prioritize before the next planning cycle.',
   },
 ]
