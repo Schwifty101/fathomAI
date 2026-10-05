@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Card } from '@/components/ui/Card'
 import { Chip } from '@/components/ui/Chip'
+import { tileSpansRow } from '@/lib/card-tiles'
 import { formatMinutes, initials } from '@/lib/format'
 import { laneColor } from '@/lib/lanes'
 import type { MeetingListItem } from '@/lib/types'
@@ -18,7 +19,7 @@ export function MeetingCard({ m }: { m: MeetingListItem }) {
             <div
               key={participant.name}
               aria-hidden
-              className={`grid place-items-center bg-surface-2 text-xl font-semibold ${tiles.length === 1 ? 'col-span-2' : ''}`}
+              className={`grid place-items-center bg-surface-2 text-xl font-semibold ${tileSpansRow(tiles.length, index) ? 'col-span-2' : ''}`}
               style={{ color: laneColor(index) }}
             >
               {initials(participant.name)}
