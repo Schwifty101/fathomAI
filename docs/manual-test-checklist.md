@@ -71,7 +71,7 @@ Optional tally helper, run from the repository root once you have ticked and ann
 
 ```bash
 f=docs/manual-test-checklist.md
-for p in SO MC TC PP TR SA HL SH GS AF RG CA AU VR AX KR; do
+for p in SO MC TC PP TR SA HL SH GS AF RG CA GC AU VR AX KR; do
   printf '%s pass=%s fail=%s blocked=%s total=%s\n' "$p" \
     "$(grep -c "^- \[x\] \*\*$p-" $f)" \
     "$(grep -c "^- \[ \] \*\*$p-.*FAIL:" $f)" \
@@ -98,11 +98,12 @@ Total is the number of items in the section. Fill in Pass, Fail and Blocked as y
 | 12. Ask Fathom, Task 26 (AF) | 28 | | | |
 | 13. Live summary regeneration, Task 27 (RG) | 14 | | | |
 | 14. Calendar stub, Task 28 (CA) | 9 | | | |
+| 14a. Google Calendar (GC) | 9 | | | |
 | 15. Google sign-in, Task 15 (AU) | 13 | | | |
 | 16. Visual and responsive review, Task 14 (VR) | 19 | | | |
 | 17. Accessibility (AX) | 38 | | | |
 | 18. Known risks to watch (KR) | 13 | | | |
-| Total | 304 | | | |
+| Total | 313 | | | |
 
 ## 3. Signed-out basics (SO)
 
@@ -375,6 +376,8 @@ Items about the extractive fallback are tagged `NK` and need no key. Items tagge
 
 Open `/calendar`. In a private window the demo starts disconnected.
 
+**Superseded.** These items describe the earlier stub (a fake connect button, local-storage state, per-event switches). `/calendar` is now the real Google Calendar page described in section 14a, so CA-01 to CA-09 no longer match the UI and are expected to fail; run the GC items instead. They are kept so the tally stays comparable.
+
 - [ ] **CA-01** **Do:** Read the page. **Expect:** the heading "Calendar" and a card "Connect your calendar" saying "This is a demo: no real Google Calendar connection is made, and the events shown after connecting are sample data.", with a button "Connect Google Calendar (demo)". **Source:** T28 S2; Code: `components/CalendarConnect.tsx`.
 - [ ] **CA-02** `D` **Do:** Click "Connect Google Calendar (demo)". **Expect:** the line "Connected (demo, sample events). Switch the notetaker on or off per meeting.", a "Disconnect" button, and five events in this order: Weekly Product Sync // Kestrel, Discovery Call // Brightline Couriers, Engineering Standup, Customer Interview // Northgate Transport, Q4 Planning Checkpoint. **Source:** T28 S2 (five events); Seed: `seed/load.ts` (`EVENTS`).
 - [ ] **CA-03** `D` **Do:** Read each event's time. **Expect:** a full weekday and a time followed by "UTC", matching the offsets in MC-08. **Source:** Code: `components/CalendarConnect.tsx`; Seed: `seed/load.ts`.
@@ -384,6 +387,20 @@ Open `/calendar`. In a private window the demo starts disconnected.
 - [ ] **CA-07** `D` **Do:** Click "Disconnect", then reload. **Expect:** the connect card returns and stays after the reload. **Source:** T28 S2.
 - [ ] **CA-08** `D` **Do:** Clear the Network tab, then connect and toggle a switch. **Expect:** no request is sent. **Source:** Spec 2 (stub UI, no calendar OAuth); Code: `components/CalendarConnect.tsx`.
 - [ ] **CA-09** `D` **Do:** Connect in one window, then open `/calendar` in a private window. **Expect:** the private window shows the connect card (the state lives in that browser's `localStorage`). **Source:** Code: `components/CalendarConnect.tsx`; L9.7.
+
+## 14a. Google Calendar (GC)
+
+Real Google Calendar read and Meet scheduling. **Unverified:** nothing here has been run in a browser against Google. All items need the Google Cloud settings in the handoff (Calendar API enabled, the `calendar.events` scope on the consent screen, your account added as a test user) and `GAUTH_CLIENT_ID`, `GAUTH_CLIENT_SECRET` and `CALENDAR_COOKIE_SECRET` in `.env.local`. Use a Google account with a few real upcoming events. Without those variables `/calendar` shows the demo schedule and Connect cannot complete.
+
+- [ ] **GC-01** `D` `G` **Do:** Signed in but not connected (private window, then sign in), open `/calendar`. **Expect:** a "Connect your calendar" card with a "Connect Google Calendar" button, and the five demo events under "Demo schedule". **Source:** Code: `components/CalendarConnect.tsx`.
+- [ ] **GC-02** `G` **Do:** Click "Connect Google Calendar". **Expect:** Google's consent screen asks for calendar event access (an "unverified app" warning first is normal in Testing status); after you allow it you return to `/calendar`. **Source:** Code: `lib/supabase/client.ts` (`connectGoogleCalendar`), `app/auth/callback/route.ts`.
+- [ ] **GC-03** `G` **Do:** Read the page after connecting. **Expect:** the heading "Your calendar", a "Disconnect" button, and your real upcoming events (at most 25, times in UTC, "All day" tagged for all-day events, "Join Meet" and "Open in Google Calendar" links where Google has them). **Source:** Code: `app/calendar/page.tsx`, `lib/google-calendar.ts` (`listGoogleEvents`).
+- [ ] **GC-04** `G` **Do:** In "Schedule a call" enter a title, a start time in the future, a duration and one invitee address you control, then click "Schedule call". **Expect:** "Call scheduled" toast, the new event in the list after the page refreshes, and the form cleared. **Source:** Code: `components/ScheduleCallForm.tsx`, `app/calendar/actions.ts`.
+- [ ] **GC-05** `G` **Do:** Click "Open the Meet link" (or "Join Meet" on the new event). **Expect:** a Google Meet page opens. If the link is not ready the message says Google is still creating it; refresh in a moment. **Source:** Code: `lib/google-calendar.ts` (`createMeetEvent`).
+- [ ] **GC-06** `G` **Do:** Check the invitee's inbox and the event in Google Calendar. **Expect:** an invitation email from Google, and the event on your primary calendar with a Meet link. **Source:** Code: `lib/google-calendar.ts` (`sendUpdates`).
+- [ ] **GC-07** `G` **Do:** Reload `/calendar`, then in DevTools Application > Cookies find `fathom_gcal`. **Expect:** you stay connected; the cookie is httpOnly and its value is an opaque string, not a readable token. Do not paste the value anywhere. **Source:** Code: `lib/google-session.ts`.
+- [ ] **GC-08** `G` **Do:** Click "Disconnect". **Expect:** the connect card and demo events return, the `fathom_gcal` cookie is gone, and a reload keeps it that way. **Source:** Code: `app/calendar/actions.ts` (`disconnectCalendar`).
+- [ ] **GC-09** `G` **Do:** Connect again, then remove the app's access at https://myaccount.google.com/permissions and reload `/calendar`. **Expect:** the connect card with "Google access was revoked or expired. Connect again."; pressing Connect works again. A failed Schedule says "Google access expired. Connect again." **Source:** Code: `lib/google-session.ts` (`accessTokenFor`), `app/calendar/page.tsx`.
 
 ## 15. Google sign-in (AU), Task 15
 

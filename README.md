@@ -22,7 +22,7 @@ It is a Next.js 15 App Router app on Supabase (Postgres, Auth, row-level securit
 | Summaries, templates, action items | Seeded content, real UI | Four summary templates and the action items per call were generated once at seed time and committed. Switching templates makes no network call. Copy puts Markdown on the clipboard. Relative due dates ("by Friday") are resolved to real dates in code against the call's date. |
 | Ask Fathom | Seeded, extractive, or live | The suggested questions are answered from stored answers with no model call. Other questions get the closest full-text matches with cited moments. Live answers need `ANTHROPIC_API_KEY` on the server and a signed-in visitor. |
 | Recording bot and media | Stubbed | There is no audio or video. The player is a `requestAnimationFrame` clock that steps through the transcript, with a speed button and a scrubber. |
-| Calendar connect | Stubbed | A demo screen over five seeded events. "Connect Google Calendar (demo)" makes no connection. The connected flag is kept in the browser's local storage and the per-event notetaker switches are not saved at all. Times are shown in UTC. |
+| Calendar | Real when connected, otherwise a demo | A signed-in visitor can press "Connect Google Calendar" on `/calendar`, see their next 25 real events and schedule a call that gets a Google Meet link (invitees get an email from Google). Not connected, you see the five seeded demo events. Times are shown in UTC. Needs your Google Cloud setup (see run step 7) and is **unverified**: nothing here has been run in a browser against Google. The recording bot is still simulated: it does not join the call. |
 | Meeting data | Synthetic | Eight fictional calls for a fictional freight-software company, generated with `claude -p` and committed as JSON under `seed/generated/`. Run `npm run seed:check` to see which bundles exist and pass. |
 | My Calls | Stand-in | There are no per-user calls. "My Calls" is the set of calls hosted by one fixed demo persona, Priya Raman, and every visitor sees it. |
 | Live AI | Optional | Live Regenerate and live Ask are off unless a server key is set. They are tested against stubbed model clients; they have not been exercised against the real API unless you supply a key. |
@@ -37,6 +37,17 @@ You need Node 22 or newer (`tests/toolchain.test.ts` asserts it), a Supabase pro
 4. Load the data: `npm run seed:check`, then `npm run seed:load`, then `npm run seed:clips`.
 5. Start the app: `npm run dev` and open `http://localhost:3000`. `/` redirects to `/meetings`.
 6. Optional, for Google sign-in locally: in the Supabase dashboard enable the Google provider with your own client ID and secret (the Google redirect URI is `https://<your-project-ref>.supabase.co/auth/v1/callback`), set Site URL to `http://localhost:3000` and add `http://localhost:3000/**` to the redirect URLs. Everything signed-out works without this.
+7. Optional, for the real Google Calendar page: set `GAUTH_CLIENT_ID` and `GAUTH_CLIENT_SECRET` (the same Google OAuth client as step 6) and `CALENDAR_COOKIE_SECRET` in `.env.local` (and in Vercel for Production and Preview; a new deployment is needed for them to take effect). Without them `/calendar` keeps the demo schedule. In Google Cloud, for that client's project: enable the Google Calendar API, add the scope `https://www.googleapis.com/auth/calendar.events` on the OAuth consent screen, and while the app is in Testing status add every tester as a test user. The scope is sensitive, so until Google verifies the app it shows an "unverified app" warning and is capped at 100 users. [unverified] None of this has been run against Google yet.
+
+Google Calendar settings:
+
+| Variable | Purpose |
+| --- | --- |
+| `GAUTH_CLIENT_ID` | Client ID of the Google OAuth client, used on the server to exchange the stored refresh token for a short-lived access token. |
+| `GAUTH_CLIENT_SECRET` | The matching client secret. Server only. |
+| `CALENDAR_COOKIE_SECRET` | Any random string of 32 or more characters. It seals the refresh token in the `fathom_gcal` cookie (AES-256-GCM). Without it, connecting stores nothing. |
+
+Ordinary Google sign-in is unchanged and asks for no calendar access. Only the "Connect Google Calendar" button requests the single scope `https://www.googleapis.com/auth/calendar.events`. The refresh token is kept in a sealed httpOnly cookie bound to your user id: there is no database table and no migration. It is per browser, so clearing cookies or using another browser means pressing Connect again. "Disconnect" deletes the cookie on this site but does not revoke the grant in your Google account.
 
 Notes on step 4:
 
@@ -105,7 +116,7 @@ Not covered by any automated test: Google sign-in, highlight, share and regenera
 
 These are scope decisions for a short rebuild judged on the core loop.
 
-- **A real recording bot, media, real calendar sign-in.** Each needs a meeting-platform or Google integration and real audio. A simulated player and a demo screen let the rest be built and demonstrated.
+- **A real recording bot and media.** Each needs a meeting-platform integration and real audio. A simulated player lets the rest be built and demonstrated. Calendar reading and Meet scheduling are real once connected, but the bot never joins the call.
 - **CRM and Slack push, Deals, Alerts.** They depend on another vendor's account and a customer's pipeline, and sit outside finding and sharing a moment.
 - **Real multi-tenant teams, invites, billing.** They need an organisation model. The fixed demo persona stands in.
 - **Playlists.** A cheap later addition: a join table over highlights.
