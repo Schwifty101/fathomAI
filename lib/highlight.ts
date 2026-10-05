@@ -10,6 +10,9 @@ export type HighlightDraft = {
   end_ms: number
 }
 
+// The database limit is 80 characters. Cutting at 80 UTF-16 units must not leave half of an emoji behind.
+const clipTitle = (text: string) => text.slice(0, 80).replace(/[\ud800-\udbff]$/, '')
+
 export function buildHighlight(
   segments: readonly HlSeg[],
   index: number,
@@ -22,7 +25,7 @@ export function buildHighlight(
   const words = segments.slice(run.startIdx, run.endIdx + 1).map((segment) => segment.text).join(' ').split(/\s+/)
   const auto = words.slice(0, 8).join(' ') + (words.length > 8 ? '…' : '')
   return {
-    type, note: cleaned, title: (cleaned ?? auto).slice(0, 80),
+    type, note: cleaned, title: clipTitle(cleaned ?? auto),
     start_ms: run.start_ms, end_ms: run.end_ms,
   }
 }

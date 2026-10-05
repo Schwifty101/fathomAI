@@ -497,12 +497,7 @@ describe('schema conformance (c): enums and limits agree with the CHECK constrai
     expect(checkAskScope(schema, ASK_SCOPES).constraintProblems).toEqual([])
   })
 
-  // KNOWN DEFECT (lib/highlight.ts:25): `.slice(0, 80)` counts UTF-16 code units, so a title whose 80th unit is the first
-  // half of an astral character (an emoji) is cut inside the surrogate pair and ends in a lone surrogate, which is not
-  // well-formed text (the exact database response to the resulting \ud83d JSON escape is UNVERIFIED here). The limit itself
-  // is safe (units >= characters, so the app is never looser than the CHECK); only the cut point is wrong. Remove `.fails`
-  // once buildHighlight truncates on a character boundary.
-  it.fails('buildHighlight never cuts a title inside a surrogate pair', () => {
+  it('buildHighlight never cuts a title inside a surrogate pair', () => {
     const note = `${'a'.repeat(79)}\u{1F600}${'b'.repeat(10)}`
     const title = must(buildHighlight(run(3, 'p1'), 0, 'insight', note), 'buildHighlight').title
     expect(title.isWellFormed()).toBe(true)
