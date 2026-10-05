@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { createHighlight, createShare, deleteHighlight, deleteShare } from '@/app/meetings/[id]/actions'
+import { AskPanel } from '@/components/AskPanel'
 import { SignInDialog } from '@/components/SignInDialog'
 import { Button } from '@/components/ui/Button'
 import { buildHighlight } from '@/lib/highlight'
@@ -163,6 +164,11 @@ export function MeetingView({ bundle, userId, initialMs, shares: initialShares }
           )}
         </div>
       ),
+    },
+    {
+      id: 'ask',
+      label: 'Ask',
+      content: <AskPanel embedded scopes={[{ value: `meeting:${meeting.slug}`, label: 'This meeting' }]} defaultScope={`meeting:${meeting.slug}`} prompts={[]} />,
     },
   ]
 
