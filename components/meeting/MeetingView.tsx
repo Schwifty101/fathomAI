@@ -43,32 +43,39 @@ export function MeetingView({ bundle, userId, initialMs, shares: initialShares }
     store.seek(initialMs)
   }, [store, initialMs])
 
-  const addHighlight = useCallback(async (type: HighlightType, note: string | null) => {
+  // Resolves true only when the highlight was saved (the note box clears on success only).
+  const addHighlight = useCallback(async (type: HighlightType, note: string | null): Promise<boolean> => {
     const index = findActiveIdx(segments, store.ms)
     const draft = buildHighlight(segments, index, type, note)
-    if (!draft) return
+    if (!draft) return false
     if (!userId) {
       setSignIn('Sign in with Google to save highlights. You will come back to this moment.')
-      return
+      return false
     }
     const temporary: HighlightRow = { id: `tmp-${crypto.randomUUID()}`, user_id: userId, ...draft }
     setHighlights((current) => [...current, temporary].sort(byStart))
-    const result = await createHighlight({ meetingSlug: meeting.slug, segmentIdx: index, type, note })
-    if (result.ok) {
+    try {
+      const result = await createHighlight({ meetingSlug: meeting.slug, segmentIdx: index, type, note })
+      if (!result.ok) throw new Error(result.error)
       setHighlights((current) => current.map((highlight) =>
         highlight.id === temporary.id ? result.highlight : highlight,
       ).sort(byStart))
-    } else {
+      return true
+    } catch {
       setHighlights((current) => current.filter((highlight) => highlight.id !== temporary.id))
       toast('Could not save the highlight')
+      return false
     }
   }, [userId, segments, store, meeting.slug])
 
   const removeHighlight = useCallback(async (id: string) => {
     const removed = highlights.find((highlight) => highlight.id === id)
     setHighlights((current) => current.filter((highlight) => highlight.id !== id))
-    const result = await deleteHighlight(id)
-    if (!result.ok && removed) {
+    let ok = false
+    try {
+      ok = (await deleteHighlight(id)).ok
+    } catch {}
+    if (!ok && removed) {
       setHighlights((current) => [...current, removed].sort(byStart))
       toast('Could not delete the highlight')
     }
@@ -79,7 +86,13 @@ export function MeetingView({ bundle, userId, initialMs, shares: initialShares }
       setSignIn('Sign in with Google to share clips.')
       return
     }
-    const result = await createShare({ meetingSlug: meeting.slug, start_ms, end_ms })
+    let result: Awaited<ReturnType<typeof createShare>>
+    try {
+      result = await createShare({ meetingSlug: meeting.slug, start_ms, end_ms })
+    } catch {
+      toast('Could not create the clip link')
+      return
+    }
     if (!result.ok) {
       toast(result.error === 'limit' ? 'Daily clip limit reached (20)' : 'Could not create the clip link')
       return
@@ -105,7 +118,11 @@ export function MeetingView({ bundle, userId, initialMs, shares: initialShares }
   const removeShare = async (slug: string) => {
     const removed = shares.find((share) => share.slug === slug)
     setShares((current) => current.filter((share) => share.slug !== slug))
-    if (!(await deleteShare(slug)).ok) {
+    let ok = false
+    try {
+      ok = (await deleteShare(slug)).ok
+    } catch {}
+    if (!ok) {
       if (removed) setShares((current) => [removed, ...current])
       toast('Could not delete the link')
     }

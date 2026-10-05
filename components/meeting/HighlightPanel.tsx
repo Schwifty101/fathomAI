@@ -11,7 +11,7 @@ export function HighlightPanel({
 }: {
   highlights: HighlightRow[]
   signedIn: boolean
-  onAdd: (type: HighlightType, note: string | null) => void
+  onAdd: (type: HighlightType, note: string | null) => Promise<boolean>
 }) {
   const [note, setNote] = useState('')
   const count = (type: HighlightType) => highlights.filter((highlight) => highlight.type === type).length
@@ -26,9 +26,8 @@ export function HighlightPanel({
           <button
             key={type}
             type="button"
-            onClick={() => {
-              onAdd(type, note.trim() || null)
-              setNote('')
+            onClick={async () => {
+              if (await onAdd(type, note.trim() || null)) setNote('')
             }}
             className="flex items-center justify-between rounded-lg border-2 bg-surface-2 px-3 py-2 text-sm font-medium transition hover:brightness-125 focus-visible:outline-2 focus-visible:outline-accent"
             style={{ borderColor: hlColor(type) }}

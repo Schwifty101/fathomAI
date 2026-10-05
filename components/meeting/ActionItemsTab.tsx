@@ -25,8 +25,12 @@ export function ActionItemsTab({
           size="sm"
           variant="ghost"
           onClick={async () => {
-            await navigator.clipboard.writeText(actionItemsToMarkdown(items))
-            toast('Action items copied')
+            try {
+              await navigator.clipboard.writeText(actionItemsToMarkdown(items))
+              toast('Action items copied')
+            } catch {
+              toast("Couldn't copy")
+            }
           }}
         >
           Copy

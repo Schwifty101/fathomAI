@@ -21,6 +21,7 @@ export default async function MeetingPage({
   const shares = user ? await getMyShares(db, bundle.meeting.id) : []
   return (
     <MeetingView
+      key={user?.id ?? 'anon'} // remount on sign-in/out so own highlights and shares never leak across users
       bundle={bundle}
       userId={user?.id ?? null}
       liveAiEnabled={Boolean(process.env.ANTHROPIC_API_KEY)}
