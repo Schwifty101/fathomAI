@@ -27,6 +27,7 @@ export default async function TeamPage({ searchParams }: { searchParams: Promise
   return (
     <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[minmax(0,1fr)_auto]">
       <div className="min-w-0 space-y-8">
+        <h1 className="text-2xl font-semibold">Team Calls</h1>
         <div className="grid gap-4 sm:grid-cols-3">
           <Card className="p-4"><p className="text-sm text-muted">Calls</p><p className="text-3xl font-semibold">{meetings.length}</p></Card>
           <Card className="p-4"><p className="text-sm text-muted">Avg talk share</p><p className="text-3xl font-semibold">{avgTalk}%</p></Card>

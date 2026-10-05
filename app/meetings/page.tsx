@@ -17,6 +17,7 @@ export default async function MeetingsPage() {
   return (
     <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[minmax(0,1fr)_auto]">
       <div className="min-w-0">
+        <h1 className="mb-6 text-2xl font-semibold">My Calls</h1>
         <UpcomingEvents events={events} />
         {groups.map((group) => (
           <section key={group.label} className="mb-10">
