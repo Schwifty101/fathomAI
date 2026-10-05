@@ -17,7 +17,7 @@ A public rebuild of the Fathom AI meeting notetaker: Next.js 15 (App Router, Rea
 
 ## Rules
 
-- Never `git add -A` or `git add .`. Stage explicit paths. `.env*`, `graphify-out/` and `supabase/.temp` must stay untracked.
+- Never `git add -A` or `git add .`. Stage explicit paths. `.env*` and `supabase/.temp` must stay untracked.
 - Never print, log or paste a secret value (`SUPABASE_SERVICE_ROLE_KEY`, the anon key, `SUPABASE_DB_PASSWORD`, `ANTHROPIC_API_KEY`). `.agent-logs/` is public. Before committing a log: `grep -ciE '(sk-ant-|eyJ[A-Za-z0-9_-]{30,}|SUPABASE_DB_PASSWORD=|service_role["'"'"': =]+eyJ)' <log>` must print 0, and `grep -qF "$VALUE" <log>` must find none of the real values.
 - Do not write to the hosted database (`seed:load`, `seed:clips`, `rls:test`, SQL through a connector) without the user's explicit go-ahead in the current conversation. `scripts/guard-target.ts` checks the project ref; run `--dry-run` first; pass `--allow-cascade` only when the user approves deleting user data.
 - Ask before spending quota (`seed:gen`, `seed/ping.ts`), deploying, creating a repository, or pushing to a branch the user has not named.
@@ -27,7 +27,7 @@ A public rebuild of the Fathom AI meeting notetaker: Next.js 15 (App Router, Rea
 - Subagents: isolated worktrees may start from `origin/main`, not your branch. Begin every prompt with `git log --oneline -1`, `ls package.json` and a base-commit check before any `npm` command. Give each agent disjoint files. Never `pkill -f`; kill the PID you started.
 - Never say something works unless you ran it. Label browser and hosted results as unverified.
 - Prose and comments: British English, no em dashes.
-- graphify: after `/graphify .` or `--update`, run `node scripts/repair-graphify.mjs <raw> <repaired>` before building (ledger 9.9). `graphify-out/` is gitignored.
+- graphify: after `/graphify .` or `--update`, run `node scripts/repair-graphify.mjs <raw> <repaired>` before building (ledger 9.9). `graphify-out/` is tracked on `main` (the user committed it) and was built at `6a43498`, before this session's code changes, so refresh it with `--update` before relying on it for `lib/`, `seed/load.ts` or the tests.
 
 ## Facts that bite
 

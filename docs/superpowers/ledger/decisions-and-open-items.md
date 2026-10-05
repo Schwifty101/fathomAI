@@ -21,7 +21,7 @@ The live summary is `continuation-handoff.md`; this file is the history behind i
 | 5 Security notes, 6 Deferred to the user | Current. |
 | 7 Tasks 1 to 9, 8 Graphify build and log location | Historical. Section 7's deferred minor findings were addressed in 9.2. Section 8's graph numbers are superseded by 9.9. |
 | 9 Verification, Phase 0, Tasks 27 and 28, Task 29 groundwork, graph repair | Current, except 9.5 "Open items": the loader, the signed-out highlight, and most App items there are fixed (10.5, 10.7). 9.3 hosted state was re-checked in 10.8. |
-| 10 Cloud continuation | Latest, in order. 10.1 to 10.4 are the break and blockers, 10.5 to 10.7 the merged workstreams and decisions, 10.8 the documentation pass. |
+| 10 Cloud continuation | Latest, in order. 10.1 to 10.4 are the break and blockers (10.3's note that `graphify-out/` is not on the remote is superseded by 10.8), 10.5 to 10.7 the merged workstreams and decisions, 10.8 the documentation pass. |
 
 ## 1. Concrete facts
 
@@ -265,4 +265,6 @@ Two plain subagents on disjoint files; both branches were merged and re-verified
 - [verified] Hosted state re-checked through the Supabase connector (read-only `get_project_url`, `list_tables`, `list_migrations`): URL `https://ifnrsvuxzfdxtcclndjp.supabase.co`, 12 public tables, RLS on every one, 0 rows, migrations `20261005000000 init` and `20261006000000 hardening`. The connector appeared mid-session; the network policy still blocks the host for scripts.
 - Rewritten: `continuation-handoff.md` (old text described `feat/phase-1-foundation` and "nothing pushed"). Added: `/CLAUDE.md` (Claude Code reads it at session start) and the "How to read this file" table above. Banner added to the top of the plan. Spec status line updated. README test notes and the checklist's pinned commit corrected.
 - Removed: `.vscode/settings.json` (an empty `{}` committed by accident; `.vscode/` is now gitignored) and the seven merged agent worktrees and `worktree-agent-*` branches (all clean and fully merged, local only).
+- [verified] `graphify-out/` reached `origin/main` during the session (the user's commits `e42446c` and `cfeb6fa`, 49 files, `.gitignore` line commented out). Scanned before merging: no secret patterns and none of the three real secret values. Graph facts: 766 nodes, 1847 edges, 36 communities, 0 dangling edges, 0 self-loops, built at `6a43498`, so it predates this session's code. `.graphify_root` and `.graphify_python` contain the user's local macOS paths (public now).
+- [verified] `origin/main` had moved ahead of the cloud branch by those two commits; they were merged into the branch (no conflicts) before the branch was pushed to `main`.
 - Not done, because it is large: reconciling the 7,000-line plan text with what was built (the plan banner lists the known deviations), and replacing the source-reading markup tests with real renders now that JSX works in vitest.
