@@ -1,9 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import type { AskResult } from '@/lib/ask'
+import { focusAfterToggle } from '@/lib/ask-focus'
 import { formatMs } from '@/lib/format'
 
 type Message = { role: 'user'; text: string } | { role: 'ai'; result: AskResult }
@@ -24,6 +25,17 @@ export function AskPanel({ scopes, defaultScope, prompts, embedded = false }: Pr
   const [messages, setMessages] = useState<Message[]>([])
   const [busy, setBusy] = useState(false)
   const [question, setQuestion] = useState('')
+  const expandRef = useRef<HTMLButtonElement>(null)
+  const questionRef = useRef<HTMLInputElement>(null)
+  const wasOpen = useRef<boolean | null>(null)
+
+  // Hide and Ask Fathom each unmount when pressed, so hand focus to the control that replaces them.
+  useEffect(() => {
+    const target = focusAfterToggle(wasOpen.current, open)
+    wasOpen.current = open
+    if (target === 'expand-button') expandRef.current?.focus()
+    else if (target === 'question') questionRef.current?.focus()
+  }, [open])
 
   async function send(raw: string) {
     const text = raw.trim()
@@ -50,7 +62,7 @@ export function AskPanel({ scopes, defaultScope, prompts, embedded = false }: Pr
   }
 
   if (!embedded && !open) {
-    return <Button size="sm" variant="secondary" className="self-start" onClick={() => setOpen(true)}>Ask Fathom</Button>
+    return <Button ref={expandRef} size="sm" variant="secondary" className="self-start" onClick={() => setOpen(true)}>Ask Fathom</Button>
   }
 
   return (
@@ -59,7 +71,7 @@ export function AskPanel({ scopes, defaultScope, prompts, embedded = false }: Pr
         <h2 className="text-sm font-semibold">Ask Fathom</h2>
         {!embedded && <Button size="sm" variant="ghost" aria-label="Collapse Ask Fathom" onClick={() => setOpen(false)}>Hide</Button>}
       </div>
-      <div className="min-h-24 space-y-3 overflow-y-auto text-sm">
+      <div role="log" aria-live="polite" aria-label="Conversation" className="min-h-24 space-y-3 overflow-y-auto text-sm">
         {messages.length === 0 && <p className="text-muted">Ask anything about {scopes.find((item) => item.value === scope)?.label.toLowerCase() ?? 'your calls'}.</p>}
         {messages.map((message, index) => message.role === 'user' ? (
           <p key={index} className="ml-6 rounded-lg bg-surface-2 p-2">{message.text}</p>
@@ -91,6 +103,7 @@ export function AskPanel({ scopes, defaultScope, prompts, embedded = false }: Pr
       )}
       <form onSubmit={(event) => { event.preventDefault(); send(question) }} className="flex flex-col gap-2">
         <input
+          ref={questionRef}
           value={question}
           onChange={(event) => setQuestion(event.target.value)}
           maxLength={500}
