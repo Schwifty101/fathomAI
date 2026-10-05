@@ -1,3 +1,4 @@
+import { guardTarget } from '../scripts/guard-target'; guardTarget() // refuses a wrong target; runs before the client below
 import { createClient } from '@supabase/supabase-js'
 import { deriveParticipantStats, unionSeconds } from '@/lib/stats'
 import type { SummaryContent, TranscriptFile } from '@/lib/schema'
