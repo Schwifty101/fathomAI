@@ -4,7 +4,7 @@ Date: 2026-10-05 (rewritten after independent verification and Phase 0). Branch:
 
 ## Stop point
 
-Tasks 1-26 are implemented, independently verified by five read-only agents, and hardened in Phase 0. **Tasks 27 (live summary regeneration) and 28 (calendar stub) are implemented and merged**; both are covered only by unit tests and builds, with no browser or live-model check yet. Task 29 is started: Steps 1-2 (the Playwright config and smoke spec) are written and the harness works, but only the 404 test can pass until data is loaded; Steps 3-12 (deploy, README, walkthrough, repository) have not started. Task 11 has not produced data.
+Tasks 1-26 are implemented, independently verified by five read-only agents, and hardened in Phase 0. **Tasks 27 (live summary regeneration) and 28 (calendar stub) are implemented and merged**; both are covered only by unit tests and builds, with no browser or live-model check yet. Task 29 is started: Steps 1-2 (the Playwright config and smoke spec) are written and the harness works, but only the 404 test can pass until data is loaded; Steps 3-12 (deploy, README, walkthrough, repository) have not started. Task 11 has produced one meeting only (the `eng-standup` probe, now passing `seed:check`); the other seven meetings and `ask.json` are not generated. See ledger section 10 for the cloud continuation and its blockers.
 
 `main` and `feat/phase-1-foundation` point at the same commit. Nothing has been pushed or deployed (`origin/main` still holds only "first commit"). Latest local checks on the merged tree: `npm test` 28 files / 234 tests, `npm run typecheck`, and `npm run build` (including `/api/regenerate` and `/calendar`) all pass.
 

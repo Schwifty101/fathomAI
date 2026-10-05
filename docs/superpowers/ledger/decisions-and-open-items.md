@@ -183,3 +183,30 @@ Not fixed, by design or for lack of data:
 - Workflow: stock graphify does not repair anything. After every `/graphify .` or `--update`, run `node scripts/repair-graphify.mjs <raw-extraction.json> <repaired.json>` from the repo root before building the graph. Because the previous graph had synthetic nodes, the first build with fewer nodes needed graphify's `force=True` (shrink guard #479); normal rebuilds do not.
 - [verified] The incremental flow works with the repair: `/graphify . --update` after the ledger, handoff and a session log changed (no code changed) re-extracted only those 3 docs with the old node ids reused so edges from untouched files did not dangle (`build_merge` drops and replaces a re-extracted file's nodes), merged into the repaired graph, and the merged extraction was already clean; running the repair on it was a no-op (766 to 766 nodes, 1847 to 1847 edges), so it is idempotent. Result: 766 nodes, 1847 edges, 36 communities, 0 dangling, 0 self-loops, 0 collapsed pairs. `graphify-out/.graphify_health.json` is a leftover from the earlier GPT run (older 816-node graph) and no longer describes the graph.
 - Not covered: a multi-line call chain whose member call is not on the edge's line is kept (conservative); node-level extractor flaws such as three same-named nested `complete()` functions merged into one node by id collision are neither fixed nor detected by the repair.
+
+## 10. Session break and cloud continuation (2026-10-05, evening)
+
+Tags as above; **[chat]** means taken from the user's pasted transcript of the interrupted local session and not re-run here.
+
+### 10.1 What the interrupted local session did
+
+- [chat] Task 11 probe: `npm run seed:gen -- eng-standup` ran with the new `claude` CLI flags and succeeded (five files). `.agent-logs/` stayed empty during generation, so the flags suppress the capture hook. Read-through found natural dialogue, the correct cast and no real-world name leakage. `seed:check` flagged three same-day deadline phrases.
+- [chat] Five background agents were launched with disjoint file ownership (seed loader hardening, README and walkthrough, manual-test checklist, UI robustness and accessibility, static schema conformance tests) and stopped before finishing when the session limit hit. Their worktrees were on the user's machine. [verified] None of their work is on the remote: `origin` held only `main` at `cb114e6` and nothing from them. Treat those five items as not started unless the user supplies the local worktrees.
+- [verified] `cb114e6` on `origin/main` holds the eng-standup bundle (`seed/generated/eng-standup/`, five files), four session logs under `.agent-logs/` and `.vscode/settings.json`.
+
+### 10.2 Done in the cloud session
+
+- [verified] Baseline reproduced from a clean `npm ci` (Node 22.22.0 here, Node 24 locally): 28 files / 234 tests pass, `npm run typecheck` clean.
+- [verified] `resolveDue` now resolves intraday phrases ("within the hour", "before noon", "by mid-afternoon", "by 3pm", "this afternoon", "in 45 minutes") to the meeting day. The check runs last, so a weekday, "tomorrow", "end of week" or "next week" still wins; a bare "morning" stays unresolved. 17 rows added to `tests/due.test.ts` (red first: 10 failed, then all pass). Suite is 28 files / 251 tests, typecheck clean.
+- [verified] The probe bundle's three stale `"due": null` entries in `seed/generated/eng-standup/actions.json` were set to `2026-10-02` (the meeting date). `seed:check` now reports `eng-standup: 100 lines, 15 min, 6 highlights` with no error for it. The remaining 8 problems are the 7 meetings not yet generated plus `ask.json`.
+- Commit `df998c7` on `claude/serene-galileo-yn8oce`.
+
+### 10.3 Blockers in the cloud environment (verified)
+
+- The container network policy returns 403 to CONNECT for `ifnrsvuxzfdxtcclndjp.supabase.co:443`. From here `seed:load`, `seed:clips`, `rls:test` and the e2e smoke run against hosted data cannot execute. The Supabase variables are set in the container environment and the URL matches the ledger ref.
+- Not installed or not enabled in the cloud session: the `graphify`, `supabase` and `vercel` CLIs and the ponytail, superpowers and graphify plugins or skills (`ListPlugins` and `ListSkills` returned nothing). `graphify-out/` is gitignored and is not on the remote.
+- `claude` 2.1.289 is logged in via an OAuth token here. Which account's quota a `seed:gen` run would spend was not checked and no generation was run.
+
+### 10.4 Secret scan of what is already public
+
+- [verified] Task 29 Step 9 regex over `.agent-logs`, `docs`, `seed`, `lib`, `app`, `components`, `scripts`, `e2e`, `supabase`: 5 matches, all prose describing the scan itself (no key values). The literal DB password, service-role key and anon key from the container environment are absent from `HEAD`; the password is also absent from the last 20 commits. Not yet done: a full-history scan and a scan of the other three logs for personal data.
