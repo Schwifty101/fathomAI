@@ -6,10 +6,12 @@ export async function middleware(request: NextRequest) {
   const supabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
     cookies: {
       getAll: () => request.cookies.getAll(),
-      setAll(list) {
+      setAll(list, headers) {
         list.forEach(({ name, value }) => request.cookies.set(name, value))
         response = NextResponse.next({ request })
         list.forEach(({ name, value, options }) => response.cookies.set(name, value, options))
+        // cache-control: no-store, so a CDN never caches a response carrying session cookies.
+        Object.entries(headers).forEach(([key, value]) => response.headers.set(key, value))
       },
     },
   })

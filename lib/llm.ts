@@ -43,7 +43,7 @@ export function anthropicClient(
   apiKey: string,
   model: string = process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-5-5',
 ): LlmClient {
-  const sdk = new Anthropic({ apiKey })
+  const sdk = new Anthropic({ apiKey, timeout: 20_000, maxRetries: 0 })
   return {
     async complete({ system, prompt, maxTokens = 4096 }) {
       const res = await sdk.messages.create({

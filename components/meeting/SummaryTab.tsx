@@ -67,8 +67,12 @@ export function SummaryTab({
           size="sm"
           variant="ghost"
           onClick={async () => {
-            await navigator.clipboard.writeText(summaryToMarkdown(title, TEMPLATE_LABELS[template], entry.content))
-            toast('Summary copied')
+            try {
+              await navigator.clipboard.writeText(summaryToMarkdown(title, TEMPLATE_LABELS[template], entry.content))
+              toast('Summary copied')
+            } catch {
+              toast("Couldn't copy")
+            }
           }}
         >
           Copy

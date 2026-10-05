@@ -1,13 +1,12 @@
 import { ImageResponse } from 'next/og'
 import { getClip } from '@/lib/clip'
-import { createAnonClient } from '@/lib/supabase/anon'
 
 export const alt = 'Meeting clip'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
 export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
-  const clip = await getClip(createAnonClient(), (await params).slug)
+  const clip = await getClip((await params).slug)
   const quote = clip?.segments[0] ? `“${clip.segments[0].text.slice(0, 180)}”` : 'This clip is no longer available'
   return new ImageResponse(
     (

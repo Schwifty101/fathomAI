@@ -1,5 +1,5 @@
 export function formatMs(ms: number): string {
-  const total = Math.max(0, Math.floor(ms / 1000))
+  const total = Number.isFinite(ms) ? Math.max(0, Math.floor(ms / 1000)) : 0
   const h = Math.floor(total / 3600)
   const m = Math.floor((total % 3600) / 60)
   const ss = String(total % 60).padStart(2, '0')
@@ -13,9 +13,8 @@ export function formatMinutes(sec: number): string {
 
 export function parseTimeParam(value: string | string[] | undefined, durationMs: number): number {
   const raw = Array.isArray(value) ? value[0] : value
-  const n = Number(raw)
-  if (raw === undefined || raw === '' || !Number.isFinite(n)) return 0
-  return Math.min(Math.max(0, Math.round(n)), durationMs)
+  if (raw === undefined || !/^\d+$/.test(raw) || !Number.isFinite(durationMs)) return 0
+  return Math.min(Number(raw), durationMs)
 }
 
 export function initials(name: string): string {

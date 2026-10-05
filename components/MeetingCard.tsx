@@ -13,10 +13,11 @@ export function MeetingCard({ m }: { m: MeetingListItem }) {
   return (
     <Link href={`/meetings/${m.slug}`} className="group block rounded-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
       <Card className="overflow-hidden transition group-hover:border-accent">
-        <div className="relative grid aspect-video grid-cols-2 gap-px bg-border" aria-hidden>
+        <div className="relative grid aspect-video grid-cols-2 gap-px bg-border">
           {tiles.map((participant, index) => (
             <div
               key={participant.name}
+              aria-hidden
               className={`grid place-items-center bg-surface-2 text-xl font-semibold ${tiles.length === 1 ? 'col-span-2' : ''}`}
               style={{ color: laneColor(index) }}
             >

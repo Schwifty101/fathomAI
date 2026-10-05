@@ -31,6 +31,7 @@
   --dur-base: 240ms;
 }
 
+html { color-scheme: dark; }
 html, body { background: var(--color-bg); color: var(--color-fg); font-family: var(--font-sans); }
 
 @keyframes fade-up { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
@@ -44,5 +45,5 @@ html, body { background: var(--color-bg); color: var(--color-fg); font-family: v
 .tr-row { content-visibility: auto; contain-intrinsic-size: auto 64px; }
 
 @media (prefers-reduced-motion: reduce) {
-  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }

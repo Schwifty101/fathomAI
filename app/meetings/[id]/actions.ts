@@ -48,8 +48,8 @@ export async function deleteHighlight(id: string): Promise<{ ok: boolean }> {
   if (!z.string().uuid().safeParse(id).success) return { ok: false }
   const db = await createClient()
   if (!(await getUser(db))) return { ok: false }
-  const { error } = await db.from('highlights').delete().eq('id', id)
-  return { ok: !error }
+  const { data, error } = await db.from('highlights').delete().eq('id', id).select('id')
+  return { ok: !error && !!data?.length } // RLS deleting 0 rows is not a success
 }
 
 const shareInput = z.object({
