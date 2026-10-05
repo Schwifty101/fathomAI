@@ -35,8 +35,16 @@ export async function refreshAccessToken(
   } catch {
     throw new Error('Google token request failed (network)')
   }
-  if (res.status >= 400 && res.status < 500) throw new GoogleAuthError(`Google rejected the token request (${res.status})`)
-  if (!res.ok) throw new Error(`Google token request failed (${res.status})`)
+  if (!res.ok) {
+    // Only a revoked or expired grant (400 invalid_grant) or a 401 means "connect again"; other 4xx is
+    // misconfiguration (for example invalid_client). The message carries a short code at most, never the body.
+    const code = ((await res.json().catch(() => null)) as { error?: unknown } | null)?.error
+    if (res.status === 401 || (res.status === 400 && code === 'invalid_grant')) {
+      throw new GoogleAuthError(`Google rejected the token request (${res.status})`)
+    }
+    const short = typeof code === 'string' && code.length <= 40 && /^[a-z_]+$/.test(code) ? ` ${code}` : ''
+    throw new Error(`Google token request failed (${res.status}${res.status < 500 ? short : ''})`)
+  }
   const token = ((await res.json().catch(() => null)) as { access_token?: unknown } | null)?.access_token
   if (typeof token !== 'string' || !token) throw new Error('Google token request failed (no access token)')
   return token
@@ -59,6 +67,13 @@ function mapEvent(e: RawEvent): CalEvent {
   }
 }
 
+// A 403 means "connect again" only for these reasons; accessNotConfigured, rate limits and the like are not the user's grant.
+async function isAuthReason(res: Response): Promise<boolean> {
+  const err = ((await res.json().catch(() => null)) as { error?: any } | null)?.error
+  const reasons = [err?.errors?.[0]?.reason, err?.reason, err?.status, ...(Array.isArray(err?.details) ? err.details.map((d: any) => d?.reason) : [])]
+  return reasons.some((r) => r === 'insufficientPermissions' || r === 'authError')
+}
+
 async function calendarJson(url: string, init: RequestInit, fetchImpl: typeof fetch): Promise<RawEvent> {
   let res: Response
   try {
@@ -66,7 +81,8 @@ async function calendarJson(url: string, init: RequestInit, fetchImpl: typeof fe
   } catch {
     throw new Error('Google Calendar request failed (network)')
   }
-  if (res.status === 401 || res.status === 403) throw new GoogleAuthError(`Google rejected the access token (${res.status})`)
+  if (res.status === 401) throw new GoogleAuthError('Google rejected the access token (401)')
+  if (res.status === 403 && (await isAuthReason(res))) throw new GoogleAuthError('Google rejected the access token (403)')
   if (!res.ok) throw new Error(`Google Calendar request failed (${res.status})`)
   try {
     return await res.json()
@@ -137,25 +153,26 @@ export function parseScheduleInput(
   raw: unknown, now: Date,
 ): { ok: true; value: ScheduleInput } | { ok: false; error: string } {
   const fail = (error: string) => ({ ok: false as const, error })
-  if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) return fail('Request body must be an object')
+  if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) return fail('Something went wrong with the form. Reload and try again.')
   const o = raw as Record<string, unknown>
 
   const title = typeof o.title === 'string' ? o.title.trim() : ''
-  if (title.length < 1 || title.length > 200) return fail('title must be 1 to 200 characters')
+  if (title.length < 1 || title.length > 200) return fail('Add a title (up to 200 characters).')
 
   const startMs = typeof o.start === 'string' && o.start.trim() ? new Date(o.start).getTime() : NaN
-  if (Number.isNaN(startMs)) return fail('start must be a valid date and time')
-  if (startMs < now.getTime()) return fail('start must not be in the past')
+  if (Number.isNaN(startMs)) return fail('Pick a valid start time.')
+  // 60 seconds of slack: datetime-local has minute precision, so picking the current minute lands just before now.
+  if (startMs < now.getTime() - 60_000) return fail('The start time is in the past.')
 
   const d = o.durationMin
-  if (typeof d !== 'number' || !Number.isInteger(d) || d < 5 || d > 480) return fail('durationMin must be a whole number from 5 to 480')
+  if (typeof d !== 'number' || !Number.isInteger(d) || d < 5 || d > 480) return fail('Choose a duration between 5 and 480 minutes.')
 
   const list = o.attendees ?? []
-  if (!Array.isArray(list) || list.length > 20) return fail('attendees must be a list of at most 20 email addresses')
+  if (!Array.isArray(list) || list.length > 20) return fail('You can invite up to 20 people.')
   const attendees: string[] = []
   for (const a of list) {
     const email = typeof a === 'string' ? a.trim().toLowerCase() : ''
-    if (!EMAIL.test(email)) return fail('attendees must all be valid email addresses')
+    if (!EMAIL.test(email)) return fail('Check the email addresses: one looks invalid.')
     if (!attendees.includes(email)) attendees.push(email)
   }
   return { ok: true, value: { title, start: new Date(startMs).toISOString(), durationMin: d, attendees } }

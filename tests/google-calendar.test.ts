@@ -30,12 +30,34 @@ describe('refreshAccessToken', () => {
       client_id: 'cid', client_secret: 'csecret', refresh_token: 'rt-secret', grant_type: 'refresh_token',
     })
   })
-  it('maps a 400 to GoogleAuthError without leaking the body or tokens', async () => {
+  it('maps a 400 invalid_grant to GoogleAuthError without leaking the body or tokens', async () => {
     const f = fakeFetch({ status: 400, body: { error: 'invalid_grant', error_description: 'rt-secret revoked' } })
     const error = await refreshAccessToken(creds, f.impl).catch((e) => e)
     expect(error).toBeInstanceOf(GoogleAuthError)
     expect(String(error.message)).not.toContain('rt-secret')
     expect(String(error.message)).not.toContain('invalid_grant')
+  })
+  it('maps a 401 to GoogleAuthError', async () => {
+    const f = fakeFetch({ status: 401, body: {} })
+    expect(await refreshAccessToken(creds, f.impl).catch((e) => e)).toBeInstanceOf(GoogleAuthError)
+  })
+  it('treats a 400 invalid_client as misconfiguration: plain error with the short code only', async () => {
+    const f = fakeFetch({ status: 400, body: { error: 'invalid_client', error_description: 'rt-secret csecret' } })
+    const error = await refreshAccessToken(creds, f.impl).catch((e) => e)
+    expect(error).not.toBeInstanceOf(GoogleAuthError)
+    expect(error.message).toBe('Google token request failed (400 invalid_client)')
+    expect(String(error.message)).not.toContain('rt-secret')
+  })
+  it('drops an error code that is not a short lowercase code, and a non-JSON 4xx body', async () => {
+    for (const body of [{ error: 'Bad Thing: rt-secret' }, { error: 'a'.repeat(41) }, { error: 5 }]) {
+      const error = await refreshAccessToken(creds, fakeFetch({ status: 400, body }).impl).catch((e) => e)
+      expect(error).not.toBeInstanceOf(GoogleAuthError)
+      expect(error.message).toBe('Google token request failed (400)')
+    }
+    const html = (async () => new Response('<html>rt-secret</html>', { status: 400 })) as unknown as typeof fetch
+    const error = await refreshAccessToken(creds, html).catch((e) => e)
+    expect(error).not.toBeInstanceOf(GoogleAuthError)
+    expect(error.message).toBe('Google token request failed (400)')
   })
   it('throws a plain error on a 503 with no token text', async () => {
     const f = fakeFetch({ status: 503, body: { error: 'rt-secret' } })
@@ -86,11 +108,23 @@ describe('listGoogleEvents', () => {
         meetUrl: 'https://meet.google.com/zzz', htmlLink: null, attendees: 0 },
     ])
   })
-  it('maps 401 and 403 to GoogleAuthError', async () => {
-    for (const status of [401, 403]) {
-      const f = fakeFetch({ status, body: { error: 'tok' } })
+  it('maps 401 and an auth-reason 403 to GoogleAuthError', async () => {
+    for (const [status, body] of [
+      [401, { error: 'tok' }],
+      [403, { error: { errors: [{ reason: 'insufficientPermissions' }] } }],
+      [403, { error: { errors: [{ reason: 'authError' }] } }],
+    ] as const) {
+      const f = fakeFetch({ status, body })
       const error = await listGoogleEvents('tok', NOW, f.impl).catch((e) => e)
       expect(error).toBeInstanceOf(GoogleAuthError)
+    }
+  })
+  it('treats other 403s (API not enabled, rate limit, no body) as a plain error', async () => {
+    for (const body of [{ error: { errors: [{ reason: 'accessNotConfigured', message: 'tok' }] } }, {}, 'nope']) {
+      const f = fakeFetch({ status: 403, body })
+      const error = await listGoogleEvents('tok', NOW, f.impl).catch((e) => e)
+      expect(error).not.toBeInstanceOf(GoogleAuthError)
+      expect(error.message).toBe('Google Calendar request failed (403)')
     }
   })
   it('throws a generic error, not a parser snippet, for a 200 with a non-JSON body', async () => {
@@ -210,11 +244,15 @@ describe('createMeetEvent', () => {
     await refreshAccessToken(creds, t.impl)
     for (const c of [...f.calls, ...l.calls, ...t.calls]) expect(c.init.signal).toBeInstanceOf(AbortSignal)
   })
-  it('maps 401 and 403 to GoogleAuthError and other failures to a plain error', async () => {
-    for (const status of [401, 403]) {
-      const f = fakeFetch({ status, body: {} })
+  it('maps 401 and an insufficientPermissions 403 to GoogleAuthError, other 403s and failures to a plain error', async () => {
+    for (const [status, body] of [[401, {}], [403, { error: { errors: [{ reason: 'insufficientPermissions' }] } }]] as const) {
+      const f = fakeFetch({ status, body })
       expect(await createMeetEvent('tok', input, 'r', f.impl, noSleep).catch((e) => e)).toBeInstanceOf(GoogleAuthError)
     }
+    const nc = fakeFetch({ status: 403, body: { error: { errors: [{ reason: 'accessNotConfigured' }] } } })
+    const ncError = await createMeetEvent('tok', input, 'r', nc.impl, noSleep).catch((e) => e)
+    expect(ncError).not.toBeInstanceOf(GoogleAuthError)
+    expect(ncError.message).toBe('Google Calendar request failed (403)')
     const f = fakeFetch({ status: 500, body: {} })
     const error = await createMeetEvent('tok', input, 'r', f.impl, noSleep).catch((e) => e)
     expect(error).not.toBeInstanceOf(GoogleAuthError)
@@ -231,6 +269,10 @@ describe('parseScheduleInput', () => {
       value: { title: 'Kickoff', start: '2026-10-06T08:00:00.000Z', durationMin: 30, attendees: ['a@x.com', 'b@y.org'] },
     })
   })
+  it('allows a start up to 60 seconds before now but not more', () => {
+    expect(bad({ start: '2026-10-05T09:59:00Z' }).ok).toBe(true)
+    expect(bad({ start: '2026-10-05T09:58:59Z' }).ok).toBe(false)
+  })
   it('treats attendees as optional and accepts a start equal to now', () => {
     expect(parseScheduleInput({ title: 't', start: NOW.toISOString(), durationMin: 5 }, NOW)).toEqual({
       ok: true, value: { title: 't', start: NOW.toISOString(), durationMin: 5, attendees: [] },
@@ -238,37 +280,29 @@ describe('parseScheduleInput', () => {
   })
   it('rejects bad titles', () => {
     for (const title of ['', '   ', 'x'.repeat(201), 5]) {
-      const r = bad({ title })
-      expect(r.ok).toBe(false)
-      if (!r.ok) expect(r.error).toMatch(/title/i)
+      expect(bad({ title })).toEqual({ ok: false, error: 'Add a title (up to 200 characters).' })
     }
     expect(bad({ title: 'x'.repeat(200) }).ok).toBe(true)
   })
   it('rejects a past or unparsable start', () => {
-    for (const start of ['2026-10-05T09:59:59Z', 'not a date', '', 7]) {
-      const r = bad({ start })
-      expect(r.ok).toBe(false)
-      if (!r.ok) expect(r.error).toMatch(/start/i)
+    expect(bad({ start: '2026-10-05T09:00:00Z' })).toEqual({ ok: false, error: 'The start time is in the past.' })
+    for (const start of ['not a date', '', 7]) {
+      expect(bad({ start })).toEqual({ ok: false, error: 'Pick a valid start time.' })
     }
   })
   it('rejects durations outside 5 to 480 or non-integer', () => {
     for (const durationMin of [4, 481, 30.5, '30', null]) {
-      const r = bad({ durationMin })
-      expect(r.ok).toBe(false)
-      if (!r.ok) expect(r.error).toMatch(/duration/i)
+      expect(bad({ durationMin })).toEqual({ ok: false, error: 'Choose a duration between 5 and 480 minutes.' })
     }
     expect(bad({ durationMin: 480 }).ok).toBe(true)
   })
   it('rejects a bad email, a non-array and more than 20 attendees', () => {
-    for (const attendees of [['nope'], ['a@b'], [3], 'a@x.com']) {
-      const r = bad({ attendees })
-      expect(r.ok).toBe(false)
-      if (!r.ok) expect(r.error).toMatch(/attendees/i)
+    for (const attendees of [['nope'], ['a@b'], [3]]) {
+      expect(bad({ attendees })).toEqual({ ok: false, error: 'Check the email addresses: one looks invalid.' })
     }
+    expect(bad({ attendees: 'a@x.com' })).toEqual({ ok: false, error: 'You can invite up to 20 people.' })
     const many = Array.from({ length: 21 }, (_, i) => `u${i}@x.com`)
-    const r = bad({ attendees: many })
-    expect(r.ok).toBe(false)
-    if (!r.ok) expect(r.error).toMatch(/attendees/i)
+    expect(bad({ attendees: many })).toEqual({ ok: false, error: 'You can invite up to 20 people.' })
     expect(bad({ attendees: many.slice(0, 20) }).ok).toBe(true)
   })
   it('rejects non-object input without throwing', () => {

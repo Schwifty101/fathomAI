@@ -6,7 +6,8 @@ const env = { secret, clientId: 'cid', clientSecret: 'csecret' }
 
 const okFetch = () =>
   vi.fn(async (_url: unknown, _init?: unknown) => new Response(JSON.stringify({ access_token: 'at' }), { status: 200 }))
-const statusFetch = (status: number) => vi.fn(async () => new Response('{}', { status })) as unknown as typeof fetch
+const statusFetch = (status: number, body: unknown = {}) =>
+  vi.fn(async () => new Response(JSON.stringify(body), { status })) as unknown as typeof fetch
 
 describe('sealConnection', () => {
   it('returns null for a missing token, a missing secret or a short secret', () => {
@@ -53,9 +54,10 @@ describe('accessTokenFor', () => {
     expect(await accessTokenFor(cookie, 'u1', { ...env, clientSecret: undefined }, fake)).toEqual({ status: 'none' })
   })
 
-  it('gives revoked on a 400 and rejects on a 503', async () => {
+  it('gives revoked on a 400 invalid_grant, and rejects (so the page shows unavailable) on invalid_client or a 503', async () => {
     const cookie = sealConnection('u1', 'rt', secret)!
-    expect(await accessTokenFor(cookie, 'u1', env, statusFetch(400))).toEqual({ status: 'revoked' })
+    expect(await accessTokenFor(cookie, 'u1', env, statusFetch(400, { error: 'invalid_grant' }))).toEqual({ status: 'revoked' })
+    await expect(accessTokenFor(cookie, 'u1', env, statusFetch(400, { error: 'invalid_client' }))).rejects.toThrow()
     await expect(accessTokenFor(cookie, 'u1', env, statusFetch(503))).rejects.toThrow()
   })
 })
