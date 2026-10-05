@@ -4,6 +4,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 import { Button } from '@/components/ui/Button'
 import type { AppUser } from '@/lib/auth'
+import { signOutWithToast } from '@/lib/sign-out'
 import { createClient, signInWithGoogle } from '@/lib/supabase/client'
 
 function Inner({ user }: { user: AppUser | null }) {
@@ -25,14 +26,7 @@ function Inner({ user }: { user: AppUser | null }) {
       ) : (
         <span className="grid size-8 place-items-center rounded-full bg-surface-2 text-xs">{(user.email ?? '?')[0].toUpperCase()}</span>
       )}
-      <Button
-        size="sm"
-        variant="ghost"
-        onClick={async () => {
-          await createClient().auth.signOut()
-          router.refresh()
-        }}
-      >
+      <Button size="sm" variant="ghost" onClick={() => signOutWithToast(() => createClient().auth, () => router.refresh())}>
         Sign out
       </Button>
     </div>
