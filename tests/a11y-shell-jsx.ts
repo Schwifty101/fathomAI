@@ -41,6 +41,14 @@ export function attr(element: Jsx, name: string): string | undefined {
   return undefined
 }
 
+/** An attribute's value exactly as written, braces included for an expression (`{expandRef}`), or undefined. */
+export function attrSource(element: Jsx, name: string): string | undefined {
+  for (const prop of opening(element).attributes.properties) {
+    if (ts.isJsxAttribute(prop) && prop.name.getText() === name) return prop.initializer?.getText()
+  }
+  return undefined
+}
+
 /** The literal text written between an element's tags, trimmed; expressions are ignored. */
 export function literalText(element: Jsx): string {
   if (!ts.isJsxElement(element)) return ''
