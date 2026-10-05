@@ -87,22 +87,22 @@ Total is the number of items in the section. Fill in Pass, Fail and Blocked as y
 | Section | Total | Pass | Fail | Blocked |
 | --- | --- | --- | --- | --- |
 | 3. Signed-out basics (SO) | 12 | | | |
-| 4. My Calls, Task 18 (MC) | 12 | | | |
-| 5. Team Calls, Task 19 (TC) | 18 | | | |
-| 6. Player and playback, Task 20 (PP) | 18 | | | |
+| 4. My Calls, Task 18 (MC) | 14 | | | |
+| 5. Team Calls, Task 19 (TC) | 19 | | | |
+| 6. Player and playback, Task 20 (PP) | 19 | | | |
 | 7. Transcript and meeting page, Task 21 (TR) | 26 | | | |
 | 8. Summary templates and action items, Task 22 (SA) | 18 | | | |
 | 9. Highlights, Task 23 (HL) | 24 | | | |
 | 10. Share and clip page, Task 24 (SH) | 24 | | | |
 | 11. Global search, Task 25 (GS) | 14 | | | |
-| 12. Ask Fathom, Task 26 (AF) | 27 | | | |
+| 12. Ask Fathom, Task 26 (AF) | 28 | | | |
 | 13. Live summary regeneration, Task 27 (RG) | 14 | | | |
 | 14. Calendar stub, Task 28 (CA) | 9 | | | |
-| 15. Google sign-in, Task 15 (AU) | 12 | | | |
+| 15. Google sign-in, Task 15 (AU) | 13 | | | |
 | 16. Visual and responsive review, Task 14 (VR) | 19 | | | |
-| 17. Accessibility (AX) | 36 | | | |
+| 17. Accessibility (AX) | 38 | | | |
 | 18. Known risks to watch (KR) | 13 | | | |
-| Total | 296 | | | |
+| Total | 304 | | | |
 
 ## 3. Signed-out basics (SO)
 
@@ -137,6 +137,8 @@ Open `/meetings` signed out. The persona is Priya Raman, who hosts four of the e
 - [ ] **MC-10** `D` **Do:** Hover over a card with the mouse. **Expect:** the card border turns cyan. **Source:** Code: `components/MeetingCard.tsx` (`group-hover:border-accent`).
 - [ ] **MC-11** `D` **Do:** At 1280 px, look at the layout. **Expect:** three columns of cards on the left and the Ask Fathom panel as a separate column on the right. **Source:** Code: `app/meetings/page.tsx` (`xl:grid-cols-3`, `lg:grid-cols-[minmax(0,1fr)_auto]`).
 - [ ] **MC-12** `D` **Do:** At 390 px, look at the layout, then run `document.documentElement.scrollWidth <= window.innerWidth` in the Console. **Expect:** one column of cards, the Ask panel below them, and the Console prints `true` (no horizontal page scroll). **Source:** T18 S3.
+- [ ] **MC-13** `D` **Do:** Open `/meetings` and list the headings (DevTools Accessibility tree, or run `[...document.querySelectorAll('h1')].map(h => h.textContent)`). **Expect:** exactly one `h1`, reading "My Calls". **Changed in the UI pass:** the page had no `h1`. **Source:** L10.5; Code: `app/meetings/page.tsx`.
+- [ ] **MC-14** `D` **Do:** Find a meeting card whose participants number exactly three (check the Team Calls table or the meeting pages) and look at its tile grid. **Expect:** no empty fourth cell; the last tile spans the full row. If no seeded call has three participants, mark Blocked. **Changed in the UI pass:** a three-participant card left an empty fourth cell. **Source:** L10.5; Code: `components/MeetingCard.tsx`, `lib/card-tiles.ts`.
 
 ## 5. Team Calls (TC), Task 19
 
@@ -160,6 +162,7 @@ Open `/team` signed out.
 - [ ] **TC-16** `D` **Do:** Choose "All hosts" and "All roles" and press Filter. **Expect:** all eight cards return. **Source:** Code: `app/team/page.tsx`.
 - [ ] **TC-17** `D` **Do:** At 1280 px, look at the layout. **Expect:** the stats, members table and calls on the left and the Ask Fathom panel on the right. **Source:** Code: `app/team/page.tsx`.
 - [ ] **TC-18** `D` **Do:** At 390 px, look at the layout and run `document.documentElement.scrollWidth <= window.innerWidth` in the Console. **Expect:** the three stats stack, the members table scrolls sideways inside its own box, the filter controls wrap, and the Console prints `true`. **Source:** Code: `components/TeamTable.tsx` (`overflow-x-auto`), `app/team/page.tsx`; T18 S3 (no horizontal page scroll).
+- [ ] **TC-19** `D` **Do:** Open `/team` and list the `h1` elements. **Expect:** exactly one, reading "Team Calls". **Changed in the UI pass:** the page had no `h1`. **Source:** L10.5; Code: `app/team/page.tsx`.
 
 ## 6. Player and playback (PP), Task 20
 
@@ -183,6 +186,7 @@ Open `/meetings/q4-planning` signed out. The player is simulated: a clock over t
 - [ ] **PP-16** `D` **Do:** Open the Chapters tab, click the third chapter, and read the small text at the top left of the stage. **Expect:** it shows the third chapter's title, and changes when playback crosses the next chapter start. **Source:** Code: `components/meeting/Player.tsx`, `components/meeting/ChaptersTab.tsx`.
 - [ ] **PP-17** `D` **Do:** Seek to within 5 seconds of the end and press Play, then let it finish. **Expect:** playback stops at the total, the button returns to "Play", and pressing Play again restarts from 0:00. **Source:** Code: `lib/playback.ts` (`tick`, `play`).
 - [ ] **PP-18** `D` **Do:** While playing, click the Highlights, Chapters and Action items tabs in turn. **Expect:** the clock keeps running and is not reset by switching tabs. **Source:** Code: `components/meeting/MeetingView.tsx` (one store per page).
+- [ ] **PP-19** `D` **Do:** Click the scrubber handle to focus it, then press Home, End, PageUp, PageDown and the Left and Right arrows. **Expect:** Home goes to 0:00, End to the end, PageUp moves forward 30 seconds, PageDown back 30 seconds, and the arrows move 5 seconds; Alt+Left still goes back in the browser instead of seeking. **Changed in the UI pass:** only the arrows worked. The 30 second page step is the agent's choice, not from the plan; mark Fail if you want another value. **Source:** L10.5; Code: `components/meeting/Scrubber.tsx`, `lib/slider.ts`.
 
 ## 7. Transcript and meeting page (TR), Task 21
 
@@ -230,7 +234,7 @@ On `/meetings/q4-planning`, Summary tab, signed out. Template headings come from
 - [ ] **SA-09** `D` **Do:** Paste the clipboard into a text editor. **Expect:** it starts with `# Q4 Product Planning`, then `_General summary_`, a blank line, then `## <heading>` lines each followed by `- ` bullets matching the screen. **Source:** Code: `lib/markdown.ts`.
 - [ ] **SA-10** `D` **Do:** Select "Project review", click Copy and paste. **Expect:** the second line reads `_Project review summary_`. **Source:** Code: `lib/markdown.ts`, `lib/schema.ts` (`TEMPLATE_LABELS`).
 - [ ] **SA-11** `D` **Do:** Open the "Action items" tab. **Expect:** one or more items (the generation prompt asks for 3 to 8), each with the task sentence, the owner in bold, a "Due YYYY-MM-DD" chip when a date is set, and an underlined "Jump to m:ss" button. **Source:** T22 S4; Code: `components/meeting/ActionItemsTab.tsx`; `lib/prompts.ts`.
-- [ ] **SA-12** `D` **Do:** Read every "Due" chip. **Expect:** all are real ISO dates (`YYYY-MM-DD`), never words such as "tomorrow" or "next week". **Source:** T22 S4 ("real ISO dates"); L9.2 (`seed:check` fails on an unresolved due phrase).
+- [ ] **SA-12** `D` **Do:** Read every "Due" chip. **Expect:** each reads as a date such as "Oct 2, 2026" (UTC), never words such as "tomorrow" or "next week" and never a raw `YYYY-MM-DD` string; in DevTools the chip is a `<time>` element whose `datetime` attribute is the ISO date. **Changed in the UI pass:** the chip used to print the raw ISO string; the copied Markdown (SA copy items) still uses ISO. **Source:** T22 S4 ("real ISO dates"); L9.2 (`seed:check` fails on an unresolved due phrase); L10.5; Code: `lib/format.ts` (`formatDue`), `components/meeting/ActionItemsTab.tsx`.
 - [ ] **SA-13** `D` **Do:** Compare each due date with the meeting date (2026-10-01). **Expect:** none is before the meeting date. **Source:** Spec 6 step 4 (relative due dates resolved against the meeting date).
 - [ ] **SA-14** `D` **Do:** Read the "Jump to" times from top to bottom. **Expect:** they never decrease. **Source:** Code: `lib/queries.ts` (ordered by `start_ms`).
 - [ ] **SA-15** `D` **Do:** Click "Jump to m:ss" on one item. **Expect:** the clock shows that time, and playback state does not change (it does not start by itself). **Source:** T22 S4; Code: `components/meeting/ActionItemsTab.tsx`.
@@ -346,6 +350,7 @@ Items about the extractive fallback are tagged `NK` and need no key. Items tagge
 - [ ] **AF-25** `D` `K` `G` **Do:** Time a live answer. **Expect:** it arrives within about 20 seconds, or the notice "The live answer failed. Showing the closest moments instead." appears. **Source:** L9.2 and L9.4 (20 s timeout, one attempt); Code: `lib/ask.ts`.
 - [ ] **AF-26** `D` `K` `G` **Do:** Ask 11 free-text questions within an hour. **Expect:** the eleventh gets the notice "Hourly live-answer limit reached. Showing the closest moments instead.". **Source:** Spec 7 (10 per hour); Code: `lib/ask.ts`.
 - [ ] **AF-27** `D` `K` `G` **Do:** After AF-26 click a chip. **Expect:** the seeded answer still appears. **Source:** Spec 7 (suggested prompts use no model call); Code: `lib/ask.ts` (suggested lookup comes first).
+- [ ] **AF-28** `D` **Do:** Click "Hide" on the Ask panel, then reopen it, using only the keyboard. **Expect:** after Hide, focus lands on the "Ask Fathom" control (it is not lost to the page); after reopening, focus lands in the question field; the conversation area has `role="log"` and `aria-live="polite"` in DevTools. A screen reader announcing the answer is not covered here. **Changed in the UI pass:** answers were not in a live region and collapsing dropped focus. **Source:** L10.5; Code: `components/AskPanel.tsx`, `lib/ask-focus.ts`.
 
 ## 13. Live summary regeneration (RG), Task 27
 
@@ -396,6 +401,7 @@ Items tagged `G` need Google OAuth configured (section 1.3). Items without it te
 - [ ] **AU-10** **Do:** Open `/meetings?auth_error=1`. **Expect:** a toast "Couldn't sign you in. Please try again." for about 3.5 seconds, and the address bar changes to `/meetings` with the parameter removed. **Source:** L9.2; Code: `components/Toaster.tsx`.
 - [ ] **AU-11** **Do:** Open `/auth/callback` with no `code` parameter. **Expect:** you end on `/meetings` and see the toast of AU-10. **Source:** Code: `app/auth/callback/route.ts`.
 - [ ] **AU-12** **Do:** Open `/auth/callback?next=https://evil.com`. **Expect:** you stay on `localhost:3000` and end on `/meetings`; there is no off-site redirect. **Source:** RF2; Code: `app/auth/callback/route.ts`.
+- [ ] **AU-13** `G` **Do:** Signed in, switch DevTools Network to Offline, then click "Sign out". **Expect:** a toast reading "Couldn't sign you out. Please try again."; no unhandled error in the Console. Unit-tested only so far. **Changed in the UI pass:** a failed sign-out was ignored. **Source:** L10.5; Code: `lib/sign-out.ts`, `components/AuthButton.tsx`.
 
 ## 16. Visual and responsive review (VR), Task 14
 
@@ -427,7 +433,7 @@ Keyboard, focus, reduced motion and contrast. Contrast figures are calculated fr
 
 Keyboard
 
-- [ ] **AX-01** **Do:** On `/meetings` press Tab repeatedly from the page top. **Expect:** the focus order is: "Fathom Rebuild" link, search box, My Calls, Team Calls, Calendar, "Sign in with Google". There is no skip link, so the logo is the first stop. **Source:** Code: `components/Header.tsx` (open question 9).
+- [ ] **AX-01** **Do:** On `/meetings` press Tab repeatedly from the page top. **Expect:** the focus order is: "Skip to main content" (visible only while focused), "Fathom Rebuild" link, search box, My Calls, Team Calls, Calendar, "Sign in with Google". **Changed in the UI pass:** there used to be no skip link, so the logo was the first stop. **Source:** Code: `app/layout.tsx`, `components/Header.tsx`; L10.5.
 - [ ] **AX-02** `D` **Do:** On a meeting page press Tab from the "← My Calls" link. **Expect:** the scrubber, "Back 10 seconds", Play, "Forward 10 seconds", the speed button, "Share moment", the six highlight buttons, the note field, the transcript search, the speaker select, and then the transcript rows. **Source:** Code: `components/meeting/MeetingView.tsx`, `Player.tsx`, `HighlightPanel.tsx`, `Transcript.tsx`.
 - [ ] **AX-03** `D` **Do:** Focus the scrubber and press the Right Arrow, then the Left Arrow. **Expect:** the clock moves forward 5 seconds, then back 5 seconds, and the page does not scroll. **Source:** Code: `components/meeting/Scrubber.tsx`.
 - [ ] **AX-04** `D` **Do:** Focus the Play button and press Space, then Enter. **Expect:** playback starts, then pauses (and the same for "-10s", "+10s" and the speed button). **Source:** Code: `components/meeting/Player.tsx` (native buttons).
@@ -475,6 +481,8 @@ Contrast (calculated with the formula in `tests/contrast.test.ts`)
 - [ ] **AX-34** **Do:** Measure the primary button text (`#06121f`) on its cyan fill (`#21baf3`). **Expect:** at least 4.5:1 (about 8.4). **Source:** T14 S2; DS.
 - [ ] **AX-35** `D` **Do:** Measure each of the eight speaker-name colours on a card and on the shaded row. **Expect:** at least 4.5:1 each (lowest about 5.6 on the shaded row). **Source:** DS; lane colours are not covered by `tests/contrast.test.ts` (T18 S2 note).
 - [ ] **AX-36** `D` **Do:** Measure the six highlight colours against the page background. **Expect:** at least 3:1 each (lowest about 6.9). **Source:** T14 S2 (3:1 for highlight colours); DS.
+- [ ] **AX-37** `D` **Do:** On a meeting page inspect the tab list in DevTools. **Expect:** the selected tab has `aria-controls` equal to the `id` of the rendered panel, and the other tabs have no `aria-controls` (their panels are not rendered). **Changed in the UI pass:** every tab pointed at a panel id, so inactive ones pointed at nothing. **Source:** L10.5; Code: `components/meeting/Tabs.tsx`, `lib/tabs.ts`.
+- [ ] **AX-38** **Do:** On any page press Tab once, then Enter on "Skip to main content", then Tab again. **Expect:** the link is visible only while focused and sits at the top of the screen; Enter moves focus to the main area, and the next Tab lands on the first control inside the page content, not on the header. There is exactly one `<main>` element. **Source:** L10.5; Code: `app/layout.tsx`.
 
 ## 18. Known risks to watch (KR)
 
@@ -506,7 +514,7 @@ I could not find a source that settles these, so no item above states them as fa
 6. `docs/design/design-system.md` says to keep transcript text at 16px and gives the page title as 30/36 regular. The code uses `text-sm` (14px) for transcript rows and `text-2xl font-semibold` (24px) for the meeting title. Only `/design` follows the guide. Which one is the authority?
 7. The same document reserves cyan for primary actions, active navigation and focus. Cyan also marks search matches, Ask and clip links, card hover borders, the first speaker lane and Insight highlights (the document itself gives Insight cyan). Is that wider use acceptable?
 8. The document says highlight colours must come with a text label. Scrubber markers carry only a hover title and transcript highlights are a coloured border; the labels appear in the panel and the Highlights tab. Is that enough?
-9. There is no skip link, so a keyboard user passes about a thousand transcript stops (KR-10) before reaching the tab panel. Should one be added?
+9. Resolved in the UI pass: a skip link now exists (AX-01, AX-38). A keyboard user can jump past the header, and the transcript is now a single tab stop (KR-10).
 10. If a user cancels at Google's consent screen, the callback has no `code` and sends them to `/meetings?auth_error=1`. I could not confirm what Supabase sends back on cancel, so no item covers it.
 11. The Share moment button uses the whole current speaker turn as the clip window (`expandToRun`; SH-18). The spec lists "the current moment" as a share source without defining its window. Is the speaker turn what you want?
 
