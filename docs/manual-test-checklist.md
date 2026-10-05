@@ -98,12 +98,12 @@ Total is the number of items in the section. Fill in Pass, Fail and Blocked as y
 | 12. Ask Fathom, Task 26 (AF) | 28 | | | |
 | 13. Live summary regeneration, Task 27 (RG) | 14 | | | |
 | 14. Calendar stub, Task 28 (CA) | 9 | | | |
-| 14a. Google Calendar (GC) | 9 | | | |
+| 14a. Google Calendar (GC) | 11 | | | |
 | 15. Google sign-in, Task 15 (AU) | 13 | | | |
 | 16. Visual and responsive review, Task 14 (VR) | 19 | | | |
 | 17. Accessibility (AX) | 38 | | | |
 | 18. Known risks to watch (KR) | 13 | | | |
-| Total | 313 | | | |
+| Total | 315 | | | |
 
 ## 3. Signed-out basics (SO)
 
@@ -376,7 +376,7 @@ Items about the extractive fallback are tagged `NK` and need no key. Items tagge
 
 Open `/calendar`. In a private window the demo starts disconnected.
 
-**Superseded.** These items describe the earlier stub (a fake connect button, local-storage state, per-event switches). `/calendar` is now the real Google Calendar page described in section 14a, so CA-01 to CA-09 no longer match the UI and are expected to fail; run the GC items instead. They are kept so the tally stays comparable.
+**Superseded.** These items describe the earlier stub (a fake connect button, local-storage state, per-event switches). `/calendar` is now the real Google Calendar page described in section 14a, so CA-01 to CA-09 no longer match the UI and are not to be run: mark each of CA-01 to CA-09 `N/A: superseded` instead of leaving them as expected failures, and run the GC items instead. They are kept so the tally stays comparable.
 
 - [ ] **CA-01** **Do:** Read the page. **Expect:** the heading "Calendar" and a card "Connect your calendar" saying "This is a demo: no real Google Calendar connection is made, and the events shown after connecting are sample data.", with a button "Connect Google Calendar (demo)". **Source:** T28 S2; Code: `components/CalendarConnect.tsx`.
 - [ ] **CA-02** `D` **Do:** Click "Connect Google Calendar (demo)". **Expect:** the line "Connected (demo, sample events). Switch the notetaker on or off per meeting.", a "Disconnect" button, and five events in this order: Weekly Product Sync // Kestrel, Discovery Call // Brightline Couriers, Engineering Standup, Customer Interview // Northgate Transport, Q4 Planning Checkpoint. **Source:** T28 S2 (five events); Seed: `seed/load.ts` (`EVENTS`).
@@ -401,6 +401,8 @@ Real Google Calendar read and Meet scheduling. **Unverified:** nothing here has 
 - [ ] **GC-07** `G` **Do:** Reload `/calendar`, then in DevTools Application > Cookies find `fathom_gcal`. **Expect:** you stay connected; the cookie is httpOnly and its value is an opaque string, not a readable token. Do not paste the value anywhere. **Source:** Code: `lib/google-session.ts`.
 - [ ] **GC-08** `G` **Do:** Click "Disconnect". **Expect:** the connect card and demo events return, the `fathom_gcal` cookie is gone, and a reload keeps it that way. **Source:** Code: `app/calendar/actions.ts` (`disconnectCalendar`).
 - [ ] **GC-09** `G` **Do:** Connect again, then remove the app's access at https://myaccount.google.com/permissions and reload `/calendar`. **Expect:** the connect card with "Google access was revoked or expired. Connect again."; pressing Connect works again. A failed Schedule says "Google access expired. Connect again." **Source:** Code: `lib/google-session.ts` (`accessTokenFor`), `app/calendar/page.tsx`.
+- [ ] **GC-10** `G` **Do:** Right after pressing Connect and returning to `/calendar`, open DevTools Console and run `document.cookie.includes('provider_refresh_token')`, then reload. **Expect:** `false`, and you are still signed in with the calendar still connected. Do not paste cookie values anywhere. **Source:** Code: `app/auth/callback/route.ts` (the session refresh after sealing). Unverified.
+- [ ] **GC-11** `G` **Do:** While connected, click Connect again and choose a different Google account. **Expect:** you come back signed in as that other account (the signed-in user switches; this is expected) and `/calendar` reflects the new account, not the old one. **Source:** Code: `app/auth/callback/route.ts`, `lib/google-session.ts` (cookie bound to the user id).
 
 ## 15. Google sign-in (AU), Task 15
 

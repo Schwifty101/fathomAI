@@ -47,7 +47,7 @@ Google Calendar settings:
 | `GAUTH_CLIENT_SECRET` | The matching client secret. Server only. |
 | `CALENDAR_COOKIE_SECRET` | Any random string of 32 or more characters. It seals the refresh token in the `fathom_gcal` cookie (AES-256-GCM). Without it, connecting stores nothing. |
 
-Ordinary Google sign-in is unchanged and asks for no calendar access. Only the "Connect Google Calendar" button requests the single scope `https://www.googleapis.com/auth/calendar.events`. The refresh token is kept in a sealed httpOnly cookie bound to your user id: there is no database table and no migration. It is per browser, so clearing cookies or using another browser means pressing Connect again. "Disconnect" deletes the cookie on this site but does not revoke the grant in your Google account.
+Ordinary Google sign-in is unchanged and asks for no calendar access. Only the "Connect Google Calendar" button requests the single scope `https://www.googleapis.com/auth/calendar.events`. The refresh token is kept in a sealed httpOnly cookie bound to your user id: there is no database table and no migration. It is per browser, so clearing cookies or using another browser means pressing Connect again. "Disconnect" deletes the cookie on this site but does not revoke the grant in your Google account (revoke it at https://myaccount.google.com/permissions). Signing out of Fathom leaves the `fathom_gcal` cookie in the browser for up to 180 days, but it is bound to your user id, so another user signing in on the same browser cannot use it. Supabase stores the Google tokens in its own JS-readable session cookie, so the sign-in callback refreshes the Supabase session once after connecting, which rewrites it without them. [unverified] This has not been checked in a browser.
 
 Notes on step 4:
 
@@ -66,6 +66,9 @@ Notes on step 4:
 | `ANTHROPIC_MODEL` | Live model | Optional. Defaults to `claude-sonnet-5-5`. |
 | `SEED_MODEL` | `seed:gen` | Optional. Model alias passed to the `claude` CLI. Defaults to `sonnet`. |
 | `NEXT_PUBLIC_SITE_URL` | Social-card metadata base URL | Optional. If unset, the app uses `VERCEL_PROJECT_PRODUCTION_URL` when present, else `http://localhost:3000` (`app/layout.tsx`). |
+| `GAUTH_CLIENT_ID` | Google Calendar page (server) | Optional. Client ID of the Google OAuth client (run step 7). Without the three Google Calendar variables `/calendar` keeps the demo schedule. |
+| `GAUTH_CLIENT_SECRET` | Google Calendar page (server) | Optional. The matching client secret. Server only. |
+| `CALENDAR_COOKIE_SECRET` | Google Calendar page (server) | Optional. Any random string of 32 or more characters; seals the `fathom_gcal` cookie. |
 | `EXPECT_SUPABASE_REF` | Target guard | Only needed if `supabase/.temp/project-ref` is absent. |
 
 The Supabase database password is used only by the `supabase` CLI. Neither the app nor the npm scripts read it.
