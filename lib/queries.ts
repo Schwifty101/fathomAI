@@ -45,6 +45,15 @@ export async function listMeetings(db: SupabaseClient, opts: { hostId?: string }
   return unwrap(await query) as unknown as MeetingListItem[]
 }
 
+// My Calls. Without a demo persona there are no calls of "mine"; falling back to an unfiltered list would show
+// every call under that label (the Ask scope for my_calls returns nothing in the same case, see lib/ask-db.ts).
+export async function listMyMeetings(
+  db: SupabaseClient,
+): Promise<{ persona: { id: string; name: string } | null; meetings: MeetingListItem[] }> {
+  const persona = await getDemoPersona(db)
+  return { persona, meetings: persona ? await listMeetings(db, { hostId: persona.id }) : [] }
+}
+
 export async function getMeetingBundle(
   db: SupabaseClient,
   slug: string,
