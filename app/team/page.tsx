@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { AskPanel } from '@/components/AskPanel'
 import { MeetingCard } from '@/components/MeetingCard'
 import { TeamTable } from '@/components/TeamTable'
@@ -6,12 +7,16 @@ import { Card } from '@/components/ui/Card'
 import { groupByMonth } from '@/lib/group'
 import { getTeamStats, listAskAnswers, listMeetings } from '@/lib/queries'
 import { createClient } from '@/lib/supabase/server'
+import { filterMeetings, resolveTeamFilter, unknownFilterMessage } from '@/lib/team-filter'
 
-export default async function TeamPage({ searchParams }: { searchParams: Promise<{ host?: string; role?: string }> }) {
-  const { host = '', role = '' } = await searchParams
+export default async function TeamPage({ searchParams }: { searchParams: Promise<{ host?: string | string[]; role?: string | string[] }> }) {
+  const params = await searchParams
   const db = await createClient()
   const [all, stats, answers] = await Promise.all([listMeetings(db), getTeamStats(db), listAskAnswers(db)])
-  const meetings = all.filter((meeting) => (!host || meeting.host_id === host) && (!role || meeting.host?.role === role))
+  const filter = resolveTeamFilter(params, stats)
+  const { host, role } = filter
+  const filterNote = unknownFilterMessage(filter)
+  const meetings = filterMeetings(all, filter)
   const withCalls = stats.filter((member) => member.calls > 0)
   const avgTalk = withCalls.length
     ? Math.round(withCalls.reduce((sum, member) => sum + member.talk_pct, 0) / withCalls.length)
@@ -39,15 +44,22 @@ export default async function TeamPage({ searchParams }: { searchParams: Promise
             <form method="get" className="flex flex-wrap items-center gap-2">
               <select name="host" defaultValue={host} aria-label="Host" className={selectClass}>
                 <option value="">All hosts</option>
+                {filter.unknownHost && <option value={host}>Unknown host</option>}
                 {stats.map((member) => <option key={member.member_id} value={member.member_id}>{member.name}</option>)}
               </select>
               <select name="role" defaultValue={role} aria-label="Role" className={selectClass}>
                 <option value="">All roles</option>
+                {filter.unknownRole && <option value={role}>Unknown role</option>}
                 {roles.map((value) => <option key={value} value={value}>{value}</option>)}
               </select>
               <Button type="submit" size="sm">Filter</Button>
             </form>
           </div>
+          {filterNote && (
+            <p role="status" className="mb-4 text-sm text-muted">
+              {filterNote} <Link href="/team" className="text-accent underline">Show all calls</Link>
+            </p>
+          )}
           {groupByMonth(meetings).map((group) => (
             <div key={group.label} className="mb-8">
               <h3 className="mb-3 text-sm font-medium uppercase tracking-wide text-muted">{group.label}</h3>
@@ -56,7 +68,7 @@ export default async function TeamPage({ searchParams }: { searchParams: Promise
               </div>
             </div>
           ))}
-          {meetings.length === 0 && <p className="text-muted">No calls match these filters.</p>}
+          {meetings.length === 0 && !filterNote && <p className="text-muted">No calls match these filters.</p>}
         </section>
       </div>
       <AskPanel

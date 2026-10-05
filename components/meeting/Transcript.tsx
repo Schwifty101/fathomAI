@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button'
 import { formatMs } from '@/lib/format'
 import { laneColor } from '@/lib/lanes'
 import type { PlaybackStore } from '@/lib/playback'
+import { rovingStop, rovingTarget } from '@/lib/roving'
 import { hlColor } from '@/lib/schema'
 import type { HighlightRow, ParticipantRow, SegmentRow } from '@/lib/types'
 import { useActiveIdx } from './playback-hooks'
@@ -24,6 +25,14 @@ function Marked({ text, query }: { text: string; query: string }) {
   return <>{parts}</>
 }
 
+// Rows are one tab stop; Up and Down move between them, Home and End jump to the ends.
+const ROW_KEYS = { prev: 'ArrowUp', next: 'ArrowDown', wrap: false }
+
+const rowIdxOf = (node: EventTarget | null): number | null => {
+  const element = node instanceof Element ? node.closest('[data-idx]') : null
+  return element ? Number(element.getAttribute('data-idx')) : null
+}
+
 type Props = {
   store: PlaybackStore
   segments: SegmentRow[]
@@ -39,6 +48,7 @@ export function Transcript({ store, segments, participants, highlights, toolbar,
   const [query, setQuery] = useState('')
   const [speaker, setSpeaker] = useState('all')
   const [selection, setSelection] = useState<{ a: number; b: number } | null>(null)
+  const [focused, setFocused] = useState<number | null>(null)
   const box = useRef<HTMLDivElement>(null)
   const who = useMemo(() => new Map(participants.map((participant, index) => [participant.id, { participant, index }])), [participants])
   const filtering = query !== '' || speaker !== 'all'
@@ -50,6 +60,9 @@ export function Transcript({ store, segments, participants, highlights, toolbar,
       (!lowerQuery || segment.text.toLowerCase().includes(lowerQuery)),
     )
   }, [segments, query, speaker])
+
+  const rowIdxs = useMemo(() => rows.map((segment) => segment.idx), [rows])
+  const tabStop = rovingStop(rowIdxs, focused, active)
 
   const highlightOf = useMemo(() => {
     const matches = new Map<number, HighlightRow>()
@@ -108,6 +121,18 @@ export function Transcript({ store, segments, participants, highlights, toolbar,
           ref={box}
           onWheel={() => setFollow(false)}
           onTouchMove={() => setFollow(false)}
+          onFocus={(event) => {
+            const idx = rowIdxOf(event.target)
+            if (idx !== null) setFocused(idx)
+          }}
+          onKeyDown={(event) => {
+            const idx = rowIdxOf(event.target)
+            if (idx === null) return
+            const target = rovingTarget(event, rowIdxs.indexOf(idx), rowIdxs.length, ROW_KEYS)
+            if (target === null) return
+            event.preventDefault()
+            box.current?.querySelector<HTMLElement>(`[data-idx="${rowIdxs[target]}"]`)?.focus()
+          }}
           onMouseUp={() => {
             const selected = window.getSelection()
             if (!selected || selected.isCollapsed) return setSelection(null)
@@ -130,6 +155,7 @@ export function Transcript({ store, segments, participants, highlights, toolbar,
                 key={segment.idx}
                 type="button"
                 data-idx={segment.idx}
+                tabIndex={tabStop === segment.idx ? 0 : -1}
                 onClick={() => {
                   if (window.getSelection()?.isCollapsed === false) return
                   store.seek(segment.start_ms)

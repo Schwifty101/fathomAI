@@ -1,15 +1,15 @@
+import Link from 'next/link'
 import { AskPanel } from '@/components/AskPanel'
 import { MeetingCard } from '@/components/MeetingCard'
 import { UpcomingEvents } from '@/components/UpcomingEvents'
 import { groupByMonth } from '@/lib/group'
-import { getDemoPersona, listAskAnswers, listMeetings, listUpcoming } from '@/lib/queries'
+import { listAskAnswers, listMyMeetings, listUpcoming } from '@/lib/queries'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function MeetingsPage() {
   const db = await createClient()
-  const persona = await getDemoPersona(db)
-  const [meetings, events, answers] = await Promise.all([
-    listMeetings(db, { hostId: persona?.id }),
+  const [{ persona, meetings }, events, answers] = await Promise.all([
+    listMyMeetings(db),
     listUpcoming(db),
     listAskAnswers(db),
   ])
@@ -26,7 +26,13 @@ export default async function MeetingsPage() {
             </div>
           </section>
         ))}
-        {meetings.length === 0 && <p className="text-muted">No calls yet.</p>}
+        {meetings.length === 0 && (persona
+          ? <p className="text-muted">No calls yet.</p>
+          : (
+            <p className="text-muted">
+              No demo user is set up, so there are no calls here. <Link href="/team" className="text-accent underline">Browse Team Calls</Link> instead.
+            </p>
+          ))}
       </div>
       <AskPanel
         scopes={[{ value: 'my_calls', label: 'My Calls' }, { value: 'team_calls', label: 'Team Calls' }]}

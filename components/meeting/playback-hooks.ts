@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useSyncExternalStore } from 'react'
-import type { PlaybackStore } from '@/lib/playback'
+import { runClock, type PlaybackStore } from '@/lib/playback'
 import { findActiveIdx, type Seg } from '@/lib/speaker-runs'
 
 export function useActiveIdx(store: PlaybackStore, segments: readonly Seg[]): number {
@@ -34,25 +34,12 @@ export function useMs(store: PlaybackStore, intervalMs = 100): number {
 }
 
 export function useClock(store: PlaybackStore): void {
-  useEffect(() => {
-    let raf = 0
-    let last = 0
-    const frame = (time: number) => {
-      store.tick(time - last)
-      last = time
-      raf = store.playing ? requestAnimationFrame(frame) : 0
-    }
-    const start = () => {
-      if (!raf && store.playing) {
-        last = performance.now()
-        raf = requestAnimationFrame(frame)
-      }
-    }
-    const unsubscribe = store.subscribe(start)
-    start()
-    return () => {
-      unsubscribe()
-      cancelAnimationFrame(raf)
-    }
-  }, [store])
+  useEffect(
+    () => runClock(store, {
+      now: () => performance.now(),
+      request: (callback) => requestAnimationFrame(callback),
+      cancel: (handle) => cancelAnimationFrame(handle),
+    }),
+    [store],
+  )
 }
