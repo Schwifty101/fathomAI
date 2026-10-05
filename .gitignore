@@ -3,7 +3,7 @@
 .env*.local
 .claude/worktrees/
 .superpowers/
-# graphify-out/
+graphify-out/
 node_modules
 .next
 *.tsbuildinfo

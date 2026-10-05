@@ -27,7 +27,7 @@ A public rebuild of the Fathom AI meeting notetaker: Next.js 15 (App Router, Rea
 - Subagents: isolated worktrees may start from `origin/main`, not your branch. Begin every prompt with `git log --oneline -1`, `ls package.json` and a base-commit check before any `npm` command. Give each agent disjoint files. Never `pkill -f`; kill the PID you started.
 - Never say something works unless you ran it. Label browser and hosted results as unverified.
 - Prose and comments: British English, no em dashes.
-- graphify: after `/graphify .` or `--update`, run `node scripts/repair-graphify.mjs <raw> <repaired>` before building (ledger 9.9). `graphify-out/` is tracked on `main` (the user committed it) and was built at `6a43498`, before this session's code changes, so refresh it with `--update` before relying on it for `lib/`, `seed/load.ts` or the tests.
+- graphify: after `/graphify .` or `--update`, run `node scripts/repair-graphify.mjs <raw> <repaired>` before building (ledger 9.9). `graphify-out/` is gitignored and was purged from the history on 2026-10-05 (it had been committed for the cloud environment); rebuild it locally with `--update` before relying on it, and never commit it.
 
 ## Facts that bite
 
