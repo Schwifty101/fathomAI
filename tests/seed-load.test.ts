@@ -312,7 +312,7 @@ function bundle(): Bundle {
   }
 }
 
-const load = (db: FakeDb, b: Bundle, options: { dryRun?: boolean; log?: (line: string) => void } = {}) =>
+const load = (db: FakeDb, b: Bundle, options: { dryRun?: boolean; allowCascade?: boolean; log?: (line: string) => void } = {}) =>
   loadSeed(db.client, b, { log: () => {}, ...options })
 const rowsOf = (db: FakeDb) => db.dump({ ignoreCreated: true })
 const boom: DbError = { message: 'connection reset', code: '08006' }
@@ -479,19 +479,53 @@ describe('loadSeed: what users created is kept', () => {
     expect(report.cascaded.highlights + report.cascaded.summaries + report.cascaded.shares).toBe(0)
   })
 
-  it('reports the user data a removed meeting takes with it, because the foreign keys force that', async () => {
-    const db = new FakeDb()
+  const withBetaRemoved = async (db: FakeDb) => {
     await load(db, bundle())
     await withUserData(db, 'beta')
     await withUserData(db, 'alpha')
     const next = bundle()
     next.meetings = [next.meetings[0]]
+    return next
+  }
+
+  it('refuses to remove a meeting that has user data unless allowCascade is passed, and writes nothing', async () => {
+    const db = new FakeDb()
+    const next = await withBetaRemoved(db)
+    const before = rowsOf(db)
+    await expect(load(db, next)).rejects.toThrow(/beta.*1 user highlight.*1 user summary.*1 share.*--allow-cascade/s)
+    expect(rowsOf(db)).toEqual(before)
+  })
+
+  it('with allowCascade it logs the warning, then removes the meeting and the user data on it', async () => {
+    const db = new FakeDb()
+    const next = await withBetaRemoved(db)
     const lines: string[] = []
-    const report = await load(db, next, { log: (line) => lines.push(line) })
+    const report = await load(db, next, { allowCascade: true, log: (line) => lines.push(line) })
     expect(report.cascaded).toEqual({ meetings: ['beta'], highlights: 1, summaries: 1, shares: 1 })
     expect(lines.join('\n')).toMatch(/WARNING.*beta.*1 user highlight.*1 user summary.*1 share/)
     expect(db.tables.shares.map((row) => row.slug)).toEqual(['clip-alpha'])
     expect(db.tables.highlights.filter((row) => row.user_id === user)).toHaveLength(1)
+  })
+
+  it('a dry run reports the cascade and says a real run would refuse, without throwing or writing', async () => {
+    const db = new FakeDb()
+    const next = await withBetaRemoved(db)
+    const before = rowsOf(db)
+    const lines: string[] = []
+    const report = await load(db, next, { dryRun: true, log: (line) => lines.push(line) })
+    expect(report.cascaded.meetings).toEqual(['beta'])
+    expect(lines.join('\n')).toMatch(/WARNING.*beta.*--allow-cascade/s)
+    expect(rowsOf(db)).toEqual(before)
+  })
+
+  it('removes a meeting that has no user data without the flag', async () => {
+    const db = new FakeDb()
+    await load(db, bundle())
+    const next = bundle()
+    next.meetings = [next.meetings[0]]
+    const report = await load(db, next)
+    expect(report.cascaded.meetings).toEqual(['beta'])
+    expect(db.tables.meetings.map((row) => row.slug)).toEqual(['alpha'])
   })
 })
 

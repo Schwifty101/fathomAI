@@ -14,7 +14,7 @@ import { castOf, MEETINGS, startedAt, type MeetingDef } from './meetings'
 import { TEAM, type Member } from './team'
 import { seedId } from './uuid'
 
-// seed:load [--dry-run]
+// seed:load [--dry-run] [--allow-cascade]
 //
 // PostgREST has no multi-statement transaction, so the load is ordered to fail safe:
 //   1. validate everything and build every row in memory (no I/O);
@@ -24,7 +24,8 @@ import { seedId } from './uuid'
 // A failure before step 4 leaves a superset of the old and new rows, never a half cleared table, and
 // running the loader again converges. Rows users created (highlights and summaries with a user_id,
 // shares) are never selected for deletion; the one exception is a meeting that left the bundle, whose
-// user rows the foreign keys cascade away. That case is counted and logged as a WARNING before it happens.
+// user rows the foreign keys cascade away. That case is counted, and the load refuses (before any write)
+// unless `--allow-cascade` is passed; a dry run reports it without refusing.
 // Every other seeded table has no client write grant, so any row in it that is not in the bundle is stale.
 // `--dry-run` stops after step 2 and reports what the real run would write and delete.
 
@@ -275,7 +276,7 @@ const zeroed = () => Object.fromEntries(TABLES.map((table) => [table, 0])) as Re
 export async function loadSeed(
   db: SupabaseClient,
   bundle: Bundle,
-  options: { dryRun?: boolean; log?: (line: string) => void } = {},
+  options: { dryRun?: boolean; allowCascade?: boolean; log?: (line: string) => void } = {},
 ): Promise<Report> {
   const log = options.log ?? console.log
   const plan = buildPlan(bundle)
@@ -319,10 +320,15 @@ export async function loadSeed(
   for (const table of TABLES) upserted[table] = plan.rows[table].length
 
   if (cascaded.highlights + cascaded.summaries + cascaded.shares > 0) {
-    log(`WARNING: pruning meeting ${cascaded.meetings.join(', ')} also removes `
+    const effect = `pruning meeting ${cascaded.meetings.join(', ')} also removes `
       + `${noun(cascaded.highlights, 'user highlight', 'user highlights')}, `
       + `${noun(cascaded.summaries, 'user summary', 'user summaries')} and ${noun(cascaded.shares, 'share', 'shares')} `
-      + '(foreign keys cascade from meetings)')
+      + '(foreign keys cascade from meetings)'
+    if (options.dryRun) log(`WARNING: ${effect}; a real run refuses unless --allow-cascade is passed`)
+    else if (!options.allowCascade) {
+      // Still before the first write, so refusing leaves every table as it was.
+      throw new Error(`refusing to load: ${effect}. Nothing was written. Re-run with --allow-cascade to go ahead.`)
+    } else log(`WARNING: ${effect}`)
   }
 
   const countAll = async () => {
@@ -355,8 +361,8 @@ export async function loadSeed(
 
 async function main() {
   guardTarget() // refuses a wrong target; runs before the client below and before anything is read or written
-  const unknown = process.argv.slice(2).filter((arg) => arg !== '--dry-run')
-  if (unknown.length) throw new Error(`unknown argument(s): ${unknown.join(' ')} (the only option is --dry-run)`)
+  const unknown = process.argv.slice(2).filter((arg) => arg !== '--dry-run' && arg !== '--allow-cascade')
+  if (unknown.length) throw new Error(`unknown argument(s): ${unknown.join(' ')} (the options are --dry-run and --allow-cascade)`)
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY
   if (!url || !key) throw new Error('set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env.local')
@@ -367,7 +373,10 @@ async function main() {
     errors.forEach((error) => console.error(`ERROR ${error}`))
     throw new Error('seed:check failed; fix the data before loading')
   }
-  const report = await loadSeed(db, readBundle(), { dryRun: process.argv.includes('--dry-run') })
+  const report = await loadSeed(db, readBundle(), {
+    dryRun: process.argv.includes('--dry-run'),
+    allowCascade: process.argv.includes('--allow-cascade'),
+  })
   for (const [table, count] of Object.entries(report.counts)) console.log(`${table}: ${count}`)
 }
 
