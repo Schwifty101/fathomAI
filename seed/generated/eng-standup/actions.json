@@ -10,7 +10,7 @@
   {
     "owner": "Lucas Ferreira",
     "task": "Post the promotion criteria for the shadow deployment in the ticket.",
-    "due": null,
+    "due": "2026-10-02",
     "due_phrase": "within the hour",
     "segment_idx": 21,
     "start_ms": 211598
@@ -18,7 +18,7 @@
   {
     "owner": "Mei Tanaka",
     "task": "Chase the GPU quota approval with infrastructure and escalate to their director if it slips.",
-    "due": null,
+    "due": "2026-10-02",
     "due_phrase": "before noon",
     "segment_idx": 22,
     "start_ms": 217509
@@ -26,7 +26,7 @@
   {
     "owner": "Mei Tanaka",
     "task": "Cut the Android 14 hotfix branch and ask the release engineer to submit the build.",
-    "due": null,
+    "due": "2026-10-02",
     "due_phrase": "by mid-afternoon",
     "segment_idx": 43,
     "start_ms": 398688

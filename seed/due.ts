@@ -2,6 +2,16 @@ const DAYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
 const DAY_WORD = /\b(sunday|monday|tuesday|wednesday|thursday|friday|saturday|sun|mon|tues|tue|wed|thurs|thur|thu|fri|sat)\b/
 const NEXT_DAY = new RegExp(`\\bnext\\s+${DAY_WORD.source.slice(2, -2)}\\b`)
 const COUNT: Record<string, number> = { a: 1, an: 1, one: 1, two: 2, 'a couple of': 2, three: 3, four: 4, five: 5, six: 6 }
+// Deadlines within the meeting day. Anchored forms only ("before noon", not a bare "morning"), and
+// checked last so any explicit day or week phrase wins ("next week by noon" is next week).
+const INTRADAY = new RegExp(
+  [
+    '\\b(within|in) (the|an?|one|two|three|four|five|six|a couple of|\\d+) (hour|min|minute)s?\\b',
+    '\\b(before|by|until) (noon|midday|lunch(time)?|mid-?(morning|afternoon)|(the )?(end of the )?(morning|afternoon|evening))\\b',
+    '\\b(before|by|until) \\d{1,2}(:\\d{2})? ?(am|pm)\\b',
+    '\\bthis (morning|afternoon|evening)\\b',
+  ].join('|'),
+)
 const iso = (d: Date) => d.toISOString().slice(0, 10)
 const addDays = (d: Date, n: number) => new Date(d.getTime() + n * 86_400_000)
 const monthEnd = (d: Date, plus: number) => new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + plus + 1, 0))
@@ -42,5 +52,6 @@ export function resolveDue(phrase: string | null, meetingDate: Date): string | n
     const n = COUNT[span[1]] ?? Number(span[1])
     return iso(addDays(base, n * (span[2] === 'week' ? 7 : 1)))
   }
+  if (INTRADAY.test(p)) return iso(base)
   return null
 }

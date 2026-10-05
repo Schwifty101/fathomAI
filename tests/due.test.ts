@@ -88,6 +88,24 @@ const table: [string, string | null][] = [
   ['close of business', '2026-10-07'],
   ['whenever we can', null],
   ['next weekend', null],
+  // intraday phrases mean the meeting day; any explicit day or week phrase still wins
+  ['within the hour', '2026-10-07'],
+  ['before noon', '2026-10-07'],
+  ['by mid-afternoon', '2026-10-07'],
+  ['by 3pm', '2026-10-07'],
+  ['by 10:30 am', '2026-10-07'],
+  ['within two hours', '2026-10-07'],
+  ['in an hour', '2026-10-07'],
+  ['in 45 minutes', '2026-10-07'],
+  ['this afternoon', '2026-10-07'],
+  ['by end of the afternoon', '2026-10-07'],
+  ['by noon tomorrow', '2026-10-08'],
+  ['tomorrow before noon', '2026-10-08'],
+  ['before noon Friday', '2026-10-09'],
+  ['end of the week by noon', '2026-10-09'],
+  ['next week by noon', '2026-10-12'],
+  ['morning', null],
+  ['in the morning', null],
 ]
 describe('resolveDue table (meeting on Wednesday 2026-10-07)', () => {
   it.each(table)('%s -> %s', (phrase, expected) => {
