@@ -17,18 +17,32 @@ const allDay: CalEvent = {
 
 describe('CalendarConnect demo mode', () => {
   it('offers to connect and labels the seeded list as a demo', () => {
-    const html = render({ mode: 'demo', demoEvents, signedIn: false, revoked: false })
+    const html = render({ mode: 'demo', demoEvents, signedIn: false, revoked: false, configured: true })
     expect(html).toContain('Connect your calendar')
     expect(html).toContain('Connect Google Calendar')
     expect(html).toContain('Demo schedule')
     expect(html).toContain('Weekly pipeline review')
     expect(html).not.toContain('Disconnect')
-    expect(html).not.toContain('Access was revoked')
+    expect(html).not.toContain('revoked or expired')
   })
 
   it('shows the revoked note', () => {
-    const html = render({ mode: 'demo', demoEvents, signedIn: true, revoked: true })
+    const html = render({ mode: 'demo', demoEvents, signedIn: true, revoked: true, configured: true })
     expect(html).toContain('Google access was revoked or expired. Connect again.')
+  })
+
+  it('hides the Connect button and says so when the server is not configured', () => {
+    const html = render({ mode: 'demo', demoEvents, signedIn: true, revoked: false, configured: false })
+    expect(html).not.toContain('Connect Google Calendar')
+    expect(html).toContain('Google Calendar is not configured on this server.')
+    expect(html).toContain('Weekly pipeline review')
+  })
+
+  it('does not throw on an invalid start time', () => {
+    expect(() => render({ mode: 'demo', demoEvents: [{ ...demoEvents[0], starts_at: '' }], signedIn: false, revoked: false, configured: true })).not.toThrow()
+    const html = render({ mode: 'google', events: [{ ...timed, start: '' }, { ...allDay, start: 'nope' }] })
+    expect(html).toContain('Design sync')
+    expect(html).toContain('Time unknown')
   })
 })
 

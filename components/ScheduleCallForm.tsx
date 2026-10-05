@@ -70,7 +70,7 @@ export function ScheduleCallForm() {
         <div className="space-y-1.5">
           <label htmlFor="sc-attendees" className="text-sm font-medium">Attendees (optional)</label>
           <input
-            id="sc-attendees" name="attendees" type="text" inputMode="email" autoComplete="off"
+            id="sc-attendees" name="attendees" type="text" autoComplete="off"
             placeholder="ana@example.com, ben@example.com" aria-describedby="sc-attendees-help" disabled={pending} className={field}
           />
           <p id="sc-attendees-help" className="text-xs text-muted">Separate addresses with commas. Google emails an invitation to each.</p>

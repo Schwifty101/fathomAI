@@ -12,8 +12,10 @@ export default async function CalendarPage() {
   const db = await createClient()
   const [user, demoEvents, jar] = await Promise.all([getUser(db), listUpcoming(db), cookies()])
 
-  const revoked: CalendarConnectProps = { mode: 'demo', demoEvents, signedIn: true, revoked: true }
-  let props: CalendarConnectProps = { mode: 'demo', demoEvents, signedIn: Boolean(user), revoked: false }
+  const configured =
+    (process.env.CALENDAR_COOKIE_SECRET ?? '').length >= 32 && Boolean(process.env.GAUTH_CLIENT_ID && process.env.GAUTH_CLIENT_SECRET)
+  const revoked: CalendarConnectProps = { mode: 'demo', demoEvents, signedIn: true, revoked: true, configured }
+  let props: CalendarConnectProps = { mode: 'demo', demoEvents, signedIn: Boolean(user), revoked: false, configured }
   if (user) {
     // accessTokenFor only throws once a cookie exists and the token refresh failed for a non-auth reason.
     const access = await accessTokenFor(jar.get(GCAL_COOKIE)?.value, user.id, {

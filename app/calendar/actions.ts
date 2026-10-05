@@ -13,22 +13,30 @@ export async function scheduleCall(raw: unknown): Promise<ScheduleResult> {
   if (!parsed.ok) return { ok: false, error: parsed.error }
   const user = await getUser(await createClient())
   if (!user) return { ok: false, error: 'Sign in to schedule a call.' }
+  let created: CalEvent
   try {
     const access = await accessTokenFor((await cookies()).get(GCAL_COOKIE)?.value, user.id, {
       secret: process.env.CALENDAR_COOKIE_SECRET,
       clientId: process.env.GAUTH_CLIENT_ID,
       clientSecret: process.env.GAUTH_CLIENT_SECRET,
     })
-    if (access.status === 'revoked') return { ok: false, error: 'Google access expired. Connect again.' }
+    if (access.status === 'revoked') {
+      revalidatePath('/calendar') // re-render into the revoked demo view that has the Connect button
+      return { ok: false, error: 'Google access expired. Connect again.' }
+    }
     if (access.status !== 'ok') return { ok: false, error: 'Connect Google Calendar first.' }
-    const event = await createMeetEvent(access.token, parsed.value, crypto.randomUUID())
-    // Refreshes the open page so the new event appears in the list without a client-side router call.
-    revalidatePath('/calendar')
-    return { ok: true, event }
+    created = await createMeetEvent(access.token, parsed.value, crypto.randomUUID())
   } catch (e) {
-    if (e instanceof GoogleAuthError) return { ok: false, error: 'Google access expired. Connect again.' }
+    if (e instanceof GoogleAuthError) {
+      revalidatePath('/calendar')
+      return { ok: false, error: 'Google access expired. Connect again.' }
+    }
     return { ok: false, error: 'Could not schedule the call. Try again.' }
   }
+  // Outside the try so a throw here can never turn a created event into a failure that invites a duplicate.
+  // Refreshes the open page so the new event appears in the list without a client-side router call.
+  revalidatePath('/calendar')
+  return { ok: true, event: created }
 }
 
 export async function disconnectCalendar(): Promise<void> {

@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useFormStatus } from 'react-dom'
 import { disconnectCalendar } from '@/app/calendar/actions'
 import { ScheduleCallForm } from '@/components/ScheduleCallForm'
@@ -12,15 +12,23 @@ import type { UpcomingEvent } from '@/lib/types'
 
 export type CalendarConnectProps =
   | { mode: 'google'; events: CalEvent[]; loadError?: string }
-  | { mode: 'demo'; demoEvents: UpcomingEvent[]; signedIn: boolean; revoked: boolean }
+  | { mode: 'demo'; demoEvents: UpcomingEvent[]; signedIn: boolean; revoked: boolean; configured: boolean }
 
 const demoFmt = new Intl.DateTimeFormat('en-US', { weekday: 'long', hour: 'numeric', minute: '2-digit', timeZone: 'UTC' })
 const timedFmt = new Intl.DateTimeFormat('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'UTC' })
 const dayFmt = new Intl.DateTimeFormat('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })
+// An empty or invalid date must not crash the page.
+const fmtDate = (f: Intl.DateTimeFormat, x: string) => (Number.isNaN(new Date(x).getTime()) ? null : f.format(new Date(x)))
 const link = 'font-medium text-accent underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent'
 
 function ConnectButton() {
   const [busy, setBusy] = useState(false)
+  // Back/forward restores the page from bfcache with the busy state still set.
+  useEffect(() => {
+    const onShow = (e: PageTransitionEvent) => { if (e.persisted) setBusy(false) }
+    window.addEventListener('pageshow', onShow)
+    return () => window.removeEventListener('pageshow', onShow)
+  }, [])
   return (
     <Button
       variant="primary"
@@ -56,7 +64,7 @@ function DemoList({ events }: { events: UpcomingEvent[] }) {
       {events.map((e) => (
         <Card key={e.id} className="p-4">
           <p className="truncate font-medium">{e.title}</p>
-          <p className="text-sm text-muted">{demoFmt.format(new Date(e.starts_at))} UTC</p>
+          <p className="text-sm text-muted">{fmtDate(demoFmt, e.starts_at)?.concat(' UTC') ?? 'Time unknown'}</p>
         </Card>
       ))}
     </section>
@@ -64,7 +72,8 @@ function DemoList({ events }: { events: UpcomingEvent[] }) {
 }
 
 function GoogleEvent({ e }: { e: CalEvent }) {
-  const when = e.allDay ? dayFmt.format(new Date(e.start)) : `${timedFmt.format(new Date(e.start))} UTC`
+  const formatted = fmtDate(e.allDay ? dayFmt : timedFmt, e.start)
+  const when = formatted === null ? 'Time unknown' : e.allDay ? formatted : `${formatted} UTC`
   const meetUrl = safeHref(e.meetUrl)
   const htmlLink = safeHref(e.htmlLink)
   return (
@@ -96,7 +105,7 @@ export function CalendarConnect(props: CalendarConnectProps) {
             this is a demo schedule.
           </p>
           {props.revoked && <p role="status" className="text-sm text-danger">Google access was revoked or expired. Connect again.</p>}
-          <ConnectButton />
+          {props.configured ? <ConnectButton /> : <p className="text-sm text-muted">Google Calendar is not configured on this server.</p>}
         </Card>
         <DemoList events={props.demoEvents} />
       </div>
