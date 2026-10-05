@@ -6,7 +6,7 @@ A rebuild of the core loop of Fathom, the AI meeting notetaker. You get a librar
 - Repository: `https://github.com/Schwifty101/fathomAI`
 - Demo script for the recording: [`docs/walkthrough.md`](docs/walkthrough.md)
 
-It is a Next.js 15 App Router app on Supabase (Postgres, Auth, row-level security), built to deploy to Vercel. Read the next section before judging it: the recording bot, the media and the calendar link are not real, and all the data is synthetic.
+It is a Next.js 15 App Router app on Supabase (Postgres, Auth, row-level security), built to deploy to Vercel. Read the next section before judging it: the recording bot and the media are not real, the calendar is real only once you connect Google, and all the data is synthetic.
 
 ## What is real and what is stubbed
 

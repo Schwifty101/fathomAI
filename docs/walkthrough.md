@@ -26,8 +26,8 @@ Two behaviours to know before you start:
 
 Start on `/meetings`, signed out.
 
-- **Say:** "This is a rebuild of an AI meeting notetaker: transcripts, summaries, highlights, search and shareable clips. Three things are stubbed. There is no recording bot or media: the player is a clock stepping through a transcript. Calendar connect is a demo screen. And all the data is synthetic, generated with Claude. Live AI is optional: without a server key, summaries are pre-generated and Ask falls back to extractive answers."
-- **Click:** the "Calendar" link in the header while you say "demo screen". Point at the card text "This is a demo: no real Google Calendar connection is made". Click "My Calls" in the header to come back. (If the page shows "Connected (demo, sample events)" instead, a previous visit left the demo switched on in that browser: click "Disconnect" before recording.)
+- **Say:** "This is a rebuild of an AI meeting notetaker: transcripts, summaries, highlights, search and shareable clips. Two things are simulated. There is no recording bot or media: the player is a clock stepping through a transcript, and the bot never joins a call. And all the data is synthetic, generated with Claude. The calendar shows a demo schedule until you connect Google Calendar; connecting shows your real events and lets you schedule a call with a real Meet link. Live AI is optional: without a server key, summaries are pre-generated and Ask falls back to extractive answers."
+- **Click:** the "Calendar" link in the header while you say "demo schedule". Point at the card text "Sign in and connect Google Calendar to see your real events and schedule calls with a Google Meet link. Until then, this is a demo schedule." Do not press "Connect Google Calendar" on camera unless you have rehearsed it: the Google connection has not been verified in a browser (see the handoff, gate 6). Click "My Calls" in the header to come back.
 
 ### 0:30 My Calls (45 s)
 
@@ -95,7 +95,7 @@ You are on Q4 Product Planning: eight people, about an hour.
 ### 4:30 Team Calls and close (30 s)
 
 - **Click:** "Team Calls" in the header. Show the three cards ("Calls", "Avg talk share", "Team members"), the "Team members" table (calls, talk share, questions, longest monologue) and the "Host" and "Role" menus with the "Filter" button.
-- **Say, as the close:** "Left out: the recording bot, real calendar sign-in, CRM and Slack, because they need other vendors' accounts; multi-tenant teams, Alerts, Deals and Playlists, which sit outside finding and sharing a moment; and semantic search, which full-text covers at this size. The code is at `https://github.com/Schwifty101/fathomAI`, with the agent logs in `.agent-logs/`."
+- **Say, as the close:** "Left out: a real recording bot, CRM and Slack, because they need other vendors' accounts; multi-tenant teams, Alerts, Deals and Playlists, which sit outside finding and sharing a moment; and semantic search, which full-text covers at this size. The code is at `https://github.com/Schwifty101/fathomAI`, with the agent logs in `.agent-logs/`."
 
 ## If something goes wrong on camera
 
@@ -110,4 +110,4 @@ You are on Q4 Product Planning: eight people, about an hour.
 
 ## If you are running over
 
-Cut in this order: the speed button and "+10s", the speaker filter, the Calendar click in the intro, "Copy" on both tabs, the Team Calls filter menus. Keep the sign-in, the highlight, the private-window clip and the stub disclosures: those are what the recording has to prove.
+Cut in this order: the speed button and "+10s", the speaker filter, the Calendar click in the intro, "Copy" on both tabs, the Team Calls filter menus. Keep the sign-in, the highlight, the private-window clip and the simulation disclosures: those are what the recording has to prove.
