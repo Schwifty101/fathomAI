@@ -5,6 +5,7 @@ import { formatMs } from '@/lib/format'
 import { laneColor } from '@/lib/lanes'
 import { msFromX, type PlaybackStore } from '@/lib/playback'
 import { hlColor } from '@/lib/schema'
+import { sliderAria, sliderTarget, trackPercent } from '@/lib/slider'
 import type { ChapterRow, HighlightRow, ParticipantRow, SegmentRow } from '@/lib/types'
 import { useMs } from './playback-hooks'
 
@@ -20,7 +21,8 @@ export function Scrubber({ store, participants, segments, chapters, highlights }
   const track = useRef<HTMLDivElement>(null)
   const ms = useMs(store)
   const duration = store.durationMs
-  const percent = (value: number) => `${Math.min(100, (value / duration) * 100)}%`
+  const percent = (value: number) => trackPercent(value, duration)
+  const aria = sliderAria(ms, duration)
   const lanes = useMemo(
     () => participants.map((participant) => segments.filter((segment) => segment.participant_id === participant.id)),
     [participants, segments],
@@ -35,9 +37,9 @@ export function Scrubber({ store, participants, segments, chapters, highlights }
       role="slider"
       tabIndex={0}
       aria-label="Playback position"
-      aria-valuemin={0}
-      aria-valuemax={Math.round(duration / 1000)}
-      aria-valuenow={Math.round(ms / 1000)}
+      aria-valuemin={aria.min}
+      aria-valuemax={aria.max}
+      aria-valuenow={aria.now}
       aria-valuetext={`${formatMs(ms)} of ${formatMs(duration)}`}
       className="relative cursor-pointer touch-none select-none rounded-lg border border-border bg-surface p-2 focus-visible:outline-2 focus-visible:outline-accent"
       onPointerDown={(event) => {
@@ -48,10 +50,10 @@ export function Scrubber({ store, participants, segments, chapters, highlights }
         if (event.buttons === 1) seekFrom(event.clientX)
       }}
       onKeyDown={(event) => {
-        if (event.key === 'ArrowRight') store.skip(5000)
-        else if (event.key === 'ArrowLeft') store.skip(-5000)
-        else return
+        const target = sliderTarget(event, store.ms, duration)
+        if (target === null) return
         event.preventDefault()
+        store.seek(target)
       }}
     >
       <div ref={track}>
@@ -74,7 +76,7 @@ export function Scrubber({ store, participants, segments, chapters, highlights }
                   className="absolute top-0 h-2 rounded-sm"
                   style={{
                     left: percent(segment.start_ms),
-                    width: `max(2px, ${((segment.end_ms - segment.start_ms) / duration) * 100}%)`,
+                    width: `max(2px, ${percent(segment.end_ms - segment.start_ms)})`,
                     background: laneColor(index),
                   }}
                 />
