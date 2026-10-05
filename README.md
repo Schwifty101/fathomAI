@@ -41,7 +41,7 @@ You need Node 22 or newer (`tests/toolchain.test.ts` asserts it), a Supabase pro
 Notes on step 4:
 
 - `seed:load` and `seed:clips` run with `--env-file=.env.local`, and so does `rls:test`. All three first run a target guard (`scripts/guard-target.ts`). It refuses to continue unless the project ref in `NEXT_PUBLIC_SUPABASE_URL` matches `supabase/.temp/project-ref` (created by `supabase link`) or `EXPECT_SUPABASE_REF` if you did not link, the service key is a `service_role` key, and the shell environment does not override `.env.local`.
-- `seed:load` runs `seed:check` first and stops if any bundle or `ask.json` is missing or invalid. It uses stable IDs and upserts and clears each call's child rows before re-inserting them, so it is written to be re-run. It is not transactional: an interrupted run can leave one call half loaded, so run it again. It never deletes calls or team members that are no longer in the seed definitions.
+- `seed:load` runs the target guard, then `seed:check`, and stops if any bundle or `ask.json` is missing or invalid. It validates every row in memory before any write, upserts everything by stable ID, and only then deletes rows that are no longer in the seed (by explicit id, never touching rows a user created), so loading twice gives the same rows. If a call leaves the seed, its users' highlights, summaries and shares go with it (foreign keys cascade) and the loader logs a warning first. It is not all-or-nothing: a failure part-way can leave some rows updated and others not, but never fewer rows than before, and a re-run converges. `npm run seed:load -- --dry-run` reads the database and reports what it would write and delete without changing anything.
 - `seed:clips` creates two public clips from the first two seeded highlights of the `q4-planning` call: `/clip/demo-q4-clip` and `/clip/demo-q4-clip-2`. It owns them with a throwaway user, `demo-clips@example.test`, which it creates and leaves in place.
 
 ### Configuration
@@ -115,7 +115,7 @@ These are scope decisions for a short rebuild judged on the core loop.
 ## Known limitations
 
 - **Every transcript is publicly readable by design.** Treat a clip link as a shortcut, not as access control. Do not load real meeting data into this.
-- The seed loader is not transactional and never removes stale calls, participants or calendar rows. The 20 a day share cap is checked and then inserted in two steps, so a burst of concurrent requests can exceed it.
+- The seed loader is not all-or-nothing (see the notes on step 4), and it has never been run against the real hosted database. The 20 a day share cap is checked and then inserted in two steps, so a burst of concurrent requests can exceed it.
 - Signing in or out resets the playhead on a meeting page, because the page remounts for the new user.
 - The transcript is a single tab stop with arrow-key movement between lines, and the meeting tabs respond to the arrow, Home and End keys. The key handling is covered by unit tests but has not been checked in a browser.
 - `npm audit --omit=dev` reports two findings (one high, one moderate) in the PostCSS 8.4.31 bundled with Next 15.5.27. The fix is a move to Next 16, which was not taken. The advisories concern attacker-supplied CSS, and this app only builds its own checked-in CSS. Reassess before any untrusted CSS reaches the build.

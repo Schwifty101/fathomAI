@@ -4182,7 +4182,7 @@ export default async function TeamPage({ searchParams }: { searchParams: Promise
 - [ ] **Step 2: Verify**
 
 Run: `npm run typecheck && npm run dev`, open `/team`.
-Expected: eight calls, a members table with talk-time percentages that make sense (members who spoke more have higher %), and filters work: choosing a host narrows the list; an unknown `?host=zzz` shows "No calls match these filters." without an error.
+Expected: eight calls, a members table with talk-time percentages that make sense (members who spoke more have higher %), and filters work: choosing a host narrows the list; an unknown `?host=zzz` selects an "Unknown host" option and shows "No team member matches that host." with a link to all calls, without an error (changed in the UI robustness pass; the plan originally said "No calls match these filters").
 
 - [ ] **Step 3: Commit**
 
