@@ -33,6 +33,7 @@ Tasks 1-26 are implemented, independently verified by five read-only agents, and
 - The real `.env.local` (Supabase URL, anon key, service-role key; values not recorded anywhere, gitignored) lives in the feature worktree. The main checkout's `.env.local` is a **symlink** to it, so scripts and tests run from either place. If the feature worktree is ever removed, move the real file into the main checkout first or the keys are lost. `.env` in the main checkout holds only `SUPABASE_DB_PASSWORD` for the `supabase` CLI.
 - Both checkouts have a clean `node_modules` (the main checkout's was rebuilt with `npm ci` after an agent corrupted it).
 - The merged agent worktrees and branches were removed. Only `main` and `feat/phase-1-foundation` (the feature worktree) remain.
+- The knowledge graph (`graphify-out/`, ignored) is healthy: 750 nodes, 1825 edges, 0 dangling endpoints, 0 self-loops, 0 collapsed edges. After any `/graphify .` or `--update`, run `node scripts/repair-graphify.mjs <raw> <repaired>` from the repo root before building (ledger 9.9); `node --test scripts/repair-graphify.test.mjs` covers it.
 - Isolated agent worktrees start from `origin/main`, not local `main`. Every agent prompt must check `git log --oneline -1` and `ls package.json` first and `git reset --hard <base>` if needed, before any `npm` command.
 
 ## Logs
