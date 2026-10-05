@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
+import { sortByTalk } from './participants'
 import { TEMPLATES, type Template } from './schema'
 import type {
   AskAnswerRow, MeetingBundle, MeetingListItem, SearchHit, ShareRow, SummaryRow, TeamStatRow, UpcomingEvent,
@@ -39,10 +40,11 @@ export async function getDemoPersona(db: SupabaseClient): Promise<{ id: string; 
 
 export async function listMeetings(db: SupabaseClient, opts: { hostId?: string } = {}): Promise<MeetingListItem[]> {
   let query = db.from('meetings')
-    .select('*, host:team_members(name, role), participants(name, is_internal)')
+    .select('*, host:team_members(name, role), participants(id, name, is_internal, talk_time_sec)')
     .order('started_at', { ascending: false })
   if (opts.hostId) query = query.eq('host_id', opts.hostId)
-  return unwrap(await query) as unknown as MeetingListItem[]
+  // An embedded list has no order of its own; sort it as the meeting page does so tile colours match.
+  return (unwrap(await query) as unknown as MeetingListItem[]).map((m) => ({ ...m, participants: sortByTalk(m.participants) }))
 }
 
 // My Calls. Without a demo persona there are no calls of "mine"; falling back to an unfiltered list would show
@@ -65,7 +67,7 @@ export async function getMeetingBundle(
   const [participants, segments, chapters, actionItems, highlights, summaries] = await Promise.all([
     db.from('participants')
       .select('id,name,role,is_internal,talk_time_sec,questions,longest_monologue_sec')
-      .eq('meeting_id', id).order('talk_time_sec', { ascending: false }),
+      .eq('meeting_id', id),
     selectAll<MeetingBundle['segments'][number]>((from, to) =>
       db.from('segments').select('idx,participant_id,start_ms,end_ms,text')
         .eq('meeting_id', id).order('idx').range(from, to)),
@@ -76,7 +78,7 @@ export async function getMeetingBundle(
   ])
   return {
     meeting,
-    participants: unwrap(participants) as MeetingBundle['participants'],
+    participants: sortByTalk(unwrap(participants) as MeetingBundle['participants']),
     segments,
     chapters: unwrap(chapters) as MeetingBundle['chapters'],
     actionItems: unwrap(actionItems) as MeetingBundle['actionItems'],

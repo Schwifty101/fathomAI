@@ -8,7 +8,7 @@ export type MeetingRow = {
 }
 export type MeetingListItem = MeetingRow & {
   host: { name: string; role: string } | null
-  participants: { name: string; is_internal: boolean }[]
+  participants: { id: string; name: string; is_internal: boolean; talk_time_sec: number }[]
 }
 export type ParticipantRow = {
   id: string; name: string; role: string; is_internal: boolean
