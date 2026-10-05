@@ -93,6 +93,14 @@ describe('listGoogleEvents', () => {
       expect(error).toBeInstanceOf(GoogleAuthError)
     }
   })
+  it('throws a generic error, not a parser snippet, for a 200 with a non-JSON body', async () => {
+    const impl = (async () => new Response('<html>proxy-secret-page</html>', { status: 200 })) as unknown as typeof fetch
+    const error = await listGoogleEvents('tok', NOW, impl).catch((e) => e)
+    expect(error).toBeInstanceOf(Error)
+    expect(error).not.toBeInstanceOf(GoogleAuthError)
+    expect(error.message).toBe('Google Calendar request failed (bad response)')
+    expect(error.message).not.toContain('proxy-secret')
+  })
   it('throws a plain error with the status on other failures', async () => {
     const f = fakeFetch({ status: 500, body: 'oops' })
     const error = await listGoogleEvents('tok', NOW, f.impl).catch((e) => e)
@@ -156,6 +164,51 @@ describe('createMeetEvent', () => {
     expect(f.calls).toHaveLength(4)
     expect(ev.meetUrl).toBeNull()
     expect(ev.id).toBe('n1')
+  })
+  const pendingEv = { ...created, hangoutLink: undefined, conferenceData: { createRequest: { status: { statusCode: 'pending' } } } }
+  it('also polls when the pending status is a plain string', async () => {
+    const f = fakeFetch({ status: 200, body: { ...pendingEv, conferenceData: { createRequest: { status: 'pending' } } } }, { status: 200, body: created })
+    const ev = await createMeetEvent('tok', input, 'req-5', f.impl, noSleep)
+    expect(f.calls).toHaveLength(2)
+    expect(ev.meetUrl).toBe('https://meet.google.com/new')
+  })
+  it('encodes the event id in the poll URL', async () => {
+    const f = fakeFetch({ status: 200, body: { ...pendingEv, id: 'a/b' } }, { status: 200, body: created })
+    await createMeetEvent('tok', input, 'req-6', f.impl, noSleep)
+    expect(f.calls[1].url).toBe('https://www.googleapis.com/calendar/v3/calendars/primary/events/a%2Fb?conferenceDataVersion=1')
+  })
+  it('keeps the created event with meetUrl null when a poll fails with a non-auth error', async () => {
+    const f = fakeFetch({ status: 200, body: pendingEv }, { status: 500, body: {} })
+    const ev = await createMeetEvent('tok', input, 'req-7', f.impl, noSleep)
+    expect(ev.id).toBe('n1')
+    expect(ev.meetUrl).toBeNull()
+    expect(f.calls).toHaveLength(2)
+    const net = (async (url: string) => {
+      if (url.includes('/n1')) throw new TypeError('boom')
+      return new Response(JSON.stringify(pendingEv), { status: 200 })
+    }) as unknown as typeof fetch
+    expect((await createMeetEvent('tok', input, 'req-8', net, noSleep)).meetUrl).toBeNull()
+  })
+  it('lets a GoogleAuthError from a poll propagate', async () => {
+    const f = fakeFetch({ status: 200, body: pendingEv }, { status: 401, body: {} })
+    expect(await createMeetEvent('tok', input, 'r', f.impl, noSleep).catch((e) => e)).toBeInstanceOf(GoogleAuthError)
+  })
+  it('throws a bad-response error for a null body or one without an id', async () => {
+    for (const body of [null, {}, { summary: 'x' }]) {
+      const f = fakeFetch({ status: 200, body })
+      const error = await createMeetEvent('tok', input, 'r', f.impl, noSleep).catch((e) => e)
+      expect(error).toBeInstanceOf(Error)
+      expect(error.message).toBe('Google Calendar request failed (bad response)')
+    }
+  })
+  it('passes an abort signal on every fetch', async () => {
+    const f = fakeFetch({ status: 200, body: pendingEv }, { status: 200, body: created })
+    await createMeetEvent('tok', input, 'r', f.impl, noSleep)
+    const l = fakeFetch({ status: 200, body: { items: [] } })
+    await listGoogleEvents('tok', NOW, l.impl)
+    const t = fakeFetch({ status: 200, body: { access_token: 'a' } })
+    await refreshAccessToken(creds, t.impl)
+    for (const c of [...f.calls, ...l.calls, ...t.calls]) expect(c.init.signal).toBeInstanceOf(AbortSignal)
   })
   it('maps 401 and 403 to GoogleAuthError and other failures to a plain error', async () => {
     for (const status of [401, 403]) {

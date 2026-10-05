@@ -68,7 +68,11 @@ async function calendarJson(url: string, init: RequestInit, fetchImpl: typeof fe
   }
   if (res.status === 401 || res.status === 403) throw new GoogleAuthError(`Google rejected the access token (${res.status})`)
   if (!res.ok) throw new Error(`Google Calendar request failed (${res.status})`)
-  return res.json()
+  try {
+    return await res.json()
+  } catch {
+    throw new Error('Google Calendar request failed (bad response)')
+  }
 }
 
 const bearer = (accessToken: string) => ({ authorization: `Bearer ${accessToken}` })
@@ -104,6 +108,7 @@ export async function createMeetEvent(
     { method: 'POST', headers: { ...bearer(accessToken), 'content-type': 'application/json' }, body: JSON.stringify(body) },
     fetchImpl,
   )
+  if (!raw?.id) throw new Error('Google Calendar request failed (bad response)')
   // The conference is created asynchronously; poll briefly while Google says it is pending.
   const pending = (r: RawEvent) => {
     const s = r?.conferenceData?.createRequest?.status
@@ -112,9 +117,16 @@ export async function createMeetEvent(
   const hasLink = (r: RawEvent) => Boolean(mapEvent(r).meetUrl)
   for (let i = 0; i < 3 && !hasLink(raw) && pending(raw); i++) {
     await sleep(700)
-    raw = await calendarJson(
-      `${EVENTS_URL}/${encodeURIComponent(raw.id)}?conferenceDataVersion=1`, { headers: bearer(accessToken) }, fetchImpl,
-    )
+    try {
+      const next = await calendarJson(
+        `${EVENTS_URL}/${encodeURIComponent(raw.id)}?conferenceDataVersion=1`, { headers: bearer(accessToken) }, fetchImpl,
+      )
+      if (next?.id) raw = next
+    } catch (e) {
+      // The event already exists; a retry would duplicate it, so a failed poll just means no link yet.
+      if (e instanceof GoogleAuthError) throw e
+      break
+    }
   }
   return mapEvent(raw)
 }
