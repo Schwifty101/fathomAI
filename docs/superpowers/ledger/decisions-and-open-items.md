@@ -43,7 +43,7 @@ Spec: `docs/superpowers/specs/2026-10-05-fathom-rebuild-design.md` (header statu
 
 ## 5. Security notes
 
-- The DB password was read into the session transcript. `.agent-logs/` is public once pushed. Before any commit containing `.agent-logs/`, grep it for the password and redact. Rotate the DB password in the Supabase dashboard at the end of the project (Task 29 Step 9 already greps for `SUPABASE_DB_PASSWORD=`).
+- [user] The DB password is not in any log or graph output checked so far. `.agent-logs/` would be public once pushed, so scan every log selected for publication before committing it. Rotate the DB password in the Supabase dashboard at the end of the project (Task 29 Step 9 already greps for `SUPABASE_DB_PASSWORD=`).
 - API keys are never printed. `SUPABASE_SERVICE_ROLE_KEY` stays server-side only.
 
 ## 6. Deferred to the user (raise at the named point, not before)
@@ -93,4 +93,11 @@ Deferred minor findings (not blocking, final review should triage):
 - Task 8: ISO pass-through is not validated; a bare day-name regex can match ordinary words; `end of week` said on a Saturday gives next Friday; `next weekend` returns next Monday; stamp tests lack empty-input, one-word and overlap-occurs cases.
 - Task 9: `validateDefs` reports an unknown member slug but `castOf` then throws a TypeError; `validateDefs` does not check the three-week window or showcase duration (the test does).
 
-Still open: graphify graph build (extraction is done, graph not built; output lives in the main checkout's `graphify-out/`, which is git-ignored).
+## 8. Graphify graph build and agent-log location
+
+Status: [verified] an ignored graph artifact exists at `graphify-out/`. On 2026-10-05, inspection of `graph.json` found 297 nodes, 397 links, zero nodes sourced from `.sql`, and zero dangling endpoints among the links actually stored. `GRAPH_REPORT.md` still reports an ambiguous README edge and source paths into the main checkout. The claimed later SQL/docs rebuild is not present in this worktree's graph output; the claimed `graphify-caveats-report.md` file is also absent. Treat the graph as a preliminary navigation aid, not proof that the caveats were resolved.
+
+Agent-log location finding:
+- [verified] `.claude/hooks/capture.py` writes to `$CLAUDE_PROJECT_DIR/.agent-logs/`, falling back to the hook payload's `cwd`. The main checkout currently has 8 logs, of which 5 are untracked; this worktree has only the 3 already tracked on the branch. The untracked files were not copied or staged.
+- [ruling] Leave the 5 parent-checkout session transcripts unpublished for this handoff. Their content may be private, and the durable implementation status is recorded in `continuation-handoff.md`. This does not delete or modify the files.
+- [later] At Task 29, decide explicitly whether any more logs need publication. Scan the exact files to be committed for secrets and personal data first; do not assume `git add .agent-logs/` in this worktree includes the parent-only logs.
