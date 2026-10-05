@@ -1,6 +1,6 @@
 # Fathom rebuild: guide for Claude Code
 
-A public rebuild of the Fathom AI meeting notetaker: Next.js 15 (App Router, React 19, Tailwind 4, TypeScript) on hosted Supabase (Postgres, Auth, RLS). Meeting data is synthetic, generated with `claude -p` and committed as JSON. The recording bot, media and calendar are simulated. See the README table "What is real and what is stubbed".
+A public rebuild of the Fathom AI meeting notetaker: Next.js 15 (App Router, React 19, Tailwind 4, TypeScript) on hosted Supabase (Postgres, Auth, RLS). Meeting data is synthetic and committed as JSON: one call (eng-standup) was generated with `claude -p`, the other seven were written by hand and built with `seed:assemble`. The recording bot, media and calendar are simulated. See the README table "What is real and what is stubbed".
 
 ## Start here, in this order
 
@@ -13,7 +13,7 @@ A public rebuild of the Fathom AI meeting notetaker: Next.js 15 (App Router, Rea
 
 - `npm ci`, `npm test` (vitest, node environment, JSX enabled), `npm run typecheck`, `npm run build`. Node 22 or newer.
 - `npm run seed:check` (no database), `npm run seed:load -- --dry-run`, `npm run seed:load`, `npm run seed:clips`, `npm run rls:test` (needs `.env.local` and the Email provider on), `npm run e2e` (needs loaded data).
-- `npm run seed:gen [-- <slug>]` runs `claude -p` on the user's login and spends their quota.
+- `npm run seed:gen [-- <slug>]` runs `claude -p` on the user's login and spends their quota. `npm run seed:assemble -- <slug>` builds a bundle from a hand-written call (no quota).
 
 ## Rules
 
@@ -35,6 +35,7 @@ A public rebuild of the Fathom AI meeting notetaker: Next.js 15 (App Router, Rea
 - "My Calls" is the calls hosted by one fixed demo persona (Priya Raman), shown to everyone. All times are UTC.
 - Seeded ids are stable (`seed/uuid.ts`). `summaries` is unique on `(meeting_id, template, user_id)` with NULLS NOT DISTINCT; `ask_answers` is unique on `(scope, prompt)`.
 - Live Ask and Regenerate are optional behind a server-only `ANTHROPIC_API_KEY`; without it they degrade (stored or extractive answers, disabled button). Rate limits: Ask 10 an hour, Regenerate 5 an hour.
+- A signed-in visitor can bring their own Anthropic, OpenAI or Gemini key (browser-only, sent as `x-llm-*` headers). The calendar page keeps its Google token in a sealed httpOnly cookie `fathom_gcal` (no database table); `/calendar` needs `GAUTH_CLIENT_ID`, `GAUTH_CLIENT_SECRET` and `CALENDAR_COOKIE_SECRET`.
 - `seed:check` fails on an unresolved due phrase; due dates are resolved in code (`seed/due.ts`), not by the model.
 
 ## Map

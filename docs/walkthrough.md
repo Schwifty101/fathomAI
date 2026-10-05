@@ -10,8 +10,8 @@ Links to have ready: live app `https://fathom-rebuild-eight.vercel.app`, reposit
 2. **Start signed out.** The header should show "Sign in with Google". You sign in on camera at 2:50. If you are signed in, click "Sign out" and reload.
 3. **Open a private window now**, empty, for the share step at 3:30.
 4. **Choose your search word.** Pick a word the Q4 Product Planning transcript contains, search for it, and check that Q4 Product Planning is among the result groups. The call's brief is about Q4 priorities, budget and hiring, so "budget" is the first word to try, but confirm it. Search is whole-word full text with English stemming, so a word and its plain variants match; a half-typed word does not.
-5. **Live AI or not.** Open the Summary tab of any call. If "Regenerate with AI" is greyed out and a line below it says "Live regeneration is unavailable", the server has no Anthropic key. Then the free-text Ask answer at 4:00 is the extractive fallback, and the script below is written for that case. If a key is set, a free-text question from a signed-in visitor is answered live and the notice line will not appear.
-6. **Read numbers off the screen, not off this page.** Call length, speaker count, talk shares and due dates all come from generated data. The showcase call is planned at 62 minutes and `seed:check` accepts a duration within 5% of that (about 59 to 65 minutes), so the card may say anywhere in that range. Do not quote a transcript line count; read it from the page if you want one.
+5. **Live AI or not.** The server `ANTHROPIC_API_KEY` is not set on Vercel, so the live-AI beats (2:15 Regenerate and 4:00 free-text Ask) need you to paste your own Anthropic, OpenAI or Gemini key into "Your AI key" (Ask panel or Summary tab) after you sign in and before you record. The key stays in your browser. Without one, "Regenerate with AI" is greyed out with a line below it saying "Live regeneration is unavailable", the free-text Ask answer is the extractive fallback, and the script below is written for that case. With a key, a free-text question from a signed-in visitor is answered live and the notice line will not appear. Either paste a key or skip those beats.
+6. **Read numbers off the screen, not off this page.** Call length, speaker count, talk shares and due dates all come from generated data. The showcase call is 62 minutes (`seed:check` accepts within 5% of its target) and the other calls run 15 to 25 minutes. Do not quote a transcript line count; read it from the page if you want one.
 7. **Window size.** Use a window at least 1280 px wide. From 1024 px up the meeting page puts the tabs beside the player; narrower, they stack below it.
 8. **Rehearse once with a timer.** Aim to finish at 4:45 to 4:55. The outline is 4:30 of content plus the close.
 
@@ -26,7 +26,7 @@ Two behaviours to know before you start:
 
 Start on `/meetings`, signed out.
 
-- **Say:** "This is a rebuild of an AI meeting notetaker: transcripts, summaries, highlights, search and shareable clips. Two things are simulated. There is no recording bot or media: the player is a clock stepping through a transcript, and the bot never joins a call. And all the data is synthetic, generated with Claude. The calendar shows a demo schedule until you connect Google Calendar; connecting shows your real events and lets you schedule a call with a real Meet link. Live AI is optional: without a server key, summaries are pre-generated and Ask falls back to extractive answers."
+- **Say:** "This is a rebuild of an AI meeting notetaker: transcripts, summaries, highlights, search and shareable clips. Two things are simulated. There is no recording bot or media: the player is a clock stepping through a transcript, and the bot never joins a call. And all the data is synthetic: one call was generated with `claude -p` and seven were written by hand and assembled by script. The calendar shows a demo schedule until you connect Google Calendar; connecting shows your real events and lets you schedule a call with a real Meet link. Live AI is optional: summaries are pre-generated, and live answers need a model key that a signed-in visitor pastes in; without one, Ask falls back to extractive answers."
 - **Click:** the "Calendar" link in the header while you say "demo schedule". Point at the card text "Sign in and connect Google Calendar to see your real events and schedule calls with a Google Meet link. Until then, this is a demo schedule." Do not press "Connect Google Calendar" on camera unless you have rehearsed it: the Google connection has not been verified in a browser (see the handoff, gate 6). Click "My Calls" in the header to come back.
 
 ### 0:30 My Calls (45 s)
@@ -58,7 +58,7 @@ You are on Q4 Product Planning: eight people, about an hour.
 - **Click:** the "Summary" tab. Show the chip "Pre-generated".
 - **Click:** the template buttons "General", "Sales", "Standup", "Project review" in turn. The page does not reload; all four are already loaded.
 - **Click:** "Copy". A toast says "Summary copied" and the clipboard holds Markdown.
-- **Say, only if "Regenerate with AI" is greyed out:** "Regenerate is disabled because there is no server key. With a key and a signed-in visitor it saves your own version, limited to five an hour." If a key is set, skip this and do not click the button on camera unless you have rehearsed it.
+- **Say, only if "Regenerate with AI" is greyed out:** "Regenerate is disabled because no model key is set. With a key (the server's, or one the visitor pastes into 'Your AI key') and a signed-in visitor it saves your own version, limited to five an hour." If you pasted a key, skip this and do not click the button on camera unless you have rehearsed it.
 - **Click:** the "Action items" tab. Each item shows owner, a "Due" date and a "Jump to m:ss" button. Due dates were turned from phrases like "by Friday" into real dates by code, against the call's date.
 - **Click:** one "Jump to m:ss". The playhead moves. Click "Copy" for the Markdown checklist (toast "Action items copied").
 
@@ -88,8 +88,8 @@ You are on Q4 Product Planning: eight people, about an hour.
 - **Click:** "My Calls" in the header. The "Ask Fathom" panel is on the right.
 - **Click:** the suggested chip "Summarize my recent meetings". The answer appears with citation links of the form "m:ss · label".
 - **Click:** one citation. It opens the call at that moment. Use the browser back button to return.
-- **Click:** the "Ask a question" box, type a free-text question, click "Ask". With no server key you get "Closest moments for ...:" with cited moments and an italic notice: "Live answers are unavailable. Showing the closest moments instead." If a key is set but you are signed out, the notice reads "Sign in with Google for live answers. Showing the closest moments instead."
-- **Say:** "The suggested questions were answered at seed time. A free-text question needs a server key and a signed-in visitor for a live answer, ten an hour. Otherwise it returns the closest full-text matches, so the box is never dead."
+- **Click:** the "Ask a question" box, type a free-text question, click "Ask". With no key you get "Closest moments for ...:" with cited moments and an italic notice: "Live answers are unavailable. Showing the closest moments instead." If a key is available but you are signed out, the notice reads "Sign in with Google for live answers. Showing the closest moments instead."
+- **Say:** "The suggested questions were answered at seed time. A free-text question needs a model key (the server's or the visitor's own) and a signed-in visitor for a live answer, ten an hour. Otherwise it returns the closest full-text matches, so the box is never dead."
 - The "Scope" menu switches between My Calls and Team Calls. The suggested chips show only while the menu is on the panel's own default scope.
 
 ### 4:30 Team Calls and close (30 s)

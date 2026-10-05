@@ -1,3 +1,6 @@
+> **Historical (completed 2026-10-05).** The seed data was hand-written and built with `seed:assemble`, not generated with `seed:gen` as Chunk 2 says, and the `graphify-out/` history purge (Chunk 0) was done.
+> Current state: `docs/superpowers/ledger/continuation-handoff.md`.
+
 # Final plan: remaining work to ship
 
 Source of truth for state: `docs/superpowers/ledger/continuation-handoff.md`. This plan covers only what is left. Each chunk ends with a stop point; do not start the next chunk until the user says so.

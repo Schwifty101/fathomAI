@@ -1,8 +1,8 @@
 # Fathom rebuild: manual test checklist
 
-This checklist is for ticking off by hand in a browser. It was written from the plan, the spec, the design system document and the code in `app/`, `components/` and `lib/`. It was not written from a running app: the hosted database is unreachable from the environment that wrote it, so nothing here has been observed against data. Where a source gives no expected behaviour, the item is not written as fact; see "Open questions for the user" at the end.
+This checklist is for ticking off by hand in a browser. It was written from the plan, the spec, the design system document and the code in `app/`, `components/` and `lib/`. It was first written without a running app, so its expected results came from the sources, not from observation. The app is now deployed at `https://fathom-rebuild-eight.vercel.app` and the data is loaded, so the items can be run. Some have been exercised since, but none is ticked here. Section 14a (GC) replaces the old calendar stub items (CA). Where a source gives no expected behaviour, the item is not written as fact; see "Open questions for the user" at the end.
 
-Tree under test: the current `main`, which contains Tasks 1 to 28 (plus the accessibility fixes described in ledger 10.7).
+Tree under test: the current `main`, which contains Tasks 1 to 28, the accessibility fixes described in ledger 10.7, the bring-your-own key, the real Google Calendar page and the skeleton loaders.
 
 ## 1. Prerequisites
 
