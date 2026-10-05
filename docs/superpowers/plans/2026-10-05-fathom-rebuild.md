@@ -2953,7 +2953,7 @@ main().catch((e) => {
 - [ ] **Step 2: Load**
 
 Run: `npm run seed:load`
-Expected: eight `loaded <slug>` lines then counts: `team_members: 8`, `meetings: 8`, `segments` equal to the sum of the printed segment counts, `summaries: 32`, `ask_answers: 3`, `calendar_events: 5`, `chapters` and `action_items` and `highlights` greater than 0.
+Expected: eight `loaded <slug>` lines then counts: `team_members: 8`, `meetings: 8`, `segments` equal to the sum of the printed segment counts, `summaries: 32`, `ask_answers: 6` (3 prompts per scope, two scopes; the original text said 3, written before scoped Ask), `calendar_events: 5`, `chapters` and `action_items` and `highlights` greater than 0.
 
 - [ ] **Step 3: Verify idempotence**
 
