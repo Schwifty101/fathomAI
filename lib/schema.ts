@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { TEMPLATE_GUIDE } from './prompts'
 
 export const HIGHLIGHT_TYPES = [
   'action_item', 'insight', 'positive', 'feedback', 'objection', 'tech_question',
@@ -27,7 +28,15 @@ export const MEETING_KINDS = [
 export const PLATFORMS = ['zoom', 'meet', 'teams'] as const
 export const MAX_CLIP_MS = 300_000
 
-const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/)
+// Postgres rejects '2026-02-31'; a regex alone would let it through the check.
+const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).refine(
+  (s) => { const d = new Date(`${s}T00:00:00Z`); return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s },
+  { message: 'not a real calendar date' },
+)
+export const ASK_SCOPES = ['my_calls', 'team_calls'] as const
+export type AskSeedScope = (typeof ASK_SCOPES)[number]
+const MAX_SEGMENT_IDX = 100_000
+const segmentIdx = z.number().int().min(0).max(MAX_SEGMENT_IDX)
 
 export const summaryContentSchema = z.object({
   sections: z
@@ -38,10 +47,14 @@ export type SummaryContent = z.infer<typeof summaryContentSchema>
 
 export const lineSchema = z.object({ speaker: z.string().min(1), text: z.string().min(1) })
 
-export const chapterLinesSchema = (speakers: readonly string[]) =>
-  z.array(lineSchema).min(1).refine((ls) => ls.every((l) => speakers.includes(l.speaker)), {
-    message: `speaker must be exactly one of: ${speakers.join(', ')}`,
-  })
+export const chapterLinesSchema = (speakers: readonly string[], mustSpeak: readonly string[] = []) =>
+  z.array(lineSchema).min(1)
+    .refine((ls) => ls.every((l) => speakers.includes(l.speaker)), {
+      message: `speaker must be exactly one of: ${speakers.join(', ')}`,
+    })
+    .refine((ls) => mustSpeak.every((n) => ls.filter((l) => l.speaker === n).length >= 2), {
+      message: `each of these people must speak at least twice in this chapter: ${mustSpeak.join(', ')}`,
+    })
 
 export const briefSchema = z.object({
   agenda: z.array(z.string().min(1)).min(1),
@@ -54,6 +67,14 @@ export const briefSchema = z.object({
     .min(3),
 })
 export type Brief = z.infer<typeof briefSchema>
+
+// The transcript is stamped toward targetMin, so a brief that plans a different length cannot land on it.
+export const BRIEF_MINUTES_TOLERANCE = 0.05
+export const briefFor = (targetMin: number) =>
+  briefSchema.refine(
+    (b) => Math.abs(b.chapters.reduce((sum, c) => sum + c.minutes, 0) - targetMin) <= targetMin * BRIEF_MINUTES_TOLERANCE,
+    { message: `chapter minutes must add up to ${targetMin} (within 5%)` },
+  )
 
 export const actionItemsSchema = (speakers: readonly string[], maxIdx: number) =>
   z.object({
@@ -79,16 +100,19 @@ export const highlightPicksSchema = (maxIdx: number) =>
       .max(6),
   })
 
-export const askAnswerSchema = (slugs: readonly string[]) =>
+// `allowed` (slug -> segment indices the model was shown) rejects citations to lines it never saw.
+export const askAnswerSchema = (slugs: readonly string[], allowed?: ReadonlyMap<string, ReadonlySet<number>>) =>
   z.object({
     text: z.string().min(1),
     citations: z
       .array(z.object({
         meeting_slug: z.string().refine((s) => slugs.includes(s), { message: 'unknown meeting_slug' }),
-        segment_idx: z.number().int().min(0),
+        segment_idx: segmentIdx,
         label: z.string().min(1),
       }))
       .min(1),
+  }).refine((a) => !allowed || a.citations.every((c) => allowed.get(c.meeting_slug)?.has(c.segment_idx)), {
+    message: 'cite only meeting_slug and segment_idx pairs that appear in the notes',
   })
 
 export const liveAskSchema = z.object({ text: z.string().min(1), refs: z.array(z.string()) })
@@ -109,23 +133,33 @@ export const transcriptFileSchema = z.object({
 })
 export type TranscriptFile = z.infer<typeof transcriptFileSchema>
 
+// A summary may omit sections the transcript does not support, but never invent headings.
+export const summaryFor = (template: Template) =>
+  summaryContentSchema.refine(
+    (s) => s.sections.every((x) => TEMPLATE_GUIDE[template].headings.includes(x.heading)),
+    { message: `headings must come from: ${TEMPLATE_GUIDE[template].headings.join(' | ')}` },
+  ).refine((s) => new Set(s.sections.map((x) => x.heading)).size === s.sections.length, {
+    message: 'each heading may appear only once',
+  })
+
 export const summariesFileSchema = z.object({
-  general: summaryContentSchema,
-  sales: summaryContentSchema,
-  standup: summaryContentSchema,
-  project_review: summaryContentSchema,
+  general: summaryFor('general'),
+  sales: summaryFor('sales'),
+  standup: summaryFor('standup'),
+  project_review: summaryFor('project_review'),
 })
 
 export const actionsFileSchema = z.array(z.object({
   owner: z.string().min(1),
   task: z.string().min(1),
   due: isoDate.nullable(),
-  segment_idx: z.number().int().min(0),
+  due_phrase: z.string().nullable().optional(), // spoken wording; seed:check fails if it did not resolve to `due`
+  segment_idx: segmentIdx,
   start_ms: z.number().int().min(0),
 }))
 
 export const highlightsFileSchema = z.array(z.object({
-  segment_idx: z.number().int().min(0),
+  segment_idx: segmentIdx,
   type: z.enum(HIGHLIGHT_TYPES),
   title: z.string().min(1),
   start_ms: z.number().int().min(0),
@@ -134,11 +168,11 @@ export const highlightsFileSchema = z.array(z.object({
 
 export const askFileSchema = z.array(z.object({
   prompt: z.string().min(1),
-  scope: z.string().min(1),
+  scope: z.enum(ASK_SCOPES),
   text: z.string().min(1),
   citations: z.array(z.object({
     meeting_slug: z.string().min(1),
-    segment_idx: z.number().int().min(0),
+    segment_idx: segmentIdx,
     label: z.string().min(1),
   })).min(1),
 }))
