@@ -6,7 +6,7 @@ const timeFormat = new Intl.DateTimeFormat('en-US', { weekday: 'short', hour: 'n
 export function UpcomingEvents({ events }: { events: UpcomingEvent[] }) {
   if (events.length === 0) return null
   return (
-    <section aria-label="Upcoming meetings" className="mb-8">
+    <section aria-label="Upcoming meetings" className="mb-6 rounded-card border border-border p-4 sm:p-5">
       <h2 className="mb-3 text-sm font-medium uppercase tracking-wide text-muted">Upcoming</h2>
       <div className="flex gap-3 overflow-x-auto pb-1">
         {events.map((event) => (

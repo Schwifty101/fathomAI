@@ -20,7 +20,7 @@ export default async function MeetingsPage() {
         <h1 className="mb-6 text-2xl font-semibold">My Calls</h1>
         <UpcomingEvents events={events} />
         {groups.map((group) => (
-          <section key={group.label} className="mb-10">
+          <section key={group.label} className="mb-6 rounded-card border border-border p-4 sm:p-5">
             <h2 className="mb-4 text-xl font-semibold">{group.label}</h2>
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {group.items.map((meeting) => <MeetingCard key={meeting.id} m={meeting} />)}

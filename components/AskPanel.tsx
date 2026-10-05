@@ -68,7 +68,7 @@ export function AskPanel({ scopes, defaultScope, prompts, embedded = false }: Pr
   }
 
   return (
-    <aside aria-label="Ask Fathom" className={`flex flex-col gap-3 rounded-card border border-border bg-surface p-4 ${embedded ? '' : 'w-full lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:w-[360px] lg:self-start'}`}>
+    <aside aria-label="Ask Fathom" className={`flex flex-col gap-3 rounded-card border border-border bg-surface p-4 ${embedded ? '' : 'w-full lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:w-[360px] lg:self-start lg:overflow-y-auto'}`}>
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-sm font-semibold">Ask Fathom</h2>
         {!embedded && <Button size="sm" variant="ghost" aria-label="Collapse Ask Fathom" onClick={() => setOpen(false)}>Hide</Button>}
