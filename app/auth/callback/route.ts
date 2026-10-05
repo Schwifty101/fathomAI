@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { GCAL_COOKIE, GCAL_COOKIE_OPTIONS, sealConnection } from '@/lib/google-session'
 import { safeNext } from '@/lib/safe-next'
 import { createClient } from '@/lib/supabase/server'
 
@@ -9,10 +10,17 @@ export async function GET(request: Request) {
   if (code) {
     let cacheHeaders: Record<string, string> = {}
     const supabase = await createClient((headers) => { cacheHeaders = headers })
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error) {
       const response = NextResponse.redirect(`${origin}${next}`)
       Object.entries(cacheHeaders).forEach(([key, value]) => response.headers.set(key, value))
+      // Only the calendar connect flow carries a refresh token; ordinary sign-in leaves any cookie alone.
+      try {
+        const sealed = sealConnection(data.user?.id ?? '', data.session?.provider_refresh_token, process.env.CALENDAR_COOKIE_SECRET)
+        if (sealed && data.user?.id) response.cookies.set(GCAL_COOKIE, sealed, GCAL_COOKIE_OPTIONS)
+      } catch {
+        // Never let the calendar cookie break sign-in.
+      }
       return response
     }
   }
