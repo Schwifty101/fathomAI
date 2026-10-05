@@ -7,6 +7,10 @@ const url = process.env.NEXT_PUBLIC_SUPABASE_URL
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY
 if (!url || !key) throw new Error('set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env.local')
 const db = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } })
+// The two demo clips need a real auth user: shares.created_by is NOT NULL and references auth.users
+// ON DELETE CASCADE (init migration), so deleting this user would delete both clips and break the
+// public /clip/demo-q4-clip page. It is therefore reused on every run (looked up by email, created
+// only the first time) and deliberately never cleaned up. Its password is random and never stored.
 const EMAIL = 'demo-clips@example.test'
 
 async function ownerId(): Promise<string> {
