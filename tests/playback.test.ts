@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { PlaybackStore } from '@/lib/playback'
+import { msFromX, PlaybackStore } from '@/lib/playback'
 
 describe('PlaybackStore', () => {
   it('does not advance while paused', () => {
@@ -53,5 +53,15 @@ describe('PlaybackStore', () => {
     unsubscribe()
     store.seek(20)
     expect(count).toBe(2)
+  })
+})
+
+describe('msFromX', () => {
+  it('maps across the track and clamps outside it', () => {
+    expect(msFromX(100, 100, 400, 3_600_000)).toBe(0)
+    expect(msFromX(300, 100, 400, 3_600_000)).toBe(1_800_000)
+    expect(msFromX(50, 100, 400, 3_600_000)).toBe(0)
+    expect(msFromX(900, 100, 400, 3_600_000)).toBe(3_600_000)
+    expect(msFromX(5, 0, 0, 1000)).toBe(0)
   })
 })

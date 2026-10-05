@@ -61,3 +61,8 @@ export class PlaybackStore {
     this.emit()
   }
 }
+
+/** Pointer x to a time, measured against the track the playhead is drawn in (not the padded outer box). */
+export function msFromX(clientX: number, left: number, width: number, durationMs: number): number {
+  return width > 0 ? Math.min(1, Math.max(0, (clientX - left) / width)) * durationMs : 0
+}

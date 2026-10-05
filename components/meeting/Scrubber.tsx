@@ -3,7 +3,7 @@
 import { useMemo, useRef } from 'react'
 import { formatMs } from '@/lib/format'
 import { laneColor } from '@/lib/lanes'
-import type { PlaybackStore } from '@/lib/playback'
+import { msFromX, type PlaybackStore } from '@/lib/playback'
 import { hlColor } from '@/lib/schema'
 import type { ChapterRow, HighlightRow, ParticipantRow, SegmentRow } from '@/lib/types'
 import { useMs } from './playback-hooks'
@@ -17,7 +17,7 @@ type Props = {
 }
 
 export function Scrubber({ store, participants, segments, chapters, highlights }: Props) {
-  const box = useRef<HTMLDivElement>(null)
+  const track = useRef<HTMLDivElement>(null)
   const ms = useMs(store)
   const duration = store.durationMs
   const percent = (value: number) => `${Math.min(100, (value / duration) * 100)}%`
@@ -26,13 +26,12 @@ export function Scrubber({ store, participants, segments, chapters, highlights }
     [participants, segments],
   )
   const seekFrom = (clientX: number) => {
-    const rect = box.current!.getBoundingClientRect()
-    store.seek(((clientX - rect.left) / rect.width) * duration)
+    const rect = track.current!.getBoundingClientRect()
+    store.seek(msFromX(clientX, rect.left, rect.width, duration))
   }
 
   return (
     <div
-      ref={box}
       role="slider"
       tabIndex={0}
       aria-label="Playback position"
@@ -55,41 +54,43 @@ export function Scrubber({ store, participants, segments, chapters, highlights }
         event.preventDefault()
       }}
     >
-      <div className="relative h-3">
-        {highlights.map((highlight) => (
-          <span
-            key={highlight.id}
-            title={highlight.title}
-            className="absolute top-0 h-3 w-1.5 -translate-x-1/2 rounded-sm"
-            style={{ left: percent(highlight.start_ms), background: hlColor(highlight.type) }}
-          />
-        ))}
-      </div>
-      <div className="relative mt-1 space-y-0.5">
-        {lanes.map((lane, index) => (
-          <div key={participants[index].id} className="relative h-2 rounded-sm bg-surface-2">
-            {lane.map((segment) => (
-              <span
-                key={segment.idx}
-                className="absolute top-0 h-2 rounded-sm"
-                style={{
-                  left: percent(segment.start_ms),
-                  width: `max(2px, ${((segment.end_ms - segment.start_ms) / duration) * 100}%)`,
-                  background: laneColor(index),
-                }}
-              />
-            ))}
-          </div>
-        ))}
-        {chapters.map((chapter) => (
-          <span
-            key={chapter.start_ms}
-            title={chapter.title}
-            className="absolute inset-y-0 w-px bg-fg/30"
-            style={{ left: percent(chapter.start_ms) }}
-          />
-        ))}
-        <span className="pointer-events-none absolute inset-y-0 w-0.5 bg-fg" style={{ left: percent(ms) }} />
+      <div ref={track}>
+        <div className="relative h-3">
+          {highlights.map((highlight) => (
+            <span
+              key={highlight.id}
+              title={highlight.title}
+              className="absolute top-0 h-3 w-1.5 -translate-x-1/2 rounded-sm"
+              style={{ left: percent(highlight.start_ms), background: hlColor(highlight.type) }}
+            />
+          ))}
+        </div>
+        <div className="relative mt-1 space-y-0.5">
+          {lanes.map((lane, index) => (
+            <div key={participants[index].id} className="relative h-2 rounded-sm bg-surface-2">
+              {lane.map((segment) => (
+                <span
+                  key={segment.idx}
+                  className="absolute top-0 h-2 rounded-sm"
+                  style={{
+                    left: percent(segment.start_ms),
+                    width: `max(2px, ${((segment.end_ms - segment.start_ms) / duration) * 100}%)`,
+                    background: laneColor(index),
+                  }}
+                />
+              ))}
+            </div>
+          ))}
+          {chapters.map((chapter) => (
+            <span
+              key={chapter.start_ms}
+              title={chapter.title}
+              className="absolute inset-y-0 w-px bg-fg/30"
+              style={{ left: percent(chapter.start_ms) }}
+            />
+          ))}
+          <span className="pointer-events-none absolute inset-y-0 w-0.5 bg-fg" style={{ left: percent(ms) }} />
+        </div>
       </div>
     </div>
   )
