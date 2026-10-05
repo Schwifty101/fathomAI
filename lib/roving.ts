@@ -15,3 +15,13 @@ export function rovingTarget(event: RovingEvent, current: number, count: number,
     default: return null
   }
 }
+
+/**
+ * Which item is the group's single tab stop: the one the user last focused, else the preferred one (the live
+ * transcript line), else the first. Null only when the group is empty, so a filter can never leave it unreachable.
+ */
+export function rovingStop(ids: readonly number[], remembered: number | null, preferred: number): number | null {
+  if (remembered !== null && ids.includes(remembered)) return remembered
+  if (ids.includes(preferred)) return preferred
+  return ids.length > 0 ? ids[0] : null
+}

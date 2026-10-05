@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { rovingTarget, type RovingKeys } from '@/lib/roving'
+import { rovingStop, rovingTarget, type RovingKeys } from '@/lib/roving'
 
 const TABS: RovingKeys = { prev: 'ArrowLeft', next: 'ArrowRight', wrap: true }
 const LIST: RovingKeys = { prev: 'ArrowUp', next: 'ArrowDown', wrap: false }
@@ -57,5 +57,26 @@ describe('rovingTarget leaves other keys and shortcuts alone', () => {
 
   it('does nothing for an empty group', () => {
     expect(rovingTarget({ key: 'ArrowRight' }, 0, 0, TABS)).toBeNull()
+  })
+})
+
+describe('rovingStop (which row is the single tab stop)', () => {
+  const ids = [4, 5, 6, 7]
+
+  it('keeps the row the user last focused', () => {
+    expect(rovingStop(ids, 6, 4)).toBe(6)
+  })
+
+  it('falls back to the preferred row (the live line) when nothing was focused', () => {
+    expect(rovingStop(ids, null, 5)).toBe(5)
+  })
+
+  it('falls back to the first row when a filter removed both', () => {
+    expect(rovingStop(ids, 99, 98)).toBe(4)
+    expect(rovingStop(ids, null, -1)).toBe(4)
+  })
+
+  it('has no stop when there are no rows', () => {
+    expect(rovingStop([], 3, 3)).toBeNull()
   })
 })
