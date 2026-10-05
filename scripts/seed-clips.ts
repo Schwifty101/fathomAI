@@ -1,4 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
+import { guardTarget } from './guard-target'
+
+guardTarget()
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -7,9 +10,13 @@ const db = createClient(url, key, { auth: { persistSession: false, autoRefreshTo
 const EMAIL = 'demo-clips@example.test'
 
 async function ownerId(): Promise<string> {
-  const { data } = await db.auth.admin.listUsers({ page: 1, perPage: 1000 })
-  const found = data.users.find((user) => user.email === EMAIL)
-  if (found) return found.id
+  for (let page = 1; ; page++) {
+    const { data, error } = await db.auth.admin.listUsers({ page, perPage: 200 })
+    if (error || !data) throw new Error(`listUsers failed: ${error?.message ?? 'no data'}`)
+    const found = data.users.find((user) => user.email === EMAIL)
+    if (found) return found.id
+    if (data.users.length < 200) break
+  }
   const { data: created, error } = await db.auth.admin.createUser({
     email: EMAIL,
     password: crypto.randomUUID(),
