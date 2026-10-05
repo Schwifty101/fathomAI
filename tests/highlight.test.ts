@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { buildHighlight, type HlSeg } from '@/lib/highlight'
+import { buildHighlight, planHighlight, type HlSeg } from '@/lib/highlight'
 import { findActiveIdx } from '@/lib/speaker-runs'
 
 const segment = (participant_id: string, start_ms: number, end_ms: number, text: string): HlSeg => ({
@@ -28,5 +28,26 @@ describe('buildHighlight', () => {
   it('returns null before the first line or when there are no lines', () => {
     expect(buildHighlight(segments, findActiveIdx(segments, 1000), 'insight')).toBeNull()
     expect(buildHighlight([], 0, 'insight')).toBeNull()
+  })
+})
+
+describe('planHighlight', () => {
+  // The seeded transcripts start at 1000 ms, so in the first second there is no active line.
+  const beforeFirstLine = findActiveIdx(segments, 1000)
+
+  it('asks a signed-out visitor to sign in even when there is no active line yet', () => {
+    expect(beforeFirstLine).toBe(-1)
+    expect(planHighlight(null, segments, beforeFirstLine, 'insight', null)).toEqual({ kind: 'sign-in' })
+    expect(planHighlight(null, segments, 1, 'insight', null)).toEqual({ kind: 'sign-in' })
+  })
+
+  it('tells a signed-in user there is nothing to highlight before the first line', () => {
+    expect(planHighlight('user-1', segments, beforeFirstLine, 'insight', null)).toEqual({ kind: 'no-segment' })
+    expect(planHighlight('user-1', [], 0, 'insight', null)).toEqual({ kind: 'no-segment' })
+  })
+
+  it('returns the draft for a signed-in user on an active line', () => {
+    const plan = planHighlight('user-1', segments, 1, 'insight', ' Key point ')
+    expect(plan).toEqual({ kind: 'save', draft: buildHighlight(segments, 1, 'insight', ' Key point ')! })
   })
 })

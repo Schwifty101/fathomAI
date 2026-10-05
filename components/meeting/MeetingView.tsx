@@ -6,7 +6,7 @@ import { createHighlight, createShare, deleteHighlight, deleteShare } from '@/ap
 import { AskPanel } from '@/components/AskPanel'
 import { SignInDialog } from '@/components/SignInDialog'
 import { Button } from '@/components/ui/Button'
-import { buildHighlight } from '@/lib/highlight'
+import { planHighlight } from '@/lib/highlight'
 import { PlaybackStore } from '@/lib/playback'
 import type { HighlightType, SummaryContent, Template } from '@/lib/schema'
 import { expandToRun, findActiveIdx } from '@/lib/speaker-runs'
@@ -46,12 +46,13 @@ export function MeetingView({ bundle, userId, liveAiEnabled, initialMs, shares: 
   // Resolves true only when the highlight was saved (the note box clears on success only).
   const addHighlight = useCallback(async (type: HighlightType, note: string | null): Promise<boolean> => {
     const index = findActiveIdx(segments, store.ms)
-    const draft = buildHighlight(segments, index, type, note)
-    if (!draft) return false
-    if (!userId) {
+    const plan = planHighlight(userId, segments, index, type, note)
+    if (plan.kind === 'sign-in') {
       setSignIn('Sign in with Google to save highlights. You will come back to this moment.')
       return false
     }
+    if (plan.kind === 'no-segment') return false
+    const draft = plan.draft
     const temporary: HighlightRow = { id: `tmp-${crypto.randomUUID()}`, user_id: userId, ...draft }
     setHighlights((current) => [...current, temporary].sort(byStart))
     try {

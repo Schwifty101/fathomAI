@@ -26,3 +26,19 @@ export function buildHighlight(
     start_ms: run.start_ms, end_ms: run.end_ms,
   }
 }
+
+export type HighlightPlan = { kind: 'sign-in' } | { kind: 'no-segment' } | { kind: 'save'; draft: HighlightDraft }
+
+// The sign-in gate comes first: before the first line starts there is no active segment, and a
+// signed-out visitor must still be asked to sign in rather than get a silent no-op.
+export function planHighlight(
+  userId: string | null,
+  segments: readonly HlSeg[],
+  index: number,
+  type: HighlightType,
+  note?: string | null,
+): HighlightPlan {
+  if (!userId) return { kind: 'sign-in' }
+  const draft = buildHighlight(segments, index, type, note)
+  return draft ? { kind: 'save', draft } : { kind: 'no-segment' }
+}
