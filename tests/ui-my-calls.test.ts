@@ -25,8 +25,8 @@ function fakeDb(tables: Record<string, Record<string, unknown>[]>) {
 }
 
 const meetings = [
-  { id: 'm1', host_id: 'demo' },
-  { id: 'm2', host_id: 'other' },
+  { id: 'm1', host_id: 'demo', participants: [] },
+  { id: 'm2', host_id: 'other', participants: [] },
 ]
 
 describe('listMyMeetings', () => {
