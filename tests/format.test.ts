@@ -11,6 +11,10 @@ describe('formatMs', () => {
   it('clamps negatives to zero', () => {
     expect(formatMs(-5)).toBe('0:00')
   })
+  it('never prints NaN', () => {
+    expect(formatMs(NaN)).toBe('0:00')
+    expect(formatMs(Infinity)).toBe('0:00')
+  })
 })
 
 describe('formatMinutes', () => {
@@ -30,6 +34,12 @@ describe('parseTimeParam', () => {
     expect(parseTimeParam('abc', dur)).toBe(0)
     expect(parseTimeParam('NaN', dur)).toBe(0)
     expect(parseTimeParam('Infinity', dur)).toBe(0)
+    expect(parseTimeParam('0x10', dur)).toBe(0)
+    expect(parseTimeParam('1e3', dur)).toBe(0)
+    expect(parseTimeParam(' 5 ', dur)).toBe(0)
+  })
+  it('returns 0 for a NaN duration', () => {
+    expect(parseTimeParam('5000', NaN)).toBe(0)
   })
   it('clamps negative and past-the-end values', () => {
     expect(parseTimeParam('-500', dur)).toBe(0)

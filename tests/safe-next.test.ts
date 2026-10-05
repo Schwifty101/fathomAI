@@ -16,7 +16,7 @@ describe('safeNext', () => {
   it('rejects external and protocol-relative URLs', () => {
     for (const value of [
       'https://evil.com', '//evil.com', '/\\evil.com', '/\t/evil.com',
-      'javascript:alert(1)',
+      'javascript:alert(1)', '/..//evil.com', '/.//evil.com', '/./\\evil.com', '%2f%2fevil.com',
     ]) {
       expect(safeNext(value)).toBe('/meetings')
     }
