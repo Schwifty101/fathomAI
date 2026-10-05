@@ -1,6 +1,6 @@
-# secrets and local tooling (Task 1 appends the rest of the plan list)
-.env
-.env*.local
+# secrets and local tooling
+.env*
+!.env.example
 .claude/worktrees/
 .superpowers/
 graphify-out/
@@ -14,4 +14,3 @@ playwright-report
 test-results
 .vscode/
 .vercel
-.env*

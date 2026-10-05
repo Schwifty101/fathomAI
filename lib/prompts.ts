@@ -129,7 +129,6 @@ export const ASK_PROMPTS_BY_SCOPE = {
   my_calls: ['Next steps on projects?', 'Summarize my recent meetings', 'Surprise me with an insight'],
   team_calls: ['Next steps across the team?', 'Summarize recent team meetings', 'Surprise me with a team insight'],
 } as const
-export const ASK_PROMPTS = ASK_PROMPTS_BY_SCOPE.my_calls
 
 export function askPrompt(question: string, corpus: string, whose = ''): string {
   return `TASK: ask

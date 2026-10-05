@@ -21,7 +21,6 @@ function Inner({ user }: { user: AppUser | null }) {
   return (
     <div className="flex items-center gap-2">
       {user.avatar ? (
-        // eslint-disable-next-line @next/next/no-img-element
         <img src={user.avatar} alt="" className="size-8 rounded-full" referrerPolicy="no-referrer" />
       ) : (
         <span className="grid size-8 place-items-center rounded-full bg-surface-2 text-xs">{(user.email ?? '?')[0].toUpperCase()}</span>

@@ -34,7 +34,6 @@ const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).refine(
   { message: 'not a real calendar date' },
 )
 export const ASK_SCOPES = ['my_calls', 'team_calls'] as const
-export type AskSeedScope = (typeof ASK_SCOPES)[number]
 const MAX_SEGMENT_IDX = 100_000
 const segmentIdx = z.number().int().min(0).max(MAX_SEGMENT_IDX)
 

@@ -74,7 +74,7 @@ export function AskPanel({ scopes, defaultScope, prompts, embedded = false }: Pr
         {!embedded && <Button size="sm" variant="ghost" aria-label="Collapse Ask Fathom" onClick={() => setOpen(false)}>Hide</Button>}
       </div>
       <div role="log" aria-live="polite" aria-label="Conversation" className="min-h-24 space-y-3 overflow-y-auto text-sm">
-        {messages.length === 0 && <p className="text-muted">Ask anything about {scopes.find((item) => item.value === scope)?.label.toLowerCase() ?? 'your calls (Add your API key for chatbot to work)'}.</p>}
+        {messages.length === 0 && <p className="text-muted">Ask anything about {scopes.find((item) => item.value === scope)?.label.toLowerCase() ?? 'your calls'}.</p>}
         {messages.map((message, index) => message.role === 'user' ? (
           <p key={index} className="ml-6 rounded-lg bg-surface-2 p-2">{message.text}</p>
         ) : (

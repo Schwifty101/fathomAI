@@ -1,9 +1,5 @@
 export type Member = { slug: string; name: string; role: string; demo?: boolean }
 
-export const COMPANY = 'Kestrel'
-export const PRODUCT =
-  'Kestrel Dispatch, route planning and dispatch software for regional freight carriers'
-
 export const TEAM: Member[] = [
   { slug: 'priya', name: 'Priya Raman', role: 'Product Lead', demo: true },
   { slug: 'daniel', name: 'Daniel Ortiz', role: 'Sales' },
