@@ -56,6 +56,14 @@ function withEdits(edits: Edit[]): Schema {
   return buildSchema(edited)
 }
 const usageOf = (text: string) => extractUsage([{ file: 'probe.ts', text }])
+/** The real sources with a deliberate edit (every occurrence of `from`). An edit whose text is not found fails the probe itself. */
+function plantSource(file: string, from: string, to: string): SourceFile[] {
+  return sources.map((source) => {
+    if (source.file !== file) return source
+    if (!source.text.includes(from)) throw new Error(`probe edit does not apply to ${file}: ${from}`)
+    return { ...source, text: source.text.split(from).join(to) }
+  })
+}
 
 const literalsIn = (text: string) => [...text.matchAll(/'([\w-]+)'/g)].map((m) => m[1])
 function unionOf(relative: string, pattern: RegExp, label: string): string[] {
@@ -327,12 +335,32 @@ describe('schema conformance: the scanner sees the code', () => {
   })
 
   it('resolves table names passed through helpers and loops (seed loader, rls test)', () => {
-    const via = (file: string) => usage.ops.filter((op) => op.file === file && op.via !== 'literal').map((op) => `${op.via}:${op.table}`)
-    expect(via('seed/load.ts')).toEqual(expect.arrayContaining(['helper upsert():meetings', 'helper upsert():calendar_events', 'helper clearSeeded():highlights', 'for-of table:chapters']))
-    expect(via('scripts/rls-test.ts')).toEqual(expect.arrayContaining(['helper snap():summaries', 'helper snap():shares']))
-    // the .is('user_id', null) clear is guarded by `seededOnly`, so only the two call sites that pass true get it
-    const withUserFilter = usage.ops.filter((op) => op.via === 'helper clearSeeded()' && op.calls.some((call) => call.method === 'is')).map((op) => op.table)
-    expect(withUserFilter.sort()).toEqual(['highlights', 'summaries'])
+    const ops = (file: string, via: string) => usage.ops.filter((op) => op.file === file && op.via === via)
+    const tablesOf = (list: typeof usage.ops) => [...new Set(list.map((op) => op.table))].sort()
+    const loaderTables = ['action_items', 'ask_answers', 'calendar_events', 'chapters', 'highlights', 'meetings', 'participants', 'segments', 'summaries', 'team_members']
+    // seed/load.ts: TABLES and PRUNE_ORDER feed the loop variables, plan steps feed step.table
+    expect(tablesOf(ops('seed/load.ts', 'helper readRows()'))).toEqual(loaderTables)
+    expect(tablesOf(ops('seed/load.ts', 'helper upsert() <- plan step'))).toEqual(loaderTables)
+    expect(tablesOf(ops('seed/load.ts', 'helper deleteIds()'))).toEqual(loaderTables)
+    expect(tablesOf(ops('seed/load.ts', 'helper countRows()'))).toEqual([...loaderTables, 'shares'].sort())
+    // every plan step is written through upsert(), and each step keeps its own line in seed/load.ts
+    const steps = ops('seed/load.ts', 'helper upsert() <- plan step')
+    expect(steps).toHaveLength(10)
+    expect(steps.every((op) => op.payloads.length > 0 && op.calls.some((call) => call.method === 'upsert' && /onConflict:\s*'id'/.test(call.args[1] ?? '')))).toBe(true)
+    expect(new Set(steps.map((op) => op.line)).size).toBe(10)
+    // the select list comes from READ_COLUMNS[table] ?? 'id'
+    const selectOf = (table: string) => ops('seed/load.ts', 'helper readRows()').find((op) => op.table === table)?.calls.find((call) => call.method === 'select')?.args[0]
+    expect([selectOf('team_members'), selectOf('meetings'), selectOf('ask_answers'), selectOf('segments')]).toEqual(["'id,is_demo_user'", "'id,slug'", "'id,scope,prompt'", "'id'"])
+    // `.is('user_id', null)` sits under `if (USER_OWNED.has(table))`: only the tables in that Set get it
+    const withCall = (via: string, method: string) => tablesOf(ops('seed/load.ts', via).filter((op) => op.calls.some((call) => call.method === method)))
+    expect(withCall('helper readRows()', 'is')).toEqual(['highlights', 'summaries'])
+    expect(withCall('helper deleteIds()', 'is')).toEqual(['highlights', 'summaries'])
+    // countRows(): `if (meetingIds)` and `if (userOnly)` guards follow each call site's arguments
+    expect(withCall('helper countRows()', 'in')).toEqual(['highlights', 'shares', 'summaries'])
+    expect(withCall('helper countRows()', 'not')).toEqual(['highlights', 'summaries'])
+    // scripts/rls-test.ts: snap(table, column, ids)
+    const snap = usage.ops.filter((op) => op.file === 'scripts/rls-test.ts' && op.via === 'helper snap()').map((op) => op.table)
+    expect(new Set(snap)).toEqual(new Set(['summaries', 'highlights', 'shares']))
   })
 
   it('resolves payload spreads and helper objects instead of guessing', () => {
@@ -341,8 +369,11 @@ describe('schema conformance: the scanner sees the code', () => {
     // ...draft (HighlightDraft) and ...window (clampWindow) in app/meetings/[id]/actions.ts
     expect(payloadKeys('app/meetings/[id]/actions.ts', 'highlights', 'insert')).toEqual(['end_ms,meeting_id,note,start_ms,title,type,user_id'])
     expect(payloadKeys('app/meetings/[id]/actions.ts', 'shares', 'insert')).toEqual(['created_by,end_ms,meeting_id,slug,start_ms'])
-    // ...event (an element of the EVENTS array) in seed/load.ts
+    // ...event (an element of the EVENTS array, reached through `events: EVENTS`) in a seed/load.ts plan step
     expect(payloadKeys('seed/load.ts', 'calendar_events', 'upsert')).toEqual(['day_offset,id,platform,time_of_day,title'])
+    // `at('summaries', Object.entries(...).map(...))`: rows built in an arrow function and pushed by a helper
+    expect(payloadKeys('seed/load.ts', 'summaries', 'upsert')).toEqual(['content,id,meeting_id,model,source,template,user_id'])
+    expect(payloadKeys('seed/load.ts', 'ask_answers', 'upsert')).toEqual(['answer,id,prompt,scope'])
     for (const op of usage.ops) for (const { payload } of op.payloads) {
       // only the rls test's deliberately open-ended `extra` argument may stay unresolved
       if (payload.unresolvedSpreads.length) expect({ file: op.file, spreads: payload.unresolvedSpreads }).toEqual({ file: 'scripts/rls-test.ts', spreads: ['extra'] })
@@ -564,8 +595,11 @@ describe('schema conformance: each check can fail', () => {
     const renamed = withEdits([{ file: 'init', from: 'talk_time_sec int not null default 0', to: 'talk_secs int not null default 0' }])
     const problems = checkReferences(renamed, usage.ops).problems
     expect(problems.some((p) => p.includes('participants.talk_time_sec') && p.includes('select'))).toBe(true)
-    expect(problems.some((p) => p.includes('participants.talk_time_sec') && p.includes('.order()'))).toBe(true)
     expect(problems.some((p) => p.includes('payload key "talk_time_sec"') && p.startsWith('seed/load.ts'))).toBe(true)
+    const begun = withEdits([{ file: 'init', from: 'started_at timestamptz not null', to: 'begun_at timestamptz not null' }])
+    const orderProblems = checkReferences(begun, usage.ops).problems
+    expect(orderProblems.some((p) => p.startsWith('lib/queries.ts') && p.includes('.order() names meetings.started_at'))).toBe(true)
+    expect(orderProblems.some((p) => p.startsWith('seed/load.ts') && p.includes('payload key "started_at"'))).toBe(true)
   })
 
   it('(a) a view column that goes away is reported', () => {
@@ -606,11 +640,7 @@ describe('schema conformance: each check can fail', () => {
   })
 
   it('(a)(b)(d) mistakes planted in the real source files are reported at their file and line', () => {
-    const plant = (file: string, from: string, to: string): SourceFile[] => sources.map((source) => {
-      if (source.file !== file) return source
-      if (!source.text.includes(from)) throw new Error(`probe edit does not apply to ${file}: ${from}`)
-      return { ...source, text: source.text.replace(from, () => to) }
-    })
+    const plant = plantSource
     const columns = extractUsage(plant('lib/queries.ts', "select('start_ms,title')", "select('start_ms,titel')"))
     expect(checkReferences(schema, columns.ops).problems).toEqual([expect.stringMatching(/^lib\/queries\.ts:\d+: select names chapters\.titel, which does not exist$/)])
     const conflict = extractUsage(plant('lib/regenerate-db.ts', "onConflict: 'meeting_id,template,user_id'", "onConflict: 'meeting_id,template'"))
@@ -622,6 +652,57 @@ describe('schema conformance: each check can fail', () => {
     ])
     const unsafe = extractUsage(plant('lib/queries.ts', ".eq('slug', slug).maybeSingle()", ".eq('title', slug).maybeSingle()"))
     expect(checkSingleRowReads(schema, unsafe.ops).problems).toEqual([expect.stringMatching(/^lib\/queries\.ts:\d+: maybeSingle\(\) on meetings filtered by \[title\], which is not a unique key$/)])
+  })
+
+  it('(a)(b) mistakes planted in the real seed loader are reported at the loader line that causes them', () => {
+    const load = (from: string, to: string) => extractUsage(plantSource('seed/load.ts', from, to))
+    const only = (problems: string[], pattern: RegExp) => { expect(problems).toEqual([expect.stringMatching(pattern)]) }
+
+    // a column renamed in a plan step's row object
+    only(checkReferences(schema, load('is_demo_user: !!member.demo', 'is_demo: !!member.demo').ops).problems,
+      /^seed\/load\.ts:\d+: upsert\(\) payload key "is_demo" is not a column of team_members$/)
+    // a plan step pointed at a table that does not exist (the helper `at` takes the table name)
+    only(checkReferences(schema, load("at('chapters', ", "at('chapterz', ").ops).problems,
+      /^seed\/load\.ts:\d+: \.from\('chapterz'\) names a table or view that no migration creates$/)
+    // a column renamed in a step built from the EVENTS list (the `...event` spread)
+    const events = checkReferences(schema, load('day_offset:', 'day_off:').ops).problems
+    expect(events).toEqual([
+      expect.stringMatching(/^seed\/load\.ts:\d+: upsert\(\) payload key "day_off" is not a column of calendar_events$/),
+      expect.stringMatching(/^seed\/load\.ts:\d+: upsert\(\) payload omits NOT NULL column\(s\) without a default: day_offset$/),
+    ])
+    // a column renamed in the READ_COLUMNS lookup that feeds readRows()
+    only(checkReferences(schema, load("meetings: 'id,slug'", "meetings: 'id,slugg'").ops).problems,
+      /^seed\/load\.ts:\d+: select names meetings\.slugg, which does not exist$/)
+    // a table added to USER_OWNED that has no user_id column: the guarded `.is('user_id', null)` now applies to it
+    const owned = checkReferences(schema, load("new Set<Table>(['summaries', 'highlights'])", "new Set<Table>(['summaries', 'highlights', 'ask_answers'])").ops).problems
+    // one in readRows(), and one in deleteIds() for each of its two ask_answers call sites
+    expect(owned).toHaveLength(3)
+    for (const problem of owned) expect(problem).toMatch(/^seed\/load\.ts:\d+: \.is\(\) names ask_answers\.user_id, which does not exist$/)
+    // a wrong conflict target in the upsert helper
+    const target = checkOnConflict(schema, load("{ onConflict: 'id' }", "{ onConflict: 'slug' }").ops).problems
+    expect(target.filter((p) => p.includes('team_members.slug, which does not exist'))).toHaveLength(1)
+    expect(target.length).toBeGreaterThanOrEqual(9)
+  })
+
+  it('a loader the scanner cannot follow is reported as a gap, never passed quietly', () => {
+    const reasons = (from: string, to: string) => extractUsage(plantSource('seed/load.ts', from, to)).skips.map((skip) => skip.reason)
+    // the writer loop no longer iterates the plan's .steps
+    expect(reasons('for (const step of plan.steps) {', 'for (const step of plan.items) {')).toEqual(expect.arrayContaining([
+      expect.stringMatching(/^upsert\(\) table argument cannot be resolved: step\.table is not the table of a loop over the plan's \.steps/),
+      expect.stringMatching(/^plan steps are built .* no loop over the plan's \.steps writing step\.table was resolved$/),
+    ]))
+    // TABLES is no longer a const array of literals
+    expect(reasons("const TABLES = [\n  'team_members',", "const TABLES = [...OTHER,\n  'team_members',")).toEqual(expect.arrayContaining([
+      expect.stringMatching(/^readRows\(\) table argument cannot be resolved: for \(const table of TABLES\) does not iterate a const array of string literals$/),
+    ]))
+    // USER_OWNED is no longer a literal Set: the guard cannot be resolved, so the guarded call is named as a gap
+    expect(reasons("new Set<Table>(['summaries', 'highlights'])", 'new Set<Table>(owned())')).toEqual(expect.arrayContaining([
+      expect.stringMatching(/^guard USER_OWNED\.has\(table\) cannot be resolved: USER_OWNED is not a const Set of string literals$/),
+    ]))
+    // a payload built some other way than an object literal
+    expect(reasons("rows: bundle.events.map((event) => ({ id: seedId('event', event.title), ...event }))", 'rows: bundle.events')).toEqual(expect.arrayContaining([
+      expect.stringMatching(/^plan step rows for calendar_events are not an object literal or local helper$/),
+    ]))
   })
 
   it('(a) an embedded select without a foreign key, or with two, is reported', () => {
@@ -639,7 +720,7 @@ describe('schema conformance: each check can fail', () => {
     const probe = usageOf([
       'async function put(table: string, rows: object[]) { await db.from(table).upsert(rows, { onConflict: "id" }) }',
       "await put('meetings', [{ id: 1, slug: 's', nope: 2 }])",
-      "for (const t of ['chapters', 'ghost']) { await db.from(t).select('*', { count: 'exact', head: true }) }",
+      "const LIST = ['chapters', 'ghost']; for (const t of LIST) { await db.from(t).select('*', { count: 'exact', head: true }) }",
       "let q = db.from('meetings').select('id'); if (cond) q = q.eq('slugg', 1)",
       "const draft = buildHighlight(); await db.from('highlights').insert({ meeting_id: m, ...draft })",
       "const row = (x) => ({ id: x, bogus: 1 }); await db.from('team_members').insert(row(1))",
@@ -788,7 +869,7 @@ describe('schema conformance: each check can fail', () => {
   it('the scanner and parser guards: a broken source or migration cannot pass quietly', () => {
     // a call the scanner cannot resolve is recorded, not ignored
     const dynamic = usageOf("const t = pick(); await db.from(t).select('id')")
-    expect(dynamic.skips.map((s) => s.reason)).toEqual(['.from(t) could not be resolved'])
+    expect(dynamic.skips.map((s) => s.reason)).toEqual(['.from(t) cannot be resolved: t is not a literal or a for-of variable'])
     const notLiteral = checkReferences(schema, usageOf("db.from('meetings').select(cols).eq(col, 1).or('a.eq.1')").ops)
     expect(notLiteral.unchecked).toHaveLength(3)
     expect(usageOf("db.from('meetings').select('id').shiny('x')").unknownMethods).toHaveLength(1)
