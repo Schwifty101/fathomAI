@@ -1,36 +1,44 @@
 # Fathom rebuild continuation handoff
 
-Date: 2026-10-05. Branch: `feat/phase-1-foundation`; worktree: `.claude/worktrees/feat+phase-1-foundation` under the main checkout. The source of truth for requirements is `docs/superpowers/plans/2026-10-05-fathom-rebuild.md`, with the design spec beside it in `docs/superpowers/specs/`. The older `decisions-and-open-items.md` records the initial Claude agent work and deferred review findings.
+Date: 2026-10-05 (rewritten after independent verification and Phase 0). Branch: `feat/phase-1-foundation`; worktree: `.claude/worktrees/feat+phase-1-foundation` under the main checkout. The source of truth for requirements is `docs/superpowers/plans/2026-10-05-fathom-rebuild.md`, with the design spec beside it in `docs/superpowers/specs/`. `decisions-and-open-items.md` is the detailed record; its section 9 holds the verification findings, Phase 0 fixes, hosted state and open items.
 
 ## Stop point
 
-The current implementation ends at **Task 26, Ask Fathom** (`d22e7d5`). Do not begin Tasks 27-29 as part of this handoff. Tasks 1-10 have code and checks; Task 11 has not produced data. Task 12's checker and Task 13's loader are committed but cannot pass their real-data gates until Task 11 is run. Tasks 14-26 have implementation commits, but several browser and hosted-service checks remain open. The branch has not been merged, pushed, or deployed.
+Tasks 1-26 are implemented, independently verified by five read-only agents, and hardened in Phase 0. **Tasks 27 (live summary regeneration) and 28 (calendar stub) were started in parallel isolated worktrees**; this file says "in progress" until they are merged and then must be updated. Task 29 (deploy, smoke test, README, repository) has not started. Task 11 has not produced data.
 
-The latest local checks on the feature branch passed: `npm test` (24 files, 139 tests), `npm run typecheck`, `npm run build` (including `/api/ask`), and `git diff --cached --check`. An invalid `POST /api/ask` returned HTTP 400 in an earlier local production-server smoke check. The Ask unit tests cover canned answers, scope isolation, extractive fallback, rate limit, live citation mapping, and model failure. They do not prove that a hosted database, Google sign-in, or a live model call works.
+`main` and `feat/phase-1-foundation` point at the same commit. Nothing has been pushed or deployed (`origin/main` still holds only "first commit"). Latest local checks on the merged tree: `npm test` 27 files / 223 tests, `npm run typecheck`, and `npm run build` all pass.
 
-## What is waiting on services or real data
+## Gates
 
-| Gate | Current evidence | Resume action |
+| Gate | Status | Resume action |
 | --- | --- | --- |
-| Task 11 synthetic meetings | No eight meeting bundles or `ask.json` in the ignored seed output. A first `eng-standup` attempt found this tool process logged out of Claude. The user later confirmed `claude auth status` is true in their terminal, but this tool process still saw false; the user's session quota had also been reached. | From the feature worktree and a terminal with working Claude access, run `npm run seed:gen -- eng-standup`, inspect that bundle, then run `npm run seed:gen`. Review output quality before loading. |
-| Tasks 12-13 data and DB gates | `npm run seed:load` stopped at its missing-bundle preflight before any DB writes. On this date the Supabase hostname lookup returned `ENOTFOUND` from the tool process both inside and outside its sandbox. | Run `npm run seed:check`, then `npm run seed:load` twice for idempotence, `npm run rls:test`, and the anon search check in the plan after DNS/data are available. |
-| Tasks 15, 18-26 runtime | The app builds, but meeting lists, playback, summary, highlights, clips, search, and Ask cannot be checked against populated hosted data from this process. Google OAuth configuration and signed-in behavior are unverified. | Follow each task's browser acceptance steps after loading data and configuring Google OAuth. For Task 26, check suggested chips/citations, scope restriction, fallback, and a live answer only if a server-side Anthropic API key is deliberately provided. |
-| Task 14 visual review | The user installed Chromium and ran the public-reference capture. Ignored screenshots exist under `docs/design/refs/`; the design system document and `/design` page are tracked. Superdesign's remote extraction failed DNS from this process. | Review the saved 1280px/390px design captures and reduced-motion result in the user's browser environment before treating visual acceptance as complete. |
+| Hosted schema | Done. `20261005000000_init.sql` and `20261006000000_hardening.sql` are applied (`supabase migration list` shows local and remote identical). 12 tables, RLS on all, 0 rows. | None. |
+| RLS and constraints on hosted | Done. The hardened `npm run rls:test` passes against the hosted project and cleans up after itself. TRUNCATE privilege is only covered by the local `supabase/tests/hardening.sql` probes. | Re-run `rls:test` once more before Task 29 Step 11 disables the Email provider (the test needs it enabled). |
+| Task 11 synthetic meetings | Not run. No `seed/generated/` output. The generation code was fixed in Phase 0 but never exercised with the real model. The new `claude` CLI flags are confirmed in `--help` only. | In a terminal with working Claude auth and quota, from the feature worktree: `npm run seed:gen -- eng-standup`, inspect the bundle, then `npm run seed:gen`. Review output quality before loading. |
+| Tasks 12-13 data gates | Not run. `seed:check` was hardened (calendar dates, duplicate prompts, scope enum, highlight ranges, per-scope citations, unresolved due phrases). The loader's missing-bundle preflight works. | `npm run seed:check`, then `npm run seed:load` twice (idempotence), then the anon search check from the plan. `seed:load` runs the target guard first. |
+| Tasks 15, 18-26 runtime | Unverified in a browser. Code, unit tests and read-only reviews pass; nothing has run against populated hosted data. Google OAuth and the Supabase redirect allow-list are not configured or tested. | After data is loaded and Google is configured, follow each task's browser acceptance steps. For Ask, check suggested chips per scope, scope restriction, the extractive fallback, and a live answer only if a server-side Anthropic key is deliberately provided. |
+| Task 14 visual review | Open. Ignored reference captures exist under `docs/design/refs/`; the design document and `/design` page are tracked. | Review the 1280 px and 390 px captures and the reduced-motion result in a browser. |
 
-Task 26 deliberately restricts canned answers to the matching scope. The seeded generation currently creates My Calls prompts, so Team Calls has no canned chips. Ask still accepts free text and uses scoped search. The panel hides initial-scope chips when the visitor switches scopes.
+## Decisions still open
 
-## Merge and repository state
+- Live Ask runs one model attempt with retries off (a ruling, see ledger 9.4). Raise the SDK timeout and `maxDuration` if a JSON-repair retry is wanted.
+- `seed:check` fails on an unresolvable due phrase. Switch it to a warning if hand edits after an expensive run are unwanted.
+- Task 29: reuse the existing public repo `Schwifty101/fathomAI` or create `fathom-rebuild`; confirm the Vercel project name (ledger section 4).
 
-The user authorized merging into `main` **if everything is working**. That condition is not met while data generation, hosted DB, OAuth, and browser checks are outstanding. Keep this feature branch available and leave `main` unchanged until the gates above pass. When they do, rerun tests/typecheck/build, inspect the diff and worktree status, then integrate the branch and commit the merge as appropriate. The local `main` is already five commits ahead of `origin/main`; nothing has been pushed.
+## Repository and environment state
 
-The main checkout has untracked `.env`, `graphify-out/`, `supabase/` (including `config.toml` and local `.temp` state), and five `.agent-logs` files. Do not use `git add -A` there. In particular, inspect the untracked `supabase/config.toml` before a future merge because the feature branch tracks a file at the same path. Preserve the main checkout's local state and credentials.
+- The main checkout has untracked local state that must be preserved: `.env` (DB password only), `supabase/.temp`, `graphify-out/`, and the session logs under `.agent-logs/` that exist only there. Do not use `git add -A` there.
+- The feature worktree has a real `.env.local` (Supabase URL, anon key, service-role key; values not recorded anywhere). It is gitignored. The main checkout has no `.env.local`.
+- The main checkout's `node_modules` is a partial leftover (8 entries) from an agent that ran `npm ci` against the wrong directory. It is gitignored and nothing depends on it: `rm -rf` it, or run `npm ci` there if tests are ever run from main. The feature worktree's `node_modules` is intact.
+- Merged agent worktrees remain on disk and can be removed once nothing needs them: `.claude/worktrees/agent-aeb014834259fb85a`, `agent-a1fe4b835d9c5bee2` and `agent-af8094821fd0c3479` (branches `worktree-agent-aeb014834259fb85a`, `worktree-agent-a1fe4b835d9c5bee2`, `fix/seed-pipeline-stream-a`). Task 27 and 28 worktrees are listed by `git worktree list`.
+- Isolated agent worktrees start from `origin/main`, not local `main`. Every agent prompt must check `git log --oneline -1` and `ls package.json` first and `git reset --hard <base>` if needed, before any `npm` command.
 
-## Claude agents, graph, and logs
+## Logs
 
-Claude's controller used isolated worktrees and cherry-picked Tasks 1-9 into this branch, including the schema/RLS, shared libraries, LLM adapter, due-date logic, roster, and meeting definitions. Subsequent commits on the same branch implement Tasks 10 and 12-26. The graphify agent left a working-tree edit to `decisions-and-open-items.md`; its later claims about a rebuilt SQL graph were not reflected in the saved graph artifact. The currently saved ignored graph has 297 nodes, 397 links, and no SQL-sourced nodes, so treat it as preliminary.
-
-The capture hook used the main checkout's project directory. Consequently, five untracked session logs are only in the main checkout; three earlier logs are tracked on this branch. The five local transcripts were left in place and not published in this handoff. The user stated that the DB password is absent from the logs and graph output; scan any exact log set proposed for publication again at Task 29. Do not copy logs into the branch automatically.
+The capture hook writes to the main checkout's `.agent-logs/` (via `$CLAUDE_PROJECT_DIR`), so recent session logs exist only there; three early logs are tracked on this branch. Do not copy logs into the branch automatically. At Task 29, decide which logs to publish and scan the exact files for secrets and personal data first (Task 29 Step 9 greps for known patterns; the DB password must never appear).
 
 ## Next planned work
 
-After the current gates pass and the user resumes new work, the plan continues with Task 27 (live summary regeneration), Task 28 (calendar stub), and Task 29 (deploy, smoke test, README, repository). This handoff records those tasks without starting them.
+1. Merge Tasks 27 and 28 when their agents report, re-run test, typecheck and build, then update this file and ledger section 9.
+2. You run `seed:gen` (Task 11); then Tasks 12-13 gates, Google OAuth, and browser acceptance.
+3. Task 29: Playwright smoke tests, deploy (needs your approval), Supabase Site URL and redirect URLs, README, walkthrough, log secret scan, repository (needs your approval), disable the Email provider, rotate the DB password.

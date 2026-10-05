@@ -5,7 +5,7 @@ Living record so nothing is lost between sessions. Each line is tagged:
 **[ruling]** a decision made by the controller (cost if wrong noted), **[unverified]** believed but not checked,
 **[later]** deferred until a named point. No secrets belong in this file.
 
-Last updated: 2026-10-05. Plan: `docs/superpowers/plans/2026-10-05-fathom-rebuild.md` (29 tasks, 5 phases).
+Last updated: 2026-10-05 (see section 9 for verification, Phase 0 and hosted state). Plan: `docs/superpowers/plans/2026-10-05-fathom-rebuild.md` (29 tasks, 5 phases).
 Spec: `docs/superpowers/specs/2026-10-05-fathom-rebuild-design.md` (header status: "approved in conversation, pending written-spec review").
 
 ## 1. Concrete facts
@@ -82,7 +82,7 @@ Plan text defects to fix in the plan file:
 - Task 9 brief lists 9 meetings where the test expects 8.
 - Task 1's plan commit command is `git add -A ':!.agent-logs'`, which would also stage the untracked `supabase/` directory and Task 2's `git add` lists `package.json` files it does not change; implementers were told to stage explicit paths instead. Other tasks' commit commands were not audited by the controller.
 
-Deferred minor findings (not blocking, final review should triage):
+Deferred minor findings (not blocking, final review should triage). **Status update 2026-10-05: the DB-hardening, Task 4, Task 5, Task 7, Task 8 and Task 9 items below were addressed in Phase 0; see section 9 for what was fixed and what remains open.**
 - DB hardening migration: default table grants are not revoked (anon/authenticated keep INSERT/UPDATE/DELETE/TRUNCATE on `ai_usage`, `shares`, `summaries`, `segments`; RLS blocks rows and PostgREST does not expose TRUNCATE); `get_clip` should use `search_path = public, pg_temp`; `search_segments` has a mutable search path (advisor WARN); shares 20/day cap and slug length are enforced only in the server action (Task 24); `get_clip` also returns `meeting_slug`.
 - Task 1: `globals.d.ts` uses `const content: {}`; `@types/node ^26` is ahead of the Node 24 runtime.
 - Task 3: cleanup results not inspected; coverage is thin for "no client writes" on `summaries` and anon update/delete.
@@ -101,3 +101,50 @@ Agent-log location finding:
 - [verified] `.claude/hooks/capture.py` writes to `$CLAUDE_PROJECT_DIR/.agent-logs/`, falling back to the hook payload's `cwd`. The main checkout currently has 8 logs, of which 5 are untracked; this worktree has only the 3 already tracked on the branch. The untracked files were not copied or staged.
 - [ruling] Leave the 5 parent-checkout session transcripts unpublished for this handoff. Their content may be private, and the durable implementation status is recorded in `continuation-handoff.md`. This does not delete or modify the files.
 - [later] At Task 29, decide explicitly whether any more logs need publication. Scan the exact files to be committed for secrets and personal data first; do not assume `git add .agent-logs/` in this worktree includes the parent-only logs.
+
+## 9. Independent verification, Phase 0 hardening, and Tasks 27-28 (2026-10-05)
+
+Status: [verified] `main` and `feat/phase-1-foundation` point at the same commit and nothing is pushed. `npm test` passes (27 files, 223 tests, up from 139), `npm run typecheck` is clean and `npm run build` succeeds. Section 7's "33/33 hosted `rls:test`" claim was not independently verifiable at the time (hosted DNS was unreachable from the verifying tools); it is superseded by the hardened run below.
+
+### 9.1 Independent verification of the Codex work
+
+Five read-only agents re-checked Tasks 1-26 against the plan. Results:
+- [verified] The claimed numbers reproduced (139 tests, typecheck, build, `POST /api/ask` with `{}` returns 400). No agent found a defect that broke the build or tests. Tracked content has no real secrets.
+- [verified] On a throwaway local Postgres 17.5 the init migration behaved as designed: RLS on every table, anon and cross-user access blocked, search safe against injection-style input, `get_clip` leaks nothing beyond the clip window.
+- [verified] Highlights, clips, search and Ask have no XSS path (no `dangerouslySetInnerHTML`; `<mark>` is rebuilt as React elements), keys never reach the client, and live citations are validated against retrieved hits.
+- Design fact: every transcript is anon-readable by design (public demo workspace). Clips are a convenience link, not a privacy boundary; do not describe them as one.
+- Design fact: `middleware.ts` only refreshes the session; `/meetings`, `/search`, `/team` and clip pages are public. Only highlight and share creation require sign-in.
+
+### 9.2 Phase 0 fixes (three parallel streams, merged without conflicts)
+
+- Seed (stream A): Ask answers are generated per scope (`my_calls` from the demo persona's hosted meetings only, `team_calls` from all) with 3 prompts each and citations limited to listed indices; seeded Ask id is `seedId('ask', scope + '\n' + prompt)`. `resolveDue` rewritten (weekday before `eod`, "next week" ordering, "in two weeks", "next month", "tonight"; invalid ISO dates return null; unresolved phrases are recorded as `due_phrase` and `seed:check` fails on them). Generation is atomic (tmp then rename), resumable per chapter and per summary template (`transcript.partial.json`, `summaries.partial.json`), bounded to 3 concurrent `claude` processes, and regenerating the brief or transcript deletes derived files. Chapter minutes must sum to the target within 5%. The eight meetings were moved to weekdays (`daysAgo` 3, 4, 5, 6, 7, 10, 11, 14). Summary prompts tell the model to omit unsupported sections. The showcase has a per-chapter speaking plan and `seed:check` requires at least 3% talk share per cast member. `seed:check` also validates real calendar dates, duplicate `(scope, prompt)`, scope enum, and highlight ranges.
+- DB and scripts (stream B): migration `supabase/migrations/20261006000000_hardening.sql` adds explicit GRANTs and revokes default privileges, pins `search_path = public, pg_temp` on `get_clip` and `search_segments` (a temp-table hijack of `get_clip` was reproduced on the old function), makes `ask_answers` UNIQUE `(scope, prompt)`, replaces the `summaries` expression index with `UNIQUE NULLS NOT DISTINCT (meeting_id, template, user_id)` (PostgREST target `onConflict: 'meeting_id,template,user_id'`), adds CHECKs (`start_ms >= 0`, highlight title <= 80 and note <= 280, share slug format), FK indexes, and fixes `team_stats` double counting. `scripts/guard-target.ts` refuses to run `rls:test`, `seed:clips` or `seed:load` unless the URL ref matches the linked project, the service key decodes to `service_role`, and `.env.local` agrees with the shell environment. `supabase/tests/hardening.sql` holds 78 local SQL probes (all pass; they fail on an init-only database).
+- App (stream C): Ask never 500s for a missing service key or a usage-table error (lazy admin client, extractive fallback), the rate limit reserves a usage row first then counts (no read-then-write race), the Anthropic SDK client has a 20 s timeout and no retries and the route exports `maxDuration = 30`; live Ask therefore gets one attempt and no JSON-repair retry [ruling, see 9.4]. Clip pages are `noindex`, cache `getClip` with `React.cache`, set `metadataBase`, and show a sign-in call to action. The scrubber seeks against the inner track, `safeNext` rejects `//` and `/\` results, session-cookie cache headers are applied in middleware and the auth callback, optimistic updates roll back with a toast, clipboard and sign-in failures are caught, `?auth_error=1` is shown, and `formatMs`/`parseTimeParam` handle NaN and `0x10`. `MeetingView` is keyed on the user id, which resets highlights on sign-out but also resets the playhead.
+- Follow-ups folded in at merge: highlight `title` is capped at 80 in `highlightsFileSchema`, and `seed/load.ts` reads `ask.json` through `GEN_DIR`.
+
+### 9.3 Hosted state
+
+- [verified] The hardening migration was applied to the hosted project with `supabase db push` (dry run first). `supabase migration list` shows local and remote identical (`20261005000000`, `20261006000000`). All 12 tables have RLS on; at last check every table had 0 rows. The security advisor no longer flags `search_segments`; it still lists `get_clip` as anon- and authenticated-executable (intended, it serves public clip pages) and `ai_usage` as RLS-without-policy (intended, service role only).
+- [verified] The hardened `npm run rls:test` passes against the hosted project ("All checks passed"), cleaning up its fixtures and test users. Its first hosted run crashed in setup on a fixture bug (a bulk insert sends omitted keys as `null`, defeating the `talk_time_sec` default); fixed in `97a31da`. It does not cover TRUNCATE privilege (PostgREST cannot reach it); `supabase/tests/hardening.sql` does.
+- [verified] The feature worktree has its own real `.env.local` with the Supabase URL, an anon key and a service-role key (values not recorded here). The main checkout's `.env` holds only the DB password.
+- [verified] The auto-mode classifier denied one read, `list_migrations` through the Supabase MCP; the CLI's `migration list` gave the same information.
+
+### 9.4 Decisions and rulings
+
+- [ruling] Live Ask uses one model attempt with retries off, so two 20 s attempts cannot exceed `maxDuration`. Cost if wrong: a malformed model reply returns the extractive fallback instead of a repaired answer. Raise the timeout and `maxDuration` to allow one repair retry if that matters.
+- [ruling] `seed:check` fails (not warns) on a due phrase it cannot resolve, because an unresolved due date means wrong data. Cost if wrong: a hand edit of `actions.json` after an expensive run.
+- [ruling] Merge order was done in the feature worktree first (three merge commits plus one follow-up), verified, then `main` was fast-forwarded. Nothing was pushed.
+
+### 9.5 Open items after Phase 0
+
+Not fixed, by design or for lack of data:
+- No generated data exists (`seed/generated/` absent), so `seed:check`, `seed:load` (idempotence, twice) and the browser acceptance steps for Tasks 15 and 18-26 are unrun. The new `claude` CLI flags (`--safe-mode`, `--tools ""`, `--strict-mcp-config`, `--disable-slash-commands`, `--permission-prompts none`) are confirmed in `claude --help` but never run with a prompt; start with `npm run seed:gen -- eng-standup`.
+- Google OAuth, the Supabase redirect allow-list, the Email provider (needed by `rls:test`, disabled at Task 29), and any live-model path are unverified.
+- Seed loader: clear-then-insert is not transactional and never removes stale participants, meetings or calendar rows. `seed-clips` leaves a `demo-clips@example.test` auth user. `shares` daily cap (20) and its count-then-insert race remain app-only. A highlight or share range beyond the meeting duration cannot be CHECKed cheaply.
+- App: `getDemoPersona` returning null silently shows all meetings; `useClock` jumps forward after a hidden tab resumes; participant tile colors can differ between card and meeting page (embedded `participants` has no order); transcript rows are one `<button>` each (about 1000 tab stops); tabs have no arrow-key roving; the header, page and middleware each call `getUser`; `?host=zzz` shows "All hosts" with zero calls; transcript deep-link scroll with `content-visibility: auto` is unchecked in a browser.
+- Tests: there are no component or route tests, the query builders in `lib/queries.ts` are untested against real column names, and `useClock`/`useMs` are untested.
+
+### 9.6 Process lessons
+
+- The harness's isolated worktrees started from `origin/main` (`bc7bd74`, README only), not local `main`. Two agents ran `npm ci` before noticing and it partly deleted the main checkout's `node_modules` (8 entries left; gitignored, safe to remove or rebuild with `npm ci`). Every agent prompt now begins with a mandatory base-commit check before any npm command.
+- Tasks 27 and 28 (live summary regeneration and the calendar stub) were started in parallel isolated worktrees. This file is updated again when they merge.
